@@ -1,9 +1,9 @@
 import { Type } from 'class-transformer';
-import { IsDateString, IsInt, IsOptional, Max, Min } from 'class-validator';
+import { IsString, IsInt, IsOptional, Max, Min } from 'class-validator';
 
 export class PostQueryDto {
   @IsOptional()
-  @IsDateString()
+  @IsString()
   cursor?: string;
 
   @IsOptional()

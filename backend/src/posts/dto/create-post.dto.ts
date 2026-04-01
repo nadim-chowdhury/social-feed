@@ -4,16 +4,17 @@ import {
   IsString,
   IsUrl,
   MaxLength,
+  ValidateIf,
 } from 'class-validator';
 import { PostVisibility } from '../enums/post-visibility.enum';
 
 export class CreatePostDto {
-  @IsOptional()
+  @ValidateIf((dto) => !dto.imageUrl)
   @IsString()
   @MaxLength(5000)
   content?: string | null;
 
-  @IsOptional()
+  @ValidateIf((dto) => !dto.content)
   @IsUrl()
   imageUrl?: string | null;
 

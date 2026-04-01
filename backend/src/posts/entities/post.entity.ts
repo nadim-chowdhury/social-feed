@@ -13,6 +13,7 @@ import { User } from '../../users/entities/user.entity';
 import { PostLike } from './post-like.entity';
 
 @Entity('posts')
+@Index(['createdAt', 'id'])
 export class Post {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -50,7 +51,6 @@ export class Post {
   commentsCount: number;
 
   @CreateDateColumn()
-  @Index()
   createdAt: Date;
 
   @UpdateDateColumn()

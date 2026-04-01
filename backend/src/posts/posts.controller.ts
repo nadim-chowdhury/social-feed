@@ -17,6 +17,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostQueryDto } from './dto/post-query.dto';
 import { PostsService } from './posts.service';
+import { WhoLikedQueryDto } from './dto/who-liked-query.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('posts')
@@ -36,12 +37,15 @@ export class PostsController {
     @Query() query: PostQueryDto,
     @CurrentUser() user: UserEntity,
   ): Promise<CursorPaginatedResponse<PostEntity>> {
-    throw new Error('Method not implemented.');
+    return this.postsService.findAll(query, user);
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
-    throw new Error('Method not implemented.');
+  findOne(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: UserEntity,
+  ): Promise<PostEntity> {
+    return this.postsService.findOne(id, user);
   }
 
   @Delete(':id')
@@ -49,27 +53,30 @@ export class PostsController {
     @Param('id', ParseUUIDPipe) id: string,
     @CurrentUser() user: UserEntity,
   ): Promise<void> {
-    throw new Error('Method not implemented.');
+    return this.postsService.remove(id, user);
   }
 
   @Post(':id/like')
   like(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @CurrentUser() user: UserEntity,
   ): Promise<void> {
-    throw new Error('Method not implemented.');
+    return this.postsService.like(id, user.id);
   }
 
   @Delete(':id/like')
   unlike(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @CurrentUser() user: UserEntity,
   ): Promise<void> {
-    throw new Error('Method not implemented.');
+    return this.postsService.unlike(id, user.id);
   }
 
   @Get(':id/likes')
-  whoLiked(@Param('id', ParseUUIDPipe) id: string): Promise<UserEntity[]> {
-    throw new Error('Method not implemented.');
+  whoLiked(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Query() query: WhoLikedQueryDto,
+  ): Promise<{ data: UserEntity[]; total: number }> {
+    return this.postsService.whoLiked(id, query.page, query.limit);
   }
 }

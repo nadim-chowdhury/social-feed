@@ -1,10 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from './entities/post.entity';
-import { Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 import { PostLike } from './entities/post-like.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { User } from '../users/entities/user.entity';
+import { PostQueryDto } from './dto/post-query.dto';
+import { CursorPaginatedResponse } from '../common/interfaces/cursor-paginated.interface';
+import { PostVisibility } from './enums/post-visibility.enum';
+import { decodeCursor, encodeCursor } from '../common/helpers/cursor';
 
 @Injectable()
 export class PostsService {
@@ -24,5 +32,156 @@ export class PostsService {
     const saved = await this.postRepository.save(post);
     saved.author = author;
     return saved;
+  }
+
+  async findAll(
+    query: PostQueryDto,
+    currentUser: User,
+  ): Promise<CursorPaginatedResponse<Post>> {
+    const limit = query.limit ?? 20;
+
+    const qb = this.postRepository
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.author', 'author')
+      .where(
+        new Brackets((sub) => {
+          sub
+            .where('post.visibility = :public', {
+              public: PostVisibility.PUBLIC,
+            })
+            .orWhere('post.authorId = :userId', { userId: currentUser.id });
+        }),
+      )
+      .orderBy('post.createdAt', 'DESC')
+      .addOrderBy('post.id', 'DESC')
+      .take(limit + 1);
+
+    if (query.cursor) {
+      const { createdAt, id } = decodeCursor(query.cursor);
+
+      qb.andWhere(
+        new Brackets((sub) => {
+          sub
+            .where('post.createdAt<:cursorDate', { cursorDate: createdAt })
+            .orWhere(
+              new Brackets((tie) => {
+                tie
+                  .where('post.createdAt = :cursorDate', {
+                    cursorDate: createdAt,
+                  })
+                  .andWhere('post.id < :cursorId', { cursorId: id });
+              }),
+            );
+        }),
+      );
+    }
+
+    const posts = await qb.getMany();
+
+    const hasNextPage = posts.length > limit;
+    if (hasNextPage) {
+      posts.pop();
+    }
+
+    return {
+      data: posts,
+      meta: {
+        hasNextPage,
+        nextCursor: hasNextPage
+          ? encodeCursor(
+              posts[posts.length - 1].createdAt,
+              posts[posts.length - 1].id,
+            )
+          : null,
+      },
+    };
+  }
+
+  async findOne(id: string, currentUser: User): Promise<Post> {
+    const post = await this.postRepository.findOne({
+      where: {
+        id,
+      },
+      relations: ['author'],
+    });
+
+    if (!post) {
+      throw new NotFoundException(`Post ${id} not found`);
+    }
+
+    if (
+      post.visibility !== PostVisibility.PUBLIC &&
+      post.authorId !== currentUser.id
+    ) {
+      throw new ForbiddenException();
+    }
+
+    return post;
+  }
+
+  async remove(id: string, currentUser: User): Promise<void> {
+    const post = await this.findOne(id, currentUser);
+
+    if (post.authorId !== currentUser.id) {
+      throw new ForbiddenException('You can only delete your own posts');
+    }
+
+    await this.postRepository.remove(post);
+  }
+
+  async like(postId: string, userId: string): Promise<void> {
+    await this.postRepository.manager.transaction(async (manager) => {
+      const post = await manager.findOne(Post, { where: { id: postId } });
+
+      if (!post) {
+        throw new NotFoundException(`Post ${postId} not found`);
+      }
+
+      const existing = await manager.findOne(PostLike, {
+        where: { postId, userId },
+      });
+
+      if (existing) return;
+
+      await manager.save(
+        PostLike,
+        manager.create(PostLike, { postId, userId }),
+      );
+      await manager.increment(Post, { id: postId }, 'likesCount', 1);
+    });
+  }
+
+  async unlike(postId: string, userId: string): Promise<void> {
+    await this.postRepository.manager.transaction(async (manager) => {
+      const post = await manager.findOne(Post, { where: { id: postId } });
+
+      if (!post) {
+        throw new NotFoundException(`Post ${postId} not found`);
+      }
+
+      const existing = await manager.findOne(PostLike, {
+        where: { postId, userId },
+      });
+
+      if (!existing) return;
+
+      await manager.remove(existing);
+      await manager.decrement(Post, { id: postId }, 'likesCount', 1);
+    });
+  }
+
+  async whoLiked(
+    postId: string,
+    page = 0,
+    limit = 10,
+  ): Promise<{ data: User[]; total: number }> {
+    const [likes, total] = await this.postLikeRepository.findAndCount({
+      where: { postId },
+      relations: ['user'],
+      order: { createdAt: 'DESC' },
+      skip: page * limit,
+      take: limit,
+    });
+    return { data: likes.map((like) => like.user), total };
   }
 }
