@@ -2,6 +2,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
+import { CreateUserData } from '../common/interfaces/create-user-data.interface';
 
 @Injectable()
 export class UsersService {
@@ -26,7 +27,7 @@ export class UsersService {
     return this.userRepository.findOne({ where: { id } });
   }
 
-  async create(data: Partial<User>): Promise<User> {
+  async create(data: CreateUserData): Promise<User> {
     const existingUser = await this.findByEmail(data.email);
 
     if (existingUser) {
