@@ -10,6 +10,7 @@ import { Post } from '../posts/entities/post.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
 import { CommentLike } from './entities/comment-like.entity';
+import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @Injectable()
 export class CommentsService {
@@ -58,6 +59,25 @@ export class CommentsService {
       saved.author = author;
       return saved;
     });
+  }
+
+  async update(
+    commentId: string,
+    dto: UpdateCommentDto,
+    currentUser: User,
+  ): Promise<Comment> {
+    const comment = await this.commentRepository.findOne({
+      where: { id: commentId },
+      relations: ['author'],
+    });
+
+    if (!comment) throw new NotFoundException('Comment not found');
+
+    if (comment.authorId !== currentUser.id)
+      throw new ForbiddenException('You can only update your own comment');
+
+    comment.content = dto.content;
+    return this.commentRepository.save(comment);
   }
 
   async findByPost(
@@ -121,7 +141,7 @@ export class CommentsService {
       const existing = await manager.findOne(CommentLike, {
         where: { commentId, userId },
       });
-      if (!existing) return;
+      if (existing) return;
 
       await manager.save(
         CommentLike,

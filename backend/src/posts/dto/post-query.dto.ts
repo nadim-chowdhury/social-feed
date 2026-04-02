@@ -11,5 +11,5 @@ export class PostQueryDto {
   @IsInt()
   @Min(1)
   @Max(100)
-  limit?: number;
+  limit: number = 20;
 }

@@ -16,6 +16,7 @@ import { CreateCommentDto } from './dto/create-comment.dto';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { User } from '../users/entities/user.entity';
 import { CommentQueryDto } from './dto/comment-query.dto';
+import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('posts/:postId/comments')
@@ -31,14 +32,14 @@ export class CommentsController {
     return this.commentsService.create(postId, dto, user);
   }
 
-  //   @Patch()
-  //   update(
-  //     @Param('commentId', ParseUUIDPipe) commentId: string,
-  //     dto: UpdateCommentDto,
-  //     @CurrentUser() user: User,
-  //   ) {
-  //     return this.commentsService.update(commentId, dto, user);
-  //   }
+  @Patch(':id')
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateCommentDto,
+    @CurrentUser() user: User,
+  ) {
+    return this.commentsService.update(id, dto, user);
+  }
 
   @Get()
   findByPost(

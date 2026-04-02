@@ -29,7 +29,7 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  getMe(@CurrentUser() req: { user: User }): User {
-    return req.user;
+  getMe(@CurrentUser() user: User): User {
+    return user;
   }
 }

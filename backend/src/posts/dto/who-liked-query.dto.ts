@@ -6,12 +6,12 @@ export class WhoLikedQueryDto {
   @Type(() => Number)
   @IsInt()
   @Min(0)
-  page?: number;
+  page: number = 0;
 
   @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(1)
   @Max(100)
-  limit?: number;
+  limit: number = 20;
 }

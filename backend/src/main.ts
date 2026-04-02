@@ -11,10 +11,9 @@ async function bootstrap() {
   app.use(helmet());
   app.setGlobalPrefix('api');
   app.enableCors({
-    origin:
-      configService.get<string>('FRONTEND_URL') ||
-      'http://localhost:3000' ||
-      'http://127.0.0.1:3000',
+    origin: configService.get<string>('FRONTEND_URL')
+      ? configService.get<string>('FRONTEND_URL')
+      : ['http://localhost:3000', 'http://127.0.0.1:3000'],
     credentials: true,
   });
 
@@ -27,5 +26,6 @@ async function bootstrap() {
   );
 
   await app.listen(configService.get<number>('PORT') ?? 5000);
+  console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();

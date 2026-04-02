@@ -54,7 +54,7 @@ export class PostsService {
     query: PostQueryDto,
     currentUser: User,
   ): Promise<CursorPaginatedResponse<Post>> {
-    const limit = query.limit ?? 20;
+    const limit = query.limit;
 
     const qb = this.postRepository
       .createQueryBuilder('post')
