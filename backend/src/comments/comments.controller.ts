@@ -58,9 +58,15 @@ export class CommentsController {
   @Get(':id/replies')
   getReplies(
     @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: User,
     @Query() query: CommentQueryDto,
   ) {
-    return this.commentsService.getreplies(id, query.page, query.limit);
+    return this.commentsService.getReplies(
+      id,
+      query.page,
+      query.limit,
+      user.id,
+    );
   }
 
   @Delete(':id')

@@ -110,10 +110,11 @@ export class CommentsService {
     return { data, total };
   }
 
-  async getreplies(
+  async getReplies(
     commentId: string,
     page: number,
     limit: number,
+    userId: string,
   ): Promise<{ data: Comment[]; total: number }> {
     const [data, total] = await this.commentRepository.findAndCount({
       where: { parentId: commentId },
@@ -122,6 +123,20 @@ export class CommentsService {
       skip: page * limit,
       take: limit,
     });
+
+    if (data.length) {
+      const ids = data.map((c) => c.id);
+      const liked = await this.commentLikeRepository
+        .createQueryBuilder('cl')
+        .select('cl.commentId')
+        .where('cl.userId = :uid', { uid: userId })
+        .andWhere('cl.commentId In (:...ids)', { ids })
+        .getMany();
+
+      const set = new Set(liked.map((l) => l.commentId));
+      data.forEach((c) => (c.isLikedByMe = set.has(c.id)));
+    }
+
     return { data, total };
   }
 
