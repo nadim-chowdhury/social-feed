@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -18,6 +19,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { PostQueryDto } from './dto/post-query.dto';
 import { PostsService } from './posts.service';
 import { WhoLikedQueryDto } from './dto/who-liked-query.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('posts')
@@ -30,6 +32,15 @@ export class PostsController {
     @CurrentUser() user: UserEntity,
   ): Promise<PostEntity> {
     return this.postsService.create(dto, user);
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdatePostDto,
+    @CurrentUser() user: UserEntity,
+  ): Promise<PostEntity> {
+    return this.postsService.update(id, dto, user);
   }
 
   @Get()

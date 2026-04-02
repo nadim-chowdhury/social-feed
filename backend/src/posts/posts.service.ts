@@ -13,6 +13,7 @@ import { PostQueryDto } from './dto/post-query.dto';
 import { CursorPaginatedResponse } from '../common/interfaces/cursor-paginated.interface';
 import { PostVisibility } from './enums/post-visibility.enum';
 import { decodeCursor, encodeCursor } from '../common/helpers/cursor';
+import { UpdatePostDto } from './dto/update-post.dto';
 
 @Injectable()
 export class PostsService {
@@ -32,6 +33,21 @@ export class PostsService {
     const saved = await this.postRepository.save(post);
     saved.author = author;
     return saved;
+  }
+
+  async update(
+    id: string,
+    dto: UpdatePostDto,
+    currentUser: User,
+  ): Promise<Post> {
+    const post = await this.findOne(id, currentUser);
+
+    if (post.authorId !== currentUser.id) {
+      throw new ForbiddenException('You can only update your own posts');
+    }
+
+    Object.assign(post, dto);
+    return this.postRepository.save(post);
   }
 
   async findAll(

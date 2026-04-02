@@ -24,7 +24,7 @@ export class Post {
   })
   content: string | null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   imageUrl: string | null;
 
   @Column({
