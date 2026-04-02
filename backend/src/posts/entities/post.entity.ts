@@ -50,6 +50,8 @@ export class Post {
   @Column({ default: 0 })
   commentsCount: number;
 
+  isLikedByMe?: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 

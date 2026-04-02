@@ -84,6 +84,7 @@ export class CommentsService {
     postId: string,
     page: number,
     limit: number,
+    userId: string,
   ): Promise<{ data: Comment[]; total: number }> {
     const [data, total] = await this.commentRepository.findAndCount({
       where: { postId, parentId: IsNull() },
@@ -92,6 +93,20 @@ export class CommentsService {
       skip: page * limit,
       take: limit,
     });
+
+    if (data.length) {
+      const ids = data.map((c) => c.id);
+      const liked = await this.commentLikeRepository
+        .createQueryBuilder('cl')
+        .select('cl.commentId')
+        .where('cl.userId = :uid', { uid: userId })
+        .andWhere('cl.commentId IN (:...ids)', { ids })
+        .getMany();
+
+      const set = new Set(liked.map((l) => l.commentId));
+      data.forEach((c) => (c.isLikedByMe = set.has(c.id)));
+    }
+
     return { data, total };
   }
 
@@ -124,8 +139,19 @@ export class CommentsService {
         throw new ForbiddenException('You can only delete your own comment');
       }
 
+      const descendentCount = await manager
+        .createQueryBuilder(Comment, 'c')
+        .where('c.parentId = :id', { id: commentId })
+        .getCount();
+      const totalRemove = 1 + descendentCount;
+
       await manager.remove(comment);
-      await manager.decrement(Post, { id: comment.postId }, 'commentsCount', 1);
+      await manager.decrement(
+        Post,
+        { id: comment.postId },
+        'commentsCount',
+        totalRemove,
+      );
     });
   }
 
@@ -164,7 +190,13 @@ export class CommentsService {
       if (!existing) return;
 
       await manager.remove(existing);
-      await manager.decrement(Comment, { id: commentId }, 'likesCount', 1);
+      // await manager.decrement(Comment, { id: commentId }, 'likesCount', 1);
+      await manager
+        .createQueryBuilder()
+        .update(Comment)
+        .set({ likesCount: () => 'GREATEST("likesCount" -1, 0)' })
+        .where('id = :id', { id: commentId })
+        .execute();
     });
   }
 

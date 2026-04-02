@@ -93,6 +93,19 @@ export class PostsService {
     }
 
     const posts = await qb.getMany();
+    const postsIds = posts.map((p) => p.id);
+
+    if (postsIds.length) {
+      const liked = await this.postLikeRepository
+        .createQueryBuilder('pl')
+        .select('pl.postId')
+        .where('pl.userId = :uid', { uid: currentUser.id })
+        .andWhere('pl.postId IN (:...postsIds)', { postsIds })
+        .getMany();
+
+      const likedSet = new Set(liked.map((l) => l.postId));
+      posts.forEach((p) => (p.isLikedByMe = likedSet.has(p.id)));
+    }
 
     const hasNextPage = posts.length > limit;
     if (hasNextPage) {
@@ -131,6 +144,11 @@ export class PostsService {
     ) {
       throw new ForbiddenException();
     }
+
+    const liked = await this.postLikeRepository.findOne({
+      where: { postId: post.id, userId: currentUser.id },
+    });
+    post.isLikedByMe = !!liked;
 
     return post;
   }
@@ -182,7 +200,12 @@ export class PostsService {
       if (!existing) return;
 
       await manager.remove(existing);
-      await manager.decrement(Post, { id: postId }, 'likesCount', 1);
+      await manager
+        .createQueryBuilder()
+        .update(Post)
+        .set({ likesCount: () => 'GREATEST("likesCount" -1, 0)' })
+        .where('id = :id', { id: postId })
+        .execute();
     });
   }
 

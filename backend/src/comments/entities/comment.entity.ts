@@ -52,6 +52,8 @@ export class Comment {
   @Column({ default: 0 })
   likesCount: number;
 
+  isLikedByMe?: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 

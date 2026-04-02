@@ -45,8 +45,14 @@ export class CommentsController {
   findByPost(
     @Param('postId', ParseUUIDPipe) postId: string,
     @Query() query: CommentQueryDto,
+    @CurrentUser() user: User,
   ) {
-    return this.commentsService.findByPost(postId, query.page, query.limit);
+    return this.commentsService.findByPost(
+      postId,
+      query.page,
+      query.limit,
+      user.id,
+    );
   }
 
   @Get(':id/replies')
