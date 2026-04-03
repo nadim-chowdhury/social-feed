@@ -50,7 +50,7 @@ export function FeedHeader() {
   return (
     <header className="fixed left-0 right-0 top-0 z-40 border-b border-black/5 bg-white">
       <nav className="mx-auto hidden max-w-[1320px] items-center gap-4 px-4 py-2.5 md:flex lg:px-6" aria-label="Main">
-        <div className="flex w-full items-center gap-4">
+        <div className="flex w-full items-center gap-8">
           <Link href="/feed" className="shrink-0">
             <Image src="/assets/images/logo.svg" alt="Buddy Script" width={120} height={32} className="h-8 w-auto" />
           </Link>
@@ -70,13 +70,13 @@ export function FeedHeader() {
               <input
                 type="search"
                 placeholder="input search text"
-                className="w-full rounded-full bg-[#F8F9FB] py-2 pl-10 pr-3 text-sm text-[#112032] placeholder:text-[#666] outline-none focus:border-[#1890FF]/80 focus:ring-1 focus:ring-[#1890FF]/80"
+                className="w-full rounded-full bg-[#F8F9FB] h-10 py-2 pl-10 pr-3 text-sm text-[#112032] placeholder:text-[#666] outline-none focus:border-[#1890FF]/80 focus:ring-1 focus:ring-[#1890FF]/80"
                 aria-label="Search"
               />
             </form>
           </div>
 
-          <ul className="ml-auto flex items-center gap-1 sm:gap-2">
+          <ul className="ml-auto flex items-center gap-1 sm:gap-4">
             <li>
               <Link
                 href="/feed"
@@ -134,7 +134,7 @@ export function FeedHeader() {
                     clipRule="evenodd"
                   />
                 </svg>
-                <span className="absolute right-1 top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#FF4D4F] px-1 text-[11px] font-semibold text-white">
+                <span className="absolute right-1 top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#1890FF] px-1 text-[11px] font-semibold text-white">
                   6
                 </span>
               </button>
@@ -197,7 +197,7 @@ export function FeedHeader() {
                         key={n.id}
                         className="flex gap-3 border-b border-black/5 px-4 py-3 last:border-b-0"
                       >
-                        <FeedAvatar name={n.kind === "timeline" ? n.actor : "Admin"} seed={n.avatarSeed} size="sm" />
+                        <FeedAvatar name={n.kind === "timeline" ? n.actor : "Admin"} image={n.avatarImage} seed={n.avatarSeed} size="sm" />
                         <div className="min-w-0 flex-1">
                           <NotificationText n={n} />
                           <p className="mt-1 text-xs text-[#666]">{n.time}</p>
@@ -220,7 +220,7 @@ export function FeedHeader() {
                     clipRule="evenodd"
                   />
                 </svg>
-                <span className="absolute right-1 top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#FF4D4F] px-1 text-[11px] font-semibold text-white">
+                <span className="absolute right-1 top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#1890FF] px-1 text-[11px] font-semibold text-white">
                   2
                 </span>
               </Link>
@@ -228,8 +228,8 @@ export function FeedHeader() {
           </ul>
 
           <div className="relative hidden items-center gap-2 sm:flex" ref={profileRef}>
-            <FeedAvatar name={currentUser.name} seed={currentUser.avatarSeed} size="sm" />
-            <div className="min-w-0">
+            <FeedAvatar name={currentUser.name} image={currentUser.avatarImage} seed={currentUser.avatarSeed} size="sm" />
+            <div className="min-w-0 flex items-center gap-2">
               <p className="truncate text-sm font-medium text-[#112032]">{currentUser.name}</p>
               <button
                 type="button"
@@ -246,7 +246,7 @@ export function FeedHeader() {
             {profileOpen && (
               <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-lg border border-black/10 bg-white py-2 shadow-lg">
                 <div className="flex gap-3 px-4 pb-3">
-                  <FeedAvatar name={currentUser.name} seed={currentUser.avatarSeed} size="md" />
+                  <FeedAvatar name={currentUser.name} image={currentUser.avatarImage} seed={currentUser.avatarSeed} size="md" />
                   <div>
                     <p className="font-semibold text-[#112032]">{currentUser.name}</p>
                     <Link href="#" className="text-sm text-[#1890FF] hover:underline">

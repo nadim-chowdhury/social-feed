@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 function gradientForSeed(seed: string): string {
   let h = 0;
   for (let i = 0; i < seed.length; i += 1) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
@@ -21,7 +23,8 @@ function initialsFromName(name: string): string {
 
 type FeedAvatarProps = {
   name: string;
-  seed: string;
+  seed: string; 
+  image: string;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   className?: string;
 };
@@ -34,14 +37,15 @@ const sizeClass: Record<NonNullable<FeedAvatarProps["size"]>, string> = {
   xl: "h-[52px] w-[52px] min-w-[52px] text-lg",
 };
 
-export function FeedAvatar({ name, seed, size = "md", className = "" }: FeedAvatarProps) {
+export function FeedAvatar({ name, seed, image, size = "md", className = "" }: FeedAvatarProps) {
   const g = gradientForSeed(seed);
+  const isImage = image && image.length > 0;
   return (
     <div
       className={`flex items-center justify-center rounded-full bg-gradient-to-br font-semibold text-white shadow-inner ${g} ${sizeClass[size]} ${className}`}
       aria-hidden
     >
-      {initialsFromName(name)}
+      {image ? <Image src={image} alt={name} width={280} height={280} className="object-cover" />: initialsFromName(name)}
     </div>
   );
 }

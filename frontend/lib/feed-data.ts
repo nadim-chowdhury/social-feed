@@ -10,6 +10,7 @@ export type SuggestedPerson = {
   name: string;
   title: string;
   avatarSeed: string;
+  avatarImage: string;
 };
 
 export type EventCard = {
@@ -59,6 +60,7 @@ export type NotificationTimeline = {
   kind: "timeline";
   actor: string;
   avatarSeed: string;
+  avatarImage: string;
   time: string;
 };
 
@@ -67,6 +69,7 @@ export type NotificationGroup = {
   kind: "group_rename";
   groupName: string;
   avatarSeed: string;
+  avatarImage: string;
   time: string;
 };
 
@@ -84,6 +87,7 @@ export type OnlineFriend = {
 export const currentUser = {
   name: "Dylan Field",
   avatarSeed: "dylan",
+  avatarImage: "/assets/images/profile.png",
 };
 
 export const exploreItems: ExploreItem[] = [
@@ -98,9 +102,9 @@ export const exploreItems: ExploreItem[] = [
 ];
 
 export const suggestedPeople: SuggestedPerson[] = [
-  { id: "1", name: "Steve Jobs", title: "CEO of Apple", avatarSeed: "sj" },
-  { id: "2", name: "Ryan Roslansky", title: "CEO of Linkedin", avatarSeed: "rr" },
-  { id: "3", name: "Dylan Field", title: "CEO of Figma", avatarSeed: "df" },
+  { id: "1", name: "Steve Jobs", title: "CEO of Apple", avatarImage: "/assets/images/profile.png", avatarSeed: "sj" },
+  { id: "2", name: "Ryan Roslansky", title: "CEO of Linkedin", avatarImage: "/assets/images/profile.png", avatarSeed: "rr" },
+  { id: "3", name: "Dylan Field", title: "CEO of Figma", avatarImage: "/assets/images/profile.png", avatarSeed: "df" },
 ];
 
 export const events: EventCard[] = [
@@ -177,6 +181,7 @@ export const notifications: NotificationEntry[] = [
     kind: "timeline",
     actor: "Steve Jobs",
     avatarSeed: "sj",
+    avatarImage: "/assets/images/profile.png",
     time: "42 minutes ago",
   },
   {
@@ -184,6 +189,7 @@ export const notifications: NotificationEntry[] = [
     kind: "group_rename",
     groupName: "Freelacer usa",
     avatarSeed: "ad",
+    avatarImage: "/assets/images/profile.png",
     time: "42 minutes ago",
   },
 ];

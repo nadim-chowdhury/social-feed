@@ -44,7 +44,7 @@ export function FeedLeftSidebar() {
             <div key={p.id} className="flex items-center justify-between gap-3">
               <div className="flex min-w-0 items-center gap-3">
                 <Link href="#" className="shrink-0">
-                  <FeedAvatar name={p.name} seed={p.avatarSeed} size="md" />
+                  <FeedAvatar name={p.name} image={p.avatarImage} seed={p.avatarSeed} size="md" />
                 </Link>
                 <div className="min-w-0">
                   <Link href="#" className="block truncate font-semibold text-[#112032] hover:text-[#1890FF]">
