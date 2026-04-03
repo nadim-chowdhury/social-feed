@@ -7,7 +7,7 @@ export function FeedStories() {
     <section className="mb-4 rounded-md bg-white p-4 shadow-sm md:p-5">
       {/* Desktop grid */}
       <div className="relative hidden md:block">
-        <button
+        {/* <button
           type="button"
           className="absolute -left-1 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-[#1890FF] shadow-md"
           aria-label="Previous stories"
@@ -15,7 +15,7 @@ export function FeedStories() {
           <svg xmlns="http://www.w3.org/2000/svg" width="9" height="8" fill="none" viewBox="0 0 9 8" aria-hidden>
             <path fill="#fff" d="M8 4l.366-.341.318.341-.318.341L8 4zm-7 .5a.5.5 0 010-1v1zM5.566.659l2.8 3-.732.682-2.8-3L5.566.66zm2.8 3.682l-2.8 3-.732-.682 2.8-3 .732.682zM8 4.5H1v-1h7v1z" />
           </svg>
-        </button>
+        </button> */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {stories.map((s) => (
             <StoryCard key={s.id} story={s} />
@@ -65,7 +65,7 @@ function StoryCard({ story }: { story: (typeof stories)[number] }) {
       : "ring-1 ring-black/10";
 
   return (
-    <div className={`overflow-hidden rounded-md ${ring}`}>
+    <div className={`overflow-hidden rounded-md`}>
       <div className="relative aspect-[3/4] rounded-md bg-gradient-to-br from-indigo-400 to-fuchsia-500">
         <div className="absolute bottom-2 left-2 right-2">
           <p className="truncate text-xs font-medium text-white drop-shadow">{story.name}</p>

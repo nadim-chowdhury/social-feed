@@ -84,6 +84,14 @@ export type OnlineFriend = {
   awayLabel?: string;
 };
 
+export type MightLikePerson = {
+  id: string;
+  name: string;
+  title: string;
+  avatarSeed: string;
+  isFollowing?: boolean;
+};
+
 export const currentUser = {
   name: "Dylan Field",
   avatarSeed: "dylan",
@@ -201,4 +209,14 @@ export const rightSidebarFriends: OnlineFriend[] = [
   { id: "f4", name: "Steve Jobs", title: "CEO of Apple", avatarSeed: "sj2", status: "away", awayLabel: "5 minute ago" },
   { id: "f5", name: "Ryan Roslansky", title: "CEO of Linkedin", avatarSeed: "rr2", status: "online" },
   { id: "f6", name: "Dylan Field", title: "CEO of Figma", avatarSeed: "df2", status: "online" },
+];
+
+export const rightSidebarMightLike: MightLikePerson[] = [
+  {
+    id: "m1",
+    name: "Radovan SkillArena",
+    title: "Founder & CEO at Trophy",
+    avatarSeed: "rs",
+    isFollowing: true,
+  },
 ];

@@ -24,7 +24,7 @@ function initialsFromName(name: string): string {
 type FeedAvatarProps = {
   name: string;
   seed: string; 
-  image: string;
+  image?: string;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   className?: string;
 };
@@ -39,13 +39,22 @@ const sizeClass: Record<NonNullable<FeedAvatarProps["size"]>, string> = {
 
 export function FeedAvatar({ name, seed, image, size = "md", className = "" }: FeedAvatarProps) {
   const g = gradientForSeed(seed);
-  const isImage = image && image.length > 0;
   return (
     <div
       className={`flex items-center justify-center rounded-full bg-gradient-to-br font-semibold text-white shadow-inner ${g} ${sizeClass[size]} ${className}`}
       aria-hidden
     >
-      {image ? <Image src={image} alt={name} width={280} height={280} className="object-cover" />: initialsFromName(name)}
+      {image ? (
+        <Image
+          src={image}
+          alt={name}
+          width={280}
+          height={280}
+          className="object-cover"
+        />
+      ) : (
+        initialsFromName(name)
+      )}
     </div>
   );
 }

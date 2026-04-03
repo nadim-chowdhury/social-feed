@@ -76,12 +76,12 @@ export function FeedLeftSidebar() {
             <Link key={ev.id} href={ev.href} className="block overflow-hidden rounded-md border border-black/5">
               <div className="relative aspect-[21/9] bg-gradient-to-br from-slate-200 to-slate-400" />
               <div className="flex gap-3 p-3">
-                <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-md bg-[#F8F9FB] text-center">
-                  <p className="text-lg font-bold leading-none text-[#112032]">{ev.day}</p>
-                  <p className="text-xs font-medium text-[#666]">{ev.month}</p>
+                <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-md bg-[#0ACF83] text-center">
+                  <p className="text-lg font-bold leading-none text-white">{ev.day}</p>
+                  <p className="text-xs font-medium text-white/80">{ev.month}</p>
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h4 className="line-clamp-2 text-sm font-semibold text-[#112032]">{ev.title}</h4>
+                  <h4 className="line-clamp-2 text-sm font-semibold text-white">{ev.title}</h4>
                 </div>
               </div>
               <hr className="border-black/5" />
