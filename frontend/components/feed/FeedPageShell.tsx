@@ -16,7 +16,7 @@ export function FeedPageShell() {
 
       <main className="mx-auto max-w-[1320px] px-4 pb-24 pt-4 lg:px-6 lg:pb-10 lg:pt-6">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-start">
-          <div className="lg:col-span-3 lg:sticky lg:top-[90px] lg:h-[calc(100vh-100px)] lg:overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:pb-4">
+          <div className="hidden lg:block lg:col-span-3 lg:sticky lg:top-[90px] lg:h-[calc(100vh-100px)] lg:overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:pb-4">
             <FeedLeftSidebar />
           </div>
           <div className="lg:col-span-6">
