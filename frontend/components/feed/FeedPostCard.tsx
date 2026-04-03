@@ -111,14 +111,13 @@ export function FeedPostCard({ post }: { post: FeedPost }) {
         />
       </div>
 
-      <div className="flex items-center justify-between px-6 py-4 pb-3">
-        <div className="flex items-center">
+      <div className="flex flex-wrap items-center justify-between gap-y-2 px-4 py-4 pb-3 sm:px-6">
+        <div className="flex shrink-0 items-center">
           <span className="flex -space-x-[10px]">
             {[
               "/assets/images/react_img1.png",
               "/assets/images/react_img2.png",
               "/assets/images/react_img3.png",
-              "/assets/images/react_img4.png",
             ].map((img, i) => (
               <Image
                 key={i}
@@ -126,15 +125,15 @@ export function FeedPostCard({ post }: { post: FeedPost }) {
                 alt="user"
                 width={36}
                 height={36}
-                className="h-9 w-9 rounded-full border-2 border-white object-cover"
+                className="h-9 w-9 shrink-0 rounded-full border-2 border-white object-cover"
               />
             ))}
-            <span className="relative z-10 flex h-9 w-9 items-center justify-center rounded-full border-2 border-white bg-[#1890FF] text-[14px] font-semibold text-white">
+            <span className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-white bg-[#1890FF] text-[14px] font-semibold text-white">
               9+
             </span>
           </span>
         </div>
-        <div className="flex gap-4 text-[15px] font-medium text-[#8C9AA9]">
+        <div className="flex shrink-0 gap-3 text-[14px] sm:text-[15px] font-medium text-[#8C9AA9] sm:gap-4">
           <button
             type="button"
             className="hover:text-[#1890FF] transition-colors"

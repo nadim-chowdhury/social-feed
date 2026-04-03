@@ -4,7 +4,7 @@ import { FeedAvatar } from "./FeedAvatar";
 
 export function FeedStories() {
   return (
-    <section className="mb-4 rounded-md bg-white p-4 shadow-sm md:p-5">
+    <section className="mb-4 rounded-md">
       {/* Desktop grid */}
       <div className="relative hidden md:block">
         {/* <button
@@ -24,7 +24,7 @@ export function FeedStories() {
       </div>
 
       {/* Mobile horizontal scroll */}
-      <div className="-mx-1 md:hidden">
+      <div className="mx-1 md:hidden">
         <ul className="flex gap-3 overflow-x-auto pb-1 pl-1 pr-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {stories.map((s) => (
             <li key={s.id} className="w-[72px] shrink-0">
@@ -117,41 +117,57 @@ function StoryCard({ story }: { story: (typeof stories)[number] }) {
 function MobileStory({ story }: { story: (typeof stories)[number] }) {
   if (story.isOwn) {
     return (
-      <Link href="#" className="block text-center">
-        <div className="relative mx-auto mb-1 aspect-square w-16 overflow-hidden rounded-full bg-linear-to-br from-slate-300 to-slate-500">
-          <span className="absolute bottom-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-[#1890FF] shadow">
+      <Link href="#" className="flex flex-col items-center">
+        <div className="relative mb-1">
+          <div className="h-[60px] w-[60px] overflow-hidden rounded-full">
+            <img
+              src={story.ownImage || story.image || "/assets/images/user1.png"}
+              alt="Your Story"
+              className="h-full w-full object-cover"
+            />
+          </div>
+          <span className="absolute bottom-0 right-0 flex h-[22px] w-[22px] items-center justify-center rounded-full border-2px border-white bg-[#1890FF]">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="12"
               height="12"
               fill="none"
-              viewBox="0 0 12 12"
-              aria-hidden
+              viewBox="0 0 24 24"
+              stroke="white"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              <path
-                stroke="#fff"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 2.5v7M2.5 6h7"
-              />
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
           </span>
         </div>
-        <p className="truncate text-[11px] text-[#112032]">Your Story</p>
+        <p className="w-full text-center truncate text-[14px] font-medium text-[#1890FF] mt-0.5">
+          Your Story
+        </p>
       </Link>
     );
   }
 
   const active = story.variant === "active";
+  const ringClass = active ? "border-[#1890FF]" : "border-[#C4C4C4]";
+
   return (
-    <Link href="#" className="block text-center">
+    <Link href="#" className="flex flex-col items-center">
       <div
-        className={`relative mx-auto mb-1 aspect-square w-16 overflow-hidden rounded-full bg-linear-to-br from-indigo-400 to-fuchsia-500 ${
-          active ? "ring-2 ring-[#1890FF]" : "opacity-90"
-        }`}
-      />
-      <p className="truncate text-[11px] text-[#112032]">
-        {story.name.slice(0, 5)}...
+        className={`relative mb-1 rounded-full border-2px p-[2.5px] ${ringClass}`}
+      >
+        <div className="h-[54px] w-[54px] overflow-hidden rounded-full">
+          <img
+            src={story.avatarImage || story.image || "/assets/images/user1.png"}
+            alt={story.name}
+            className="h-full w-full object-cover"
+          />
+        </div>
+      </div>
+      <p className="w-full text-center truncate text-[14px] font-medium text-[#516170] mt-0.5">
+        {story.name.length > 5 ? `${story.name.slice(0, 4)}...` : story.name}
       </p>
     </Link>
   );
