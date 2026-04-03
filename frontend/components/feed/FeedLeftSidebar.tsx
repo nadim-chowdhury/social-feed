@@ -2,6 +2,7 @@ import Link from "next/link";
 import { events, exploreItems, suggestedPeople } from "@/lib/feed-data";
 import { ExploreIconForItem } from "./feed-explore-icons";
 import { FeedAvatar } from "./FeedAvatar";
+import Image from "next/image";
 
 export function FeedLeftSidebar() {
   return (
@@ -15,7 +16,7 @@ export function FeedLeftSidebar() {
                 href={item.href}
                 className="flex items-center justify-between gap-2 rounded-md py-2 text-sm font-medium text-[#666] hover:bg-[#F8F9FB] hover:text-[#112032]"
               >
-                <span className="flex min-w-0 items-center gap-2">
+                <span className="flex min-w-0 items-center justify-center gap-4">
                   <span className="text-[#666]">
                     <ExploreIconForItem
                       id={item.id}
@@ -56,22 +57,22 @@ export function FeedLeftSidebar() {
                     name={p.name}
                     image={p.avatarImage}
                     seed={p.avatarSeed}
-                    size="md"
+                    size="sm"
                   />
                 </Link>
                 <div className="min-w-0">
                   <Link
                     href="#"
-                    className="block truncate font-semibold text-[#112032] hover:text-[#1890FF]"
+                    className="block truncate font-medium text-[#112032] hover:text-[#1890FF]"
                   >
                     {p.name}
                   </Link>
-                  <p className="truncate text-sm text-[#666]">{p.title}</p>
+                  <p className="truncate text-xs text-[#666]">{p.title}</p>
                 </div>
               </div>
               <Link
                 href="#"
-                className="shrink-0 rounded-md border border-[#1890FF] px-3 py-1.5 text-sm font-medium text-[#1890FF] hover:bg-[#E6F7FF]"
+                className="shrink-0 rounded-md border border-[#aaa] px-2 py-1 text-xs font-medium text-[#999] hover:bg-[#1890FF]"
               >
                 Connect
               </Link>
@@ -97,26 +98,35 @@ export function FeedLeftSidebar() {
               href={ev.href}
               className="block overflow-hidden rounded-md border border-black/5"
             >
-              <div className="relative aspect-21/9 bg-linear-to-br from-slate-200 to-slate-400" />
-              <div className="flex gap-3 p-3">
-                <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-md bg-[#0ACF83] text-center">
+              <Image
+                src="/assets/images/feed_event1.png"
+                alt="Event"
+                width={280}
+                height={280}
+                className="w-full h-40 object-cover"
+              />
+
+              <div className="flex gap-3 p-3 py-5">
+                <div className="flex h-14 w-10 shrink-0 flex-col items-center justify-center rounded-sm bg-[#0ACF83] text-center">
                   <p className="text-lg font-bold leading-none text-white">
                     {ev.day}
                   </p>
-                  <p className="text-xs font-medium text-white/80">
+                  <p className="text-sm font-medium text-white/90">
                     {ev.month}
                   </p>
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h4 className="line-clamp-2 text-sm font-semibold text-white">
+                  <h4 className="line-clamp-2 text-sm font-semibold text-[#112032]">
                     {ev.title}
                   </h4>
                 </div>
               </div>
               <hr className="border-black/5" />
-              <div className="flex items-center justify-between px-3 py-2 text-sm">
+              <div className="flex items-center justify-between px-3 py-4 text-sm">
                 <p className="text-[#666]">{ev.goingCount} People Going</p>
-                <span className="font-medium text-[#1890FF]">Going</span>
+                <button className="font-medium text-[#1890FF] border border-[#1890FF] px-4 py-[2px] bg-[#F3F9FF] hover:bg-[#1890FF] hover:text-white transition-all duration-300 ease-in-out">
+                  Going
+                </button>
               </div>
             </Link>
           ))}

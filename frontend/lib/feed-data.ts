@@ -82,6 +82,7 @@ export type OnlineFriend = {
   avatarSeed: string;
   status: "online" | "away";
   awayLabel?: string;
+  image: string;
 };
 
 export type MightLikePerson = {
@@ -90,6 +91,7 @@ export type MightLikePerson = {
   title: string;
   avatarSeed: string;
   isFollowing?: boolean;
+  image: string;
 };
 
 export const currentUser = {
@@ -114,21 +116,21 @@ export const suggestedPeople: SuggestedPerson[] = [
     id: "1",
     name: "Steve Jobs",
     title: "CEO of Apple",
-    avatarImage: "/assets/images/profile.png",
+    avatarImage: "/assets/images/people1.png",
     avatarSeed: "sj",
   },
   {
     id: "2",
     name: "Ryan Roslansky",
     title: "CEO of Linkedin",
-    avatarImage: "/assets/images/profile.png",
+    avatarImage: "/assets/images/people2.png",
     avatarSeed: "rr",
   },
   {
     id: "3",
     name: "Dylan Field",
     title: "CEO of Figma",
-    avatarImage: "/assets/images/profile.png",
+    avatarImage: "/assets/images/people3.png",
     avatarSeed: "df",
   },
 ];
@@ -225,6 +227,7 @@ export const rightSidebarFriends: OnlineFriend[] = [
     name: "Steve Jobs",
     title: "CEO of Apple",
     avatarSeed: "sj",
+    image: "/assets/images/people1.png",
     status: "away",
     awayLabel: "5 minute ago",
   },
@@ -232,6 +235,7 @@ export const rightSidebarFriends: OnlineFriend[] = [
     id: "f2",
     name: "Ryan Roslansky",
     title: "CEO of Linkedin",
+    image: "/assets/images/people2.png",
     avatarSeed: "rr",
     status: "online",
   },
@@ -239,6 +243,7 @@ export const rightSidebarFriends: OnlineFriend[] = [
     id: "f3",
     name: "Dylan Field",
     title: "CEO of Figma",
+    image: "/assets/images/people3.png",
     avatarSeed: "df",
     status: "online",
   },
@@ -247,6 +252,7 @@ export const rightSidebarFriends: OnlineFriend[] = [
     name: "Steve Jobs",
     title: "CEO of Apple",
     avatarSeed: "sj2",
+    image: "/assets/images/people1.png",
     status: "away",
     awayLabel: "5 minute ago",
   },
@@ -255,12 +261,14 @@ export const rightSidebarFriends: OnlineFriend[] = [
     name: "Ryan Roslansky",
     title: "CEO of Linkedin",
     avatarSeed: "rr2",
+    image: "/assets/images/people2.png",
     status: "online",
   },
   {
     id: "f6",
     name: "Dylan Field",
     title: "CEO of Figma",
+    image: "/assets/images/people3.png",
     avatarSeed: "df2",
     status: "online",
   },
@@ -273,5 +281,6 @@ export const rightSidebarMightLike: MightLikePerson[] = [
     title: "Founder & CEO at Trophy",
     avatarSeed: "rs",
     isFollowing: true,
+    image: "/assets/images/Avatar.png",
   },
 ];

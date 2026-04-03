@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FeedAvatar } from "./FeedAvatar";
 import { rightSidebarFriends, rightSidebarMightLike } from "@/lib/feed-data";
+import Image from "next/image";
 
 function initialsFromName(name: string) {
   const parts = name.trim().split(/\s+/).filter(Boolean);
@@ -41,7 +42,7 @@ function StatusIndicator({
   }
 
   return (
-    <span className="text-sm leading-none text-[#666]">
+    <span className="text-xs leading-none text-[#666]">
       {awayLabel ?? "5 minute ago"}
     </span>
   );
@@ -71,23 +72,28 @@ export function FeedRightSidebar() {
               key={p.id}
               className="flex flex-col items-center justify-center gap-3"
             >
-              <div className="flex min-w-0 items-center gap-3 py-3">
+              <div className="flex min-w-0 items-center gap-3 py-4">
                 <Link href="#" className="shrink-0">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#F2F2F2] text-sm font-semibold text-[#112032]">
+                  {/* <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#F2F2F2] text-sm font-semibold text-[#112032]">
                     {initialsFromName(p.name)}
-                  </div>
+                  </div> */}
+                  <Image
+                    src={p.image}
+                    alt={p.name}
+                    width={96}
+                    height={96}
+                    className="rounded-full h-12 w-12 object-cover"
+                  />
                 </Link>
 
                 <div className="min-w-0">
                   <Link
                     href="#"
-                    className="block truncate font-semibold text-[#112032] hover:text-[#1890FF] mb-1"
+                    className="block truncate font-medium text-[#112032] hover:text-[#1890FF] mb-1"
                   >
                     {p.name}
                   </Link>
-                  <p className="truncate text-sm font-medium text-[#1890FF]">
-                    {p.title}
-                  </p>
+                  <p className="truncate text-xs text-[#666]">{p.title}</p>
                 </div>
               </div>
 
@@ -114,7 +120,7 @@ export function FeedRightSidebar() {
         </div>
       </div>
 
-      <div className="rounded-md bg-white px-6 pt-6 pb-3">
+      <div className="rounded-md bg-white px-6 pt-6 pb-3 shadow-sm">
         <div className="flex items-center justify-between">
           <h4 className="text-lg font-semibold text-[#112032]">Your Friends</h4>
           <Link
@@ -125,7 +131,7 @@ export function FeedRightSidebar() {
           </Link>
         </div>
 
-        <form className="mt-4 flex items-center gap-2 rounded-md border border-black/5 bg-[#F8F9FB] px-3 py-2">
+        <form className="mt-4 flex items-center gap-2  rounded-full bg-[#F5F5F5] px-4 py-3">
           <svg
             className="h-[17px] w-[17px] shrink-0 text-[#666]"
             xmlns="http://www.w3.org/2000/svg"
@@ -146,8 +152,8 @@ export function FeedRightSidebar() {
           />
         </form>
 
-        <div className="mt-4 max-h-[560px] overflow-y-auto pr-1">
-          <div className="space-y-4">
+        <div className="mt-8 mb-4 max-h-[560px] overflow-y-auto pr-1">
+          <div className="space-y-8">
             {rightSidebarFriends.map((f) => {
               const inactive = f.status === "away";
               return (
@@ -163,18 +169,19 @@ export function FeedRightSidebar() {
                         <FeedAvatar
                           name={f.name}
                           seed={f.avatarSeed}
-                          size="md"
+                          image={f.image}
+                          size="sm"
                         />
                       </Link>
                     </div>
                     <div className="min-w-0">
                       <Link
                         href="#"
-                        className="block truncate font-semibold text-[#112032] hover:text-[#1890FF]"
+                        className="block truncate font-medium text-[#112032] hover:text-[#1890FF]"
                       >
                         {f.name}
                       </Link>
-                      <p className="truncate text-sm text-[#666]">{f.title}</p>
+                      <p className="truncate text-xs text-[#666]">{f.title}</p>
                     </div>
                   </div>
 
