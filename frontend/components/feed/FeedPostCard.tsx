@@ -9,6 +9,7 @@ import { FeedAvatar } from "./FeedAvatar";
 
 export function FeedPostCard({ post }: { post: FeedPost }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [replyToId, setReplyToId] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -102,9 +103,7 @@ export function FeedPostCard({ post }: { post: FeedPost }) {
             )}
           </div>
         </div>
-        <h3 className="mt-4 text-base text-[#112032]">
-          {post.title}
-        </h3>
+        <h3 className="mt-4 text-base text-[#112032]">{post.title}</h3>
         <div
           className={`mt-4 aspect-video w-full rounded-md bg-linear-to-br ${post.imageGradient}`}
           role="img"
@@ -112,7 +111,7 @@ export function FeedPostCard({ post }: { post: FeedPost }) {
         />
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/5 px-6 py-4">
+      <div className="flex items-center justify-between px-6 py-4 pb-3">
         <div className="flex items-center">
           <span className="flex -space-x-[10px]">
             {[
@@ -130,33 +129,33 @@ export function FeedPostCard({ post }: { post: FeedPost }) {
                 className="h-9 w-9 rounded-full border-2 border-white object-cover"
               />
             ))}
-            <span
-              className="relative flex h-9 w-9 items-center justify-center rounded-full border-2 border-white bg-[#1890FF] text-[13px] text-white"
-            >
+            <span className="relative z-10 flex h-9 w-9 items-center justify-center rounded-full border-2 border-white bg-[#1890FF] text-[14px] font-semibold text-white">
               9+
             </span>
           </span>
         </div>
-        <div className="flex gap-4 text-[15px] text-[#666]">
-          <button type="button" className="hover:text-[#1890FF]">
-            <span className="text-[#112032]">
-              {post.commentCount}
-            </span>{" "}
+        <div className="flex gap-4 text-[15px] font-medium text-[#8C9AA9]">
+          <button
+            type="button"
+            className="hover:text-[#1890FF] transition-colors"
+          >
+            <span className="text-[#112032] mr-1.5">{post.commentCount}</span>
             Comment
           </button>
-          <p>
-            <span className="text-[#112032]">
-              {post.shareCount}
-            </span>{" "}
+          <button
+            type="button"
+            className="hover:text-[#1890FF] transition-colors"
+          >
+            <span className="text-[#112032] mr-1.5">{post.shareCount}</span>
             Share
-          </p>
+          </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-2 border-b border-black/5 px-4 py-2 sm:px-6">
+      <div className="grid grid-cols-3 w-full border-y border-black/5">
         <button
           type="button"
-          className="inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-[#F8F9FB] px-3 py-2 text-sm font-medium text-[#112032] sm:flex-none sm:bg-transparent"
+          className="flex items-center justify-center gap-2 bg-[#EAF4FF] py-3 text-[15px] font-medium text-[#112032]"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -175,59 +174,56 @@ export function FeedPostCard({ post }: { post: FeedPost }) {
               d="M9.5 11.083c-1.912 0-3.181-.222-4.75-.527-.358-.07-1.056 0-1.056 1.055 0 2.111 2.425 4.75 5.806 4.75 3.38 0 5.805-2.639 5.805-4.75 0-1.055-.697-1.125-1.055-1.055-1.57.305-2.838.527-4.75.527z"
             />
           </svg>
-          {post.reactionLabel}
+          Haha
         </button>
         <button
           type="button"
-          className="inline-flex flex-1 items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-[#112032] hover:bg-[#F8F9FB] sm:flex-none"
+          className="flex items-center justify-center gap-2 py-3 text-[15px] font-medium text-[#112032] hover:bg-[#F8F9FB] transition-colors"
         >
           <svg
             className="text-[#112032]"
             xmlns="http://www.w3.org/2000/svg"
-            width="21"
-            height="21"
+            width="22"
+            height="22"
             fill="none"
-            viewBox="0 0 21 21"
-            aria-hidden
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth="1.5"
           >
             <path
-              stroke="currentColor"
-              d="M1 10.5c0-.464 0-.696.009-.893A9 9 0 019.607 1.01C9.804 1 10.036 1 10.5 1v0c.464 0 .696 0 .893.009a9 9 0 018.598 8.598c.009.197.009.429.009.893v6.046c0 1.36 0 2.041-.317 2.535a2 2 0 01-.602.602c-.494.317-1.174.317-2.535.317H10.5c-.464 0-.696 0-.893-.009a9 9 0 01-8.598-8.598C1 11.196 1 10.964 1 10.5v0z"
-            />
-            <path
-              stroke="currentColor"
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M6.938 9.313h7.125M10.5 14.063h3.563"
+              d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z"
             />
           </svg>
           Comment
         </button>
         <button
           type="button"
-          className="inline-flex flex-1 items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-[#112032] hover:bg-[#F8F9FB] sm:flex-none"
+          className="flex items-center justify-center gap-2 py-3 text-[15px] font-medium text-[#112032] hover:bg-[#F8F9FB] transition-colors"
         >
           <svg
             className="text-[#112032]"
             xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="21"
+            width="22"
+            height="22"
             fill="none"
-            viewBox="0 0 24 21"
-            aria-hidden
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth="1.5"
           >
             <path
-              stroke="currentColor"
+              strokeLinecap="round"
               strokeLinejoin="round"
-              d="M23 10.5L12.917 1v5.429C3.267 6.429 1 13.258 1 20c2.785-3.52 5.248-5.429 11.917-5.429V20L23 10.5z"
+              d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z"
             />
           </svg>
           Share
         </button>
       </div>
 
-      <div className="px-6 py-4">
-        <div className="flex items-center gap-3 rounded-full bg-[#F5F5F5] p-2 pr-4">
+      <div className="px-6 pb-6 mt-6 flex flex-col gap-6">
+        <div className="flex items-center gap-3 rounded-full bg-[#F5F5F5] p-2 pr-4 w-full">
           <div className="shrink-0">
             <FeedAvatar
               name={currentUser.name}
@@ -244,7 +240,7 @@ export function FeedPostCard({ post }: { post: FeedPost }) {
               type="text"
               id={`comment-${post.id}`}
               placeholder="Write a comment"
-              className="w-full bg-transparent text-[15px] text-[#112032] placeholder:text-[#517596] outline-none"
+              className="w-full bg-transparent text-[15.5px] text-[#112032] placeholder:text-[#517596] outline-none"
             />
           </div>
           <div className="flex shrink-0 items-center gap-3 text-[#8C9AA9]">
@@ -253,10 +249,20 @@ export function FeedPostCard({ post }: { post: FeedPost }) {
               className="hover:text-[#1890FF] transition-colors"
               aria-label="Microphone"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="19" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                <line x1="12" x2="12" y1="19" y2="22"/>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="19"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                <line x1="12" x2="12" y1="19" y2="22" />
               </svg>
             </button>
             <button
@@ -264,10 +270,20 @@ export function FeedPostCard({ post }: { post: FeedPost }) {
               className="hover:text-[#1890FF] transition-colors"
               aria-label="Attach Photo"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect width="18" height="18" x="3" y="3" rx="4" ry="4"/>
-                <circle cx="8.5" cy="8.5" r="1.5"/>
-                <path d="M21 15l-5-5L5 21"/>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect width="18" height="18" x="3" y="3" rx="4" ry="4" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <path d="M21 15l-5-5L5 21" />
               </svg>
             </button>
           </div>
@@ -277,76 +293,176 @@ export function FeedPostCard({ post }: { post: FeedPost }) {
           post.previousCommentsCount > 0 && (
             <button
               type="button"
-              className="mt-4 text-sm font-medium text-[#666] hover:text-[#1890FF]"
+              className="text-left text-[15.5px] font-medium text-[#516170] hover:text-[#1890FF]"
             >
               View {post.previousCommentsCount} previous comments
             </button>
           )}
 
-        {post.comments.map((c) => (
-          <div key={c.id} className="mt-4 flex gap-3">
-            <Link href="#" className="shrink-0">
-              <FeedAvatar name={c.author} seed={c.authorSeed} size="md" />
-            </Link>
-            <div className="min-w-0 flex-1 rounded-2xl bg-[#F8F9FB] px-4 py-3">
-              <Link
-                href="#"
-                className="font-semibold text-[#112032] hover:underline"
-              >
-                {c.author}
+        <div className="flex flex-col gap-6">
+          {post.comments.map((c) => (
+            <div key={c.id} className="flex gap-3">
+              <Link href="#" className="shrink-0 mt-1">
+                <FeedAvatar
+                  name={c.author}
+                  seed={c.authorSeed}
+                  image="/assets/images/txt_img.png"
+                  size="sm"
+                />
               </Link>
-              <p className="mt-1 text-sm leading-relaxed text-[#112032]">
-                {c.body}
-              </p>
-              <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-[#666]">
-                <span className="inline-flex items-center gap-1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    aria-hidden
+              <div className="min-w-0 flex-1 flex flex-col items-start w-full">
+                <div className="relative w-[95%] rounded-2xl bg-[#F5F5F5] px-4 py-3 pb-4">
+                  <Link
+                    href="#"
+                    className="font-medium text-[15px] text-[#112032] hover:underline"
                   >
-                    <path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3" />
-                  </svg>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    aria-hidden
-                  >
-                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
-                  </svg>
-                  <span className="font-medium text-[#112032]">
+                    {c.author}
+                  </Link>
+                  <p className="mt-1 text-[15.5px] leading-relaxed text-[#516170]">
+                    {c.body}
+                  </p>
+
+                  <span className="absolute -bottom-[14px] right-4 flex items-center gap-1 shadow-[0_2px_8px_rgba(0,0,0,0.08)] rounded-full bg-white px-2 py-[3px] text-[13px] font-semibold text-[#112032] border border-black/5">
+                    <div className="flex items-center -space-x-[6px] mr-1">
+                      <span className="relative z-10 rounded-full bg-white border-2 border-white flex justify-center items-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#1890FF"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="p-[1.5px] bg-[#EAF4FF] rounded-full"
+                        >
+                          <path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3" />
+                        </svg>
+                      </span>
+                      <span className="rounded-full bg-white border-2 border-white flex justify-center items-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#FF4D4F"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="p-[1.5px] bg-[#FFF1F0] rounded-full"
+                        >
+                          <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+                        </svg>
+                      </span>
+                    </div>
                     {c.reactions}
                   </span>
-                </span>
-                <span className="flex gap-2">
+                </div>
+
+                <div className="mt-3 px-1 flex gap-1.5 text-[14.5px] font-medium text-[#112032]">
                   <button type="button" className="hover:text-[#1890FF]">
                     Like
                   </button>
-                  <span>·</span>
-                  <button type="button" className="hover:text-[#1890FF]">
+                  <span className="text-[#112032]">.</span>
+                  <button
+                    type="button"
+                    className="hover:text-[#1890FF]"
+                    onClick={() =>
+                      setReplyToId(replyToId === c.id ? null : c.id)
+                    }
+                  >
                     Reply
                   </button>
-                  <span>·</span>
+                  <span className="text-[#112032]">.</span>
                   <button type="button" className="hover:text-[#1890FF]">
                     Share
                   </button>
-                  <span>·</span>
-                  <span className="text-[#999]">.{c.timeLabel}</span>
-                </span>
+                  <span className="text-[#8C9AA9] font-normal ml-0.5">
+                    .{c.timeLabel}
+                  </span>
+                </div>
+
+                {replyToId === c.id && (
+                  <div className="flex items-center gap-3 rounded-full bg-[#F5F5F5] p-2 pr-4 mt-3 w-full">
+                    <div className="shrink-0">
+                      <FeedAvatar
+                        name={currentUser.name}
+                        seed={currentUser.avatarSeed}
+                        image="/assets/images/txt_img.png"
+                        size="sm"
+                      />
+                    </div>
+                    <div className="relative min-w-0 flex-1 flex items-center">
+                      <label htmlFor={`reply-${c.id}`} className="sr-only">
+                        Write a comment
+                      </label>
+                      <input
+                        type="text"
+                        id={`reply-${c.id}`}
+                        placeholder="Write a comment"
+                        autoFocus
+                        className="w-full bg-transparent text-[15.5px] text-[#112032] placeholder:text-[#517596] outline-none"
+                      />
+                    </div>
+                    <div className="flex shrink-0 items-center gap-3 text-[#8C9AA9]">
+                      <button
+                        type="button"
+                        className="hover:text-[#1890FF] transition-colors"
+                        aria-label="Microphone"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="19"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                          <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                          <line x1="12" x2="12" y1="19" y2="22" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        className="hover:text-[#1890FF] transition-colors"
+                        aria-label="Attach Photo"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="18"
+                          height="18"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <rect
+                            width="18"
+                            height="18"
+                            x="3"
+                            y="3"
+                            rx="4"
+                            ry="4"
+                          />
+                          <circle cx="8.5" cy="8.5" r="1.5" />
+                          <path d="M21 15l-5-5L5 21" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </article>
   );
