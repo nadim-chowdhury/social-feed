@@ -73,9 +73,9 @@ export default function RegisterPage() {
   return (
     <div className="grid grid-cols-1 items-center gap-10 lg:min-h-[520px] lg:grid-cols-12 lg:gap-8">
       <div className="flex justify-center lg:col-span-7 xl:col-span-8">
-        <div className="w-full max-w-[640px]">
+        <div className="w-full max-w-[840px]">
           <Image
-            src="/assets/images/registration-hero.svg"
+            src="/assets/images/registration.png"
             alt=""
             width={633}
             height={480}

@@ -57,7 +57,7 @@ export default function LoginPage() {
       <div className="flex justify-center lg:col-span-7 xl:col-span-8">
         <div className="w-full max-w-[640px]">
           <Image
-            src="/assets/images/login-hero.svg"
+            src="/assets/images/login.png"
             alt=""
             width={633}
             height={420}
