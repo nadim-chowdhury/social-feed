@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import type { FeedPost } from "@/lib/feed-data";
 import { currentUser } from "@/lib/feed-data";
@@ -111,31 +112,40 @@ export function FeedPostCard({ post }: { post: FeedPost }) {
         />
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/5 px-6 py-3">
-        <div className="flex items-center gap-1">
-          <span className="flex -space-x-1">
-            {[0, 1, 2].map((i) => (
-              <span
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/5 px-6 py-4">
+        <div className="flex items-center">
+          <span className="flex -space-x-[10px]">
+            {[
+              "/assets/images/react_img1.png",
+              "/assets/images/react_img2.png",
+              "/assets/images/react_img3.png",
+              "/assets/images/react_img4.png",
+            ].map((img, i) => (
+              <Image
                 key={i}
-                className="inline-flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-linear-to-br from-amber-200 to-rose-400 text-[10px] font-bold text-white"
-              >
-                {i + 1}
-              </span>
+                src={img}
+                alt="user"
+                width={36}
+                height={36}
+                className="h-9 w-9 rounded-full border-2 border-white object-cover"
+              />
             ))}
-          </span>
-          <span className="text-sm font-medium text-[#112032]">
-            {post.reactSummary}
+            <span
+              className="relative flex h-9 w-9 items-center justify-center rounded-full border-2 border-white bg-[#1890FF] text-[13px] text-white"
+            >
+              9+
+            </span>
           </span>
         </div>
-        <div className="flex gap-4 text-sm text-[#666]">
+        <div className="flex gap-4 text-[15px] text-[#666]">
           <button type="button" className="hover:text-[#1890FF]">
-            <span className="font-medium text-[#112032]">
+            <span className="text-[#112032]">
               {post.commentCount}
             </span>{" "}
             Comment
           </button>
           <p>
-            <span className="font-medium text-[#112032]">
+            <span className="text-[#112032]">
               {post.shareCount}
             </span>{" "}
             Share
