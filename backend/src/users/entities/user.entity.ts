@@ -14,10 +14,10 @@ export class User {
   id: string;
 
   @Column()
-  firstName: string;
+  firstName?: string;
 
   @Column()
-  lastName: string;
+  lastName?: string;
 
   @Index({ unique: true })
   @Column({ unique: true })
@@ -28,7 +28,7 @@ export class User {
   password: string;
 
   @Column({ nullable: true })
-  avatar: string;
+  avatar?: string;
 
   @CreateDateColumn()
   createdAt: Date;
