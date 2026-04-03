@@ -41,8 +41,15 @@ function StoryCard({ story }: { story: (typeof stories)[number] }) {
   if (story.isOwn) {
     return (
       <div className="overflow-hidden rounded-md">
-        <div className="relative aspect-3/4 rounded-md bg-linear-to-b from-slate-300 to-slate-500">
-          <div className="absolute inset-x-0 bottom-0 flex flex-col items-center pb-3 pt-8">
+        <div
+          className="relative aspect-3/4 rounded-md"
+          style={{
+            background: `url(${story.ownImage})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          <div className="absolute inset-x-0 bottom-0 flex flex-col items-center pb-3 pt-8 z-50">
             <button
               type="button"
               className="mb-2 flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-[#1890FF]"
@@ -67,27 +74,41 @@ function StoryCard({ story }: { story: (typeof stories)[number] }) {
               Your Story
             </p>
           </div>
+
+          <div className="absolute bottom-0 left-0 right-0 z-20 w-full pb-6 pt-8 rounded-t-4xl bg-[#112032]" />
+
+          <div className="absolute z-10 top-0 left-0 right-0 bottom-0 w-full h-full bg-black/50 hover:bg-black/70 transition-all duration-300" />
         </div>
       </div>
     );
   }
 
-  const ring =
-    story.variant === "active"
-      ? "ring-2 ring-[#1890FF] ring-offset-2"
-      : "ring-1 ring-black/10";
-
   return (
     <div className={`overflow-hidden rounded-md`}>
-      <div className="relative aspect-3/4 rounded-md bg-linear-to-br from-indigo-400 to-fuchsia-500">
+      <div
+        className="relative aspect-3/4 rounded-md overflow-hidden"
+        style={{
+          background: `url(${story.image})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         <div className="absolute bottom-2 left-2 right-2">
           <p className="truncate text-xs font-medium text-white drop-shadow">
             {story.name}
           </p>
         </div>
-        <div className="absolute left-2 top-2">
-          <FeedAvatar name={story.name} seed={story.avatarSeed} size="xs" />
+        <div className="absolute right-2 top-2 z-50">
+          <FeedAvatar
+            name={story.name}
+            seed={story.avatarSeed}
+            image={story.avatarImage}
+            size="xs"
+            className="rounded-full ring-2 ring-white overflow-hidden"
+          />
         </div>
+
+        <div className="absolute z-10 top-0 left-0 right-0 bottom-0 w-full h-full bg-black/50 hover:bg-black/70 transition-all duration-300" />
       </div>
     </div>
   );

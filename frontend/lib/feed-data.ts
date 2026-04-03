@@ -28,6 +28,9 @@ export type StoryItem = {
   isOwn?: boolean;
   variant?: "active" | "inactive";
   avatarSeed: string;
+  image: string;
+  avatarImage: string;
+  ownImage?: string;
 };
 
 export type PostComment = {
@@ -155,10 +158,39 @@ export const events: EventCard[] = [
 ];
 
 export const stories: StoryItem[] = [
-  { id: "s0", name: "Your Story", isOwn: true, avatarSeed: "me" },
-  { id: "s1", name: "Ryan Roslansky", variant: "active", avatarSeed: "rr" },
-  { id: "s2", name: "Ryan Roslansky", variant: "inactive", avatarSeed: "rr2" },
-  { id: "s3", name: "Ryan Roslansky", variant: "active", avatarSeed: "rr3" },
+  {
+    id: "s0",
+    name: "Your Story",
+    isOwn: true,
+    avatarSeed: "me",
+    image: "/assets/images/card_ppl2.png",
+    avatarImage: "/assets/images/mini_pic.png",
+    ownImage: "/assets/images/card_ppl1.png",
+  },
+  {
+    id: "s1",
+    name: "Ryan Roslansky",
+    variant: "active",
+    avatarSeed: "rr",
+    image: "/assets/images/card_ppl3.png",
+    avatarImage: "/assets/images/mini_pic.png",
+  },
+  {
+    id: "s2",
+    name: "Ryan Roslansky",
+    variant: "inactive",
+    avatarSeed: "rr2",
+    image: "/assets/images/card_ppl4.png",
+    avatarImage: "/assets/images/mini_pic.png",
+  },
+  {
+    id: "s3",
+    name: "Ryan Roslansky",
+    variant: "active",
+    avatarSeed: "rr3",
+    image: "/assets/images/card_ppl4.png",
+    avatarImage: "/assets/images/mini_pic.png",
+  },
 ];
 
 export const feedPosts: FeedPost[] = [

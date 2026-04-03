@@ -26,7 +26,7 @@ export function FeedPostCard({ post }: { post: FeedPost }) {
           <div className="flex min-w-0 gap-3">
             <FeedAvatar name={post.author} seed={post.authorSeed} size="lg" />
             <div className="min-w-0">
-              <h4 className="font-semibold text-[#112032]">{post.author}</h4>
+              <h4 className="font-medium text-[#112032] mb-1">{post.author}</h4>
               <p className="text-sm text-[#666]">
                 {post.timeLabel} ·{" "}
                 <Link href="#" className="text-[#1890FF] hover:underline">
@@ -101,7 +101,7 @@ export function FeedPostCard({ post }: { post: FeedPost }) {
             )}
           </div>
         </div>
-        <h3 className="mt-4 text-base font-semibold text-[#112032]">
+        <h3 className="mt-4 text-base text-[#112032]">
           {post.title}
         </h3>
         <div
@@ -143,7 +143,7 @@ export function FeedPostCard({ post }: { post: FeedPost }) {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2 border-b border-black/5 px-4 py-2 sm:px-6">
+      <div className="grid grid-cols-3 gap-2 border-b border-black/5 px-4 py-2 sm:px-6">
         <button
           type="button"
           className="inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-[#F8F9FB] px-3 py-2 text-sm font-medium text-[#112032] sm:flex-none sm:bg-transparent"

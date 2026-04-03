@@ -89,7 +89,8 @@ export function FeedComposer() {
         <FeedAvatar
           name={currentUser.name}
           seed={currentUser.avatarSeed}
-          size="lg"
+          image="/assets/images/txt_img.png"
+          size="sm"
         />
         <div className="relative min-w-0 flex-1">
           <label htmlFor="feed-composer" className="sr-only">
@@ -98,28 +99,13 @@ export function FeedComposer() {
           <textarea
             id="feed-composer"
             rows={3}
-            placeholder="Leave a comment here"
-            className="min-h-[88px] w-full resize-y rounded-md border border-black/10 bg-[#F8F9FB] px-3 py-3 text-sm text-[#112032] placeholder:text-[#666] outline-none focus:border-[#1890FF]/40 focus:ring-2 focus:ring-[#1890FF]/20"
+            placeholder="Write something..."
+            className="min-h-[88px] w-full resize-y rounded-md px-3 py-3 text-[#112032] placeholder:text-[#666] outline-none focus:border-[#1890FF]/40 focus:ring-2 focus:ring-[#1890FF]/20"
           />
-          <span className="pointer-events-none absolute right-3 top-3 text-[#666]">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="23"
-              height="24"
-              fill="none"
-              viewBox="0 0 23 24"
-              aria-hidden
-            >
-              <path
-                fill="currentColor"
-                d="M19.504 19.209c.332 0 .601.289.601.646 0 .326-.226.596-.52.64l-.081.005h-6.276c-.332 0-.602-.289-.602-.645 0-.327.227-.597.52-.64l.082-.006h6.276zM13.4 4.417c1.139-1.223 2.986-1.223 4.125 0l1.182 1.268c1.14 1.223 1.14 3.205 0 4.427L9.82 19.649a2.619 2.619 0 01-1.916.85h-3.64c-.337 0-.61-.298-.6-.66l.09-3.941a3.019 3.019 0 01.794-1.982l8.852-9.5z"
-              />
-            </svg>
-          </span>
         </div>
       </div>
 
-      <div className="mt-4 hidden flex-wrap items-center justify-between gap-3 border-t border-black/5 pt-4 md:flex">
+      <div className="mt-4 hidden flex-wrap items-center justify-between gap-3 rounded-md py-2 px-4 md:flex bg-[#F3F9FF]">
         <div className="flex flex-wrap gap-2">
           {actions.map((a) => (
             <button
