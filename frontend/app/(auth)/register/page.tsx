@@ -167,7 +167,7 @@ export default function RegisterPage() {
               <div className="form-check flex items-center gap-2">
                 <input
                   id="reg-terms"
-                  type="radio"
+                  type="checkbox"
                   name="terms"
                   checked={agreedToTerms}
                   onChange={(e) => setAgreedToTerms(e.target.checked)}

@@ -134,7 +134,7 @@ export default function LoginPage() {
               <div className="form-check flex items-center gap-2">
                 <input
                   id="login-remember"
-                  type="radio"
+                  type="checkbox"
                   name="remember"
                   checked={remember}
                   onChange={(e) => setRemember(e.target.checked)}
