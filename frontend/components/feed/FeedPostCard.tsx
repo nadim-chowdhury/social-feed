@@ -9,7 +9,7 @@ import { FeedAvatar } from "./FeedAvatar";
 
 export function FeedPostCard({ post }: { post: FeedPost }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [replyToId, setReplyToId] = useState<string | null>(null);
+  const [replyToId, setReplyToId] = useState<string | null>("1");
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -229,7 +229,7 @@ export function FeedPostCard({ post }: { post: FeedPost }) {
               name={currentUser.name}
               seed={currentUser.avatarSeed}
               image="/assets/images/txt_img.png"
-              size="sm"
+              size="xs"
             />
           </div>
           <div className="relative min-w-0 flex-1 flex items-center">
@@ -384,81 +384,82 @@ export function FeedPostCard({ post }: { post: FeedPost }) {
                   </span>
                 </div>
 
-                {replyToId === c.id && (
-                  <div className="flex items-center gap-3 rounded-full bg-[#F5F5F5] p-2 pr-4 mt-3 w-full">
-                    <div className="shrink-0">
-                      <FeedAvatar
-                        name={currentUser.name}
-                        seed={currentUser.avatarSeed}
-                        image="/assets/images/txt_img.png"
-                        size="sm"
-                      />
-                    </div>
-                    <div className="relative min-w-0 flex-1 flex items-center">
-                      <label htmlFor={`reply-${c.id}`} className="sr-only">
-                        Write a comment
-                      </label>
-                      <input
-                        type="text"
-                        id={`reply-${c.id}`}
-                        placeholder="Write a comment"
-                        autoFocus
-                        className="w-full bg-transparent text-[15.5px] text-[#112032] placeholder:text-[#517596] outline-none"
-                      />
-                    </div>
-                    <div className="flex shrink-0 items-center gap-3 text-[#8C9AA9]">
-                      <button
-                        type="button"
-                        className="hover:text-[#1890FF] transition-colors"
-                        aria-label="Microphone"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="19"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
+                {replyToId === c.id ||
+                  (true && (
+                    <div className="flex items-center gap-3 rounded-full bg-[#F5F5F5] p-2 pr-4 mt-3 w-full">
+                      <div className="shrink-0">
+                        <FeedAvatar
+                          name={currentUser.name}
+                          seed={currentUser.avatarSeed}
+                          image="/assets/images/txt_img.png"
+                          size="xs"
+                        />
+                      </div>
+                      <div className="relative min-w-0 flex-1 flex items-center">
+                        <label htmlFor={`reply-${c.id}`} className="sr-only">
+                          Write a comment
+                        </label>
+                        <input
+                          type="text"
+                          id={`reply-${c.id}`}
+                          placeholder="Write a comment"
+                          autoFocus
+                          className="w-full bg-transparent text-[15.5px] text-[#112032] placeholder:text-[#517596] outline-none"
+                        />
+                      </div>
+                      <div className="flex shrink-0 items-center gap-3 text-[#8C9AA9]">
+                        <button
+                          type="button"
+                          className="hover:text-[#1890FF] transition-colors"
+                          aria-label="Microphone"
                         >
-                          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
-                          <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-                          <line x1="12" x2="12" y1="19" y2="22" />
-                        </svg>
-                      </button>
-                      <button
-                        type="button"
-                        className="hover:text-[#1890FF] transition-colors"
-                        aria-label="Attach Photo"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="19"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                            <line x1="12" x2="12" y1="19" y2="22" />
+                          </svg>
+                        </button>
+                        <button
+                          type="button"
+                          className="hover:text-[#1890FF] transition-colors"
+                          aria-label="Attach Photo"
                         >
-                          <rect
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
                             width="18"
                             height="18"
-                            x="3"
-                            y="3"
-                            rx="4"
-                            ry="4"
-                          />
-                          <circle cx="8.5" cy="8.5" r="1.5" />
-                          <path d="M21 15l-5-5L5 21" />
-                        </svg>
-                      </button>
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <rect
+                              width="18"
+                              height="18"
+                              x="3"
+                              y="3"
+                              rx="4"
+                              ry="4"
+                            />
+                            <circle cx="8.5" cy="8.5" r="1.5" />
+                            <path d="M21 15l-5-5L5 21" />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  ))}
               </div>
             </div>
           ))}

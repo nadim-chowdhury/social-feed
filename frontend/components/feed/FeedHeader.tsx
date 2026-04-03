@@ -50,7 +50,7 @@ export function FeedHeader() {
   }, []);
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-40 border-b border-black/5 bg-white">
+    <header className="fixed left-0 right-0 top-0 z-9999 border-b border-black/5 bg-white">
       <nav
         className="mx-auto hidden max-w-[1320px] items-center gap-4 px-4 py-2.5 md:flex lg:px-6"
         aria-label="Main"
