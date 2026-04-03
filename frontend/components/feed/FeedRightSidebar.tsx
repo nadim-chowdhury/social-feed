@@ -52,8 +52,13 @@ export function FeedRightSidebar() {
     <aside className="space-y-4">
       <div className="rounded-md bg-white px-6 pt-6 pb-6 shadow-sm">
         <div className="flex items-center justify-between">
-          <h4 className="text-lg font-semibold text-[#112032]">You Might Like</h4>
-          <Link href="#" className="text-sm font-medium text-[#1890FF] hover:underline">
+          <h4 className="text-lg font-semibold text-[#112032]">
+            You Might Like
+          </h4>
+          <Link
+            href="#"
+            className="text-sm font-medium text-[#1890FF] hover:underline"
+          >
             See All
           </Link>
         </div>
@@ -80,7 +85,9 @@ export function FeedRightSidebar() {
                   >
                     {p.name}
                   </Link>
-                  <p className="truncate text-sm font-medium text-[#1890FF]">{p.title}</p>
+                  <p className="truncate text-sm font-medium text-[#1890FF]">
+                    {p.title}
+                  </p>
                 </div>
               </div>
 
@@ -110,14 +117,15 @@ export function FeedRightSidebar() {
       <div className="rounded-md bg-white px-6 pt-6 pb-3">
         <div className="flex items-center justify-between">
           <h4 className="text-lg font-semibold text-[#112032]">Your Friends</h4>
-          <Link href="#" className="text-sm font-medium text-[#1890FF] hover:underline">
+          <Link
+            href="#"
+            className="text-sm font-medium text-[#1890FF] hover:underline"
+          >
             See All
           </Link>
         </div>
 
-        <form
-          className="mt-4 flex items-center gap-2 rounded-md border border-black/5 bg-[#F8F9FB] px-3 py-2"
-        >
+        <form className="mt-4 flex items-center gap-2 rounded-md border border-black/5 bg-[#F8F9FB] px-3 py-2">
           <svg
             className="h-[17px] w-[17px] shrink-0 text-[#666]"
             xmlns="http://www.w3.org/2000/svg"
@@ -152,11 +160,18 @@ export function FeedRightSidebar() {
                   <div className="flex min-w-0 items-center gap-3">
                     <div className="shrink-0">
                       <Link href="#">
-                        <FeedAvatar name={f.name} seed={f.avatarSeed} size="md" />
+                        <FeedAvatar
+                          name={f.name}
+                          seed={f.avatarSeed}
+                          size="md"
+                        />
                       </Link>
                     </div>
                     <div className="min-w-0">
-                      <Link href="#" className="block truncate font-semibold text-[#112032] hover:text-[#1890FF]">
+                      <Link
+                        href="#"
+                        className="block truncate font-semibold text-[#112032] hover:text-[#1890FF]"
+                      >
                         {f.name}
                       </Link>
                       <p className="truncate text-sm text-[#666]">{f.title}</p>

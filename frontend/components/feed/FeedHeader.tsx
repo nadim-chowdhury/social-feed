@@ -14,7 +14,8 @@ function NotificationText({ n }: { n: NotificationEntry }) {
   if (n.kind === "timeline") {
     return (
       <p className="text-sm leading-snug text-[#112032]">
-        <span className="font-medium">{n.actor}</span> posted a link in your timeline.
+        <span className="font-medium">{n.actor}</span> posted a link in your
+        timeline.
       </p>
     );
   }
@@ -37,7 +38,8 @@ export function FeedHeader() {
   useEffect(() => {
     function onDoc(e: MouseEvent) {
       const t = e.target as Node;
-      if (notifyRef.current && !notifyRef.current.contains(t)) setNotifyOpen(false);
+      if (notifyRef.current && !notifyRef.current.contains(t))
+        setNotifyOpen(false);
       if (profileRef.current && !profileRef.current.contains(t)) {
         setProfileOpen(false);
         setNotifyMenuOpen(false);
@@ -49,28 +51,44 @@ export function FeedHeader() {
 
   return (
     <header className="fixed left-0 right-0 top-0 z-40 border-b border-black/5 bg-white">
-      <nav className="mx-auto hidden max-w-[1320px] items-center gap-4 px-4 py-2.5 md:flex lg:px-6" aria-label="Main">
+      <nav
+        className="mx-auto hidden max-w-[1320px] items-center gap-4 px-4 py-2.5 md:flex lg:px-6"
+        aria-label="Main"
+      >
         <div className="flex w-full items-center gap-8">
           <Link href="/feed" className="shrink-0">
-            <Image src="/assets/images/logo.svg" alt="Buddy Script" width={120} height={32} className="h-8 w-auto" />
+            <Image
+              src="/assets/images/logo.svg"
+              alt="Buddy Script"
+              width={120}
+              height={32}
+              className="h-8 w-auto"
+            />
           </Link>
 
           <div className="min-w-0 flex-1">
-            <form className="relative mx-auto max-w-md" onSubmit={(e) => e.preventDefault()}>
+            <form
+              className="relative mx-auto max-w-md"
+              onSubmit={(e) => e.preventDefault()}
+            >
               <svg
-                className="pointer-events-none absolute left-3 top-1/2 h-[17px] w-[17px] -translate-y-1/2 text-[#666]"
+                className="pointer-events-none absolute left-4 top-1/2 h-[17px] w-[17px] -translate-y-1/2 text-[#666]"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 17 17"
                 aria-hidden
               >
                 <circle cx="7" cy="7" r="6" stroke="currentColor" />
-                <path stroke="currentColor" strokeLinecap="round" d="M16 16l-3-3" />
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  d="M16 16l-3-3"
+                />
               </svg>
               <input
                 type="search"
                 placeholder="input search text"
-                className="w-full rounded-full bg-[#F8F9FB] h-10 py-2 pl-10 pr-3 text-sm text-[#112032] placeholder:text-[#666] outline-none focus:border-[#1890FF]/80 focus:ring-1 focus:ring-[#1890FF]/80"
+                className="w-full rounded-full bg-[#F8F9FB] h-10 py-2 pl-12 pr-3 text-sm text-[#112032] placeholder:text-[#666] outline-none focus:border-[#1890FF]/80 focus:ring-1 focus:ring-[#1890FF]/80"
                 aria-label="Search"
               />
             </form>
@@ -83,7 +101,14 @@ export function FeedHeader() {
                 className="flex h-11 w-11 items-center justify-center rounded-md text-[#112032]/70 hover:bg-black/5"
                 aria-current="page"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="21" fill="none" viewBox="0 0 18 21" aria-hidden>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="21"
+                  fill="none"
+                  viewBox="0 0 18 21"
+                  aria-hidden
+                >
                   <path
                     stroke="#000"
                     strokeWidth="1.5"
@@ -106,7 +131,14 @@ export function FeedHeader() {
                 href="#"
                 className="flex h-11 w-11 items-center justify-center rounded-md text-[#112032]/70 hover:bg-black/5"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="20" fill="none" viewBox="0 0 26 20" aria-hidden>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="26"
+                  height="20"
+                  fill="none"
+                  viewBox="0 0 26 20"
+                  aria-hidden
+                >
                   <path
                     fill="currentColor"
                     fillOpacity="0.6"
@@ -119,99 +151,138 @@ export function FeedHeader() {
             </li>
             <li className="relative">
               <div className="relative" ref={notifyRef}>
-              <button
-                type="button"
-                className="relative flex h-11 w-11 items-center justify-center rounded-md text-[#112032]/70 hover:bg-black/5"
-                aria-expanded={notifyOpen}
-                onClick={() => setNotifyOpen((v) => !v)}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="22" fill="none" viewBox="0 0 20 22" aria-hidden>
-                  <path
-                    fill="currentColor"
-                    fillOpacity="0.6"
-                    fillRule="evenodd"
-                    d="M7.547 19.55c.533.59 1.218.915 1.93.915.714 0 1.403-.324 1.938-.916a.777.777 0 011.09-.056c.318.284.344.77.058 1.084-.832.917-1.927 1.423-3.086 1.423h-.002c-1.155-.001-2.248-.506-3.077-1.424a.762.762 0 01.057-1.083.774.774 0 011.092.057zM9.527 0c4.58 0 7.657 3.543 7.657 6.85 0 1.702.436 2.424.899 3.19.457.754.976 1.612.976 3.233-.36 4.14-4.713 4.478-9.531 4.478-4.818 0-9.172-.337-9.528-4.413-.003-1.686.515-2.544.973-3.299l.161-.27c.398-.679.737-1.417.737-2.918C1.871 3.543 4.948 0 9.528 0zm0 1.535c-3.6 0-6.11 2.802-6.11 5.316 0 2.127-.595 3.11-1.12 3.978-.422.697-.755 1.247-.755 2.444.173 1.93 1.455 2.944 7.986 2.944 6.494 0 7.817-1.06 7.988-3.01-.003-1.13-.336-1.681-.757-2.378-.526-.868-1.12-1.851-1.12-3.978 0-2.514-2.51-5.316-6.111-5.316z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span className="absolute right-1 top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#1890FF] px-1 text-[11px] font-semibold text-white">
-                  6
-                </span>
-              </button>
+                <button
+                  type="button"
+                  className="relative flex h-11 w-11 items-center justify-center rounded-md text-[#112032]/70 hover:bg-black/5"
+                  aria-expanded={notifyOpen}
+                  onClick={() => setNotifyOpen((v) => !v)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="22"
+                    fill="none"
+                    viewBox="0 0 20 22"
+                    aria-hidden
+                  >
+                    <path
+                      fill="currentColor"
+                      fillOpacity="0.6"
+                      fillRule="evenodd"
+                      d="M7.547 19.55c.533.59 1.218.915 1.93.915.714 0 1.403-.324 1.938-.916a.777.777 0 011.09-.056c.318.284.344.77.058 1.084-.832.917-1.927 1.423-3.086 1.423h-.002c-1.155-.001-2.248-.506-3.077-1.424a.762.762 0 01.057-1.083.774.774 0 011.092.057zM9.527 0c4.58 0 7.657 3.543 7.657 6.85 0 1.702.436 2.424.899 3.19.457.754.976 1.612.976 3.233-.36 4.14-4.713 4.478-9.531 4.478-4.818 0-9.172-.337-9.528-4.413-.003-1.686.515-2.544.973-3.299l.161-.27c.398-.679.737-1.417.737-2.918C1.871 3.543 4.948 0 9.528 0zm0 1.535c-3.6 0-6.11 2.802-6.11 5.316 0 2.127-.595 3.11-1.12 3.978-.422.697-.755 1.247-.755 2.444.173 1.93 1.455 2.944 7.986 2.944 6.494 0 7.817-1.06 7.988-3.01-.003-1.13-.336-1.681-.757-2.378-.526-.868-1.12-1.851-1.12-3.978 0-2.514-2.51-5.316-6.111-5.316z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span className="absolute right-1 top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#1890FF] px-1 text-[11px] font-semibold text-white">
+                    6
+                  </span>
+                </button>
 
-              {notifyOpen && (
-                <div className="absolute right-0 top-full z-50 mt-2 w-[min(100vw-2rem,380px)] rounded-lg border border-black/10 bg-white shadow-lg">
-                  <div className="flex items-start justify-between border-b border-black/5 px-4 py-3">
-                    <h4 className="text-base font-semibold text-[#112032]">Notifications</h4>
-                    <div className="relative">
+                {notifyOpen && (
+                  <div className="absolute right-0 top-full z-50 mt-2 w-[min(100vw-2rem,380px)] rounded-lg border border-black/10 bg-white shadow-lg">
+                    <div className="flex items-start justify-between border-b border-black/5 px-4 py-3">
+                      <h4 className="text-base font-semibold text-[#112032]">
+                        Notifications
+                      </h4>
+                      <div className="relative">
+                        <button
+                          type="button"
+                          className="rounded p-1 text-[#C4C4C4] hover:bg-black/5"
+                          aria-expanded={notifyMenuOpen}
+                          onClick={() => setNotifyMenuOpen((v) => !v)}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="4"
+                            height="17"
+                            fill="none"
+                            viewBox="0 0 4 17"
+                          >
+                            <circle cx="2" cy="2" r="2" fill="currentColor" />
+                            <circle cx="2" cy="8" r="2" fill="currentColor" />
+                            <circle cx="2" cy="15" r="2" fill="currentColor" />
+                          </svg>
+                        </button>
+                        {notifyMenuOpen && (
+                          <ul className="absolute right-0 top-full z-10 mt-1 min-w-[180px] rounded-md border border-black/10 bg-white py-1 text-sm shadow-md">
+                            <li>
+                              <button
+                                type="button"
+                                className="block w-full px-3 py-2 text-left hover:bg-black/5"
+                              >
+                                Mark as all read
+                              </button>
+                            </li>
+                            <li>
+                              <button
+                                type="button"
+                                className="block w-full px-3 py-2 text-left hover:bg-black/5"
+                              >
+                                Notifications settings
+                              </button>
+                            </li>
+                            <li>
+                              <button
+                                type="button"
+                                className="block w-full px-3 py-2 text-left hover:bg-black/5"
+                              >
+                                Open Notifications
+                              </button>
+                            </li>
+                          </ul>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex gap-2 border-b border-black/5 px-4 py-2">
                       <button
                         type="button"
-                        className="rounded p-1 text-[#C4C4C4] hover:bg-black/5"
-                        aria-expanded={notifyMenuOpen}
-                        onClick={() => setNotifyMenuOpen((v) => !v)}
+                        className="rounded-md bg-[#1890FF] px-3 py-1.5 text-sm font-medium text-white"
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="4" height="17" fill="none" viewBox="0 0 4 17">
-                          <circle cx="2" cy="2" r="2" fill="currentColor" />
-                          <circle cx="2" cy="8" r="2" fill="currentColor" />
-                          <circle cx="2" cy="15" r="2" fill="currentColor" />
-                        </svg>
+                        All
                       </button>
-                      {notifyMenuOpen && (
-                        <ul className="absolute right-0 top-full z-10 mt-1 min-w-[180px] rounded-md border border-black/10 bg-white py-1 text-sm shadow-md">
-                          <li>
-                            <button type="button" className="block w-full px-3 py-2 text-left hover:bg-black/5">
-                              Mark as all read
-                            </button>
-                          </li>
-                          <li>
-                            <button type="button" className="block w-full px-3 py-2 text-left hover:bg-black/5">
-                              Notifications settings
-                            </button>
-                          </li>
-                          <li>
-                            <button type="button" className="block w-full px-3 py-2 text-left hover:bg-black/5">
-                              Open Notifications
-                            </button>
-                          </li>
-                        </ul>
-                      )}
+                      <button
+                        type="button"
+                        className="rounded-md px-3 py-1.5 text-sm font-medium text-[#666] hover:bg-black/5"
+                      >
+                        Unread
+                      </button>
+                    </div>
+                    <div className="max-h-[min(60vh,420px)] overflow-y-auto">
+                      {notifications.map((n) => (
+                        <div
+                          key={n.id}
+                          className="flex gap-3 border-b border-black/5 px-4 py-3 last:border-b-0"
+                        >
+                          <FeedAvatar
+                            name={n.kind === "timeline" ? n.actor : "Admin"}
+                            image={n.avatarImage}
+                            seed={n.avatarSeed}
+                            size="sm"
+                          />
+                          <div className="min-w-0 flex-1">
+                            <NotificationText n={n} />
+                            <p className="mt-1 text-xs text-[#666]">{n.time}</p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                  <div className="flex gap-2 border-b border-black/5 px-4 py-2">
-                    <button
-                      type="button"
-                      className="rounded-md bg-[#1890FF] px-3 py-1.5 text-sm font-medium text-white"
-                    >
-                      All
-                    </button>
-                    <button
-                      type="button"
-                      className="rounded-md px-3 py-1.5 text-sm font-medium text-[#666] hover:bg-black/5"
-                    >
-                      Unread
-                    </button>
-                  </div>
-                  <div className="max-h-[min(60vh,420px)] overflow-y-auto">
-                    {notifications.map((n) => (
-                      <div
-                        key={n.id}
-                        className="flex gap-3 border-b border-black/5 px-4 py-3 last:border-b-0"
-                      >
-                        <FeedAvatar name={n.kind === "timeline" ? n.actor : "Admin"} image={n.avatarImage} seed={n.avatarSeed} size="sm" />
-                        <div className="min-w-0 flex-1">
-                          <NotificationText n={n} />
-                          <p className="mt-1 text-xs text-[#666]">{n.time}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+                )}
               </div>
             </li>
             <li>
-              <Link href="#" className="relative flex h-11 w-11 items-center justify-center rounded-md text-[#112032]/70 hover:bg-black/5">
-                <svg xmlns="http://www.w3.org/2000/svg" width="23" height="22" fill="none" viewBox="0 0 23 22" aria-hidden>
+              <Link
+                href="#"
+                className="relative flex h-11 w-11 items-center justify-center rounded-md text-[#112032]/70 hover:bg-black/5"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="23"
+                  height="22"
+                  fill="none"
+                  viewBox="0 0 23 22"
+                  aria-hidden
+                >
                   <path
                     fill="currentColor"
                     fillOpacity="0.6"
@@ -227,18 +298,38 @@ export function FeedHeader() {
             </li>
           </ul>
 
-          <div className="relative hidden items-center gap-2 sm:flex" ref={profileRef}>
-            <FeedAvatar name={currentUser.name} image={currentUser.avatarImage} seed={currentUser.avatarSeed} size="sm" />
+          <div
+            className="relative hidden items-center gap-2 sm:flex"
+            ref={profileRef}
+          >
+            <FeedAvatar
+              name={currentUser.name}
+              image={currentUser.avatarImage}
+              seed={currentUser.avatarSeed}
+              size="sm"
+            />
             <div className="min-w-0 flex items-center gap-2">
-              <p className="truncate text-sm font-medium text-[#112032]">{currentUser.name}</p>
+              <p className="truncate text-sm font-medium text-[#112032]">
+                {currentUser.name}
+              </p>
               <button
                 type="button"
                 className="flex items-center gap-1 text-[#112032]"
                 aria-expanded={profileOpen}
                 onClick={() => setProfileOpen((v) => !v)}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" fill="none" viewBox="0 0 10 6" aria-hidden>
-                  <path fill="#112032" d="M5 5l.354.354L5 5.707l-.354-.353L5 5zm4.354-3.646l-4 4-.708-.708 4-4 .708.708zm-4.708 4l-4-4 .708-.708 4 4-.708.708z" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="10"
+                  height="6"
+                  fill="none"
+                  viewBox="0 0 10 6"
+                  aria-hidden
+                >
+                  <path
+                    fill="#112032"
+                    d="M5 5l.354.354L5 5.707l-.354-.353L5 5zm4.354-3.646l-4 4-.708-.708 4-4 .708.708zm-4.708 4l-4-4 .708-.708 4 4-.708.708z"
+                  />
                 </svg>
               </button>
             </div>
@@ -246,10 +337,20 @@ export function FeedHeader() {
             {profileOpen && (
               <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-lg border border-black/10 bg-white py-2 shadow-lg">
                 <div className="flex gap-3 px-4 pb-3">
-                  <FeedAvatar name={currentUser.name} image={currentUser.avatarImage} seed={currentUser.avatarSeed} size="md" />
+                  <FeedAvatar
+                    name={currentUser.name}
+                    image={currentUser.avatarImage}
+                    seed={currentUser.avatarSeed}
+                    size="md"
+                  />
                   <div>
-                    <p className="font-semibold text-[#112032]">{currentUser.name}</p>
-                    <Link href="#" className="text-sm text-[#1890FF] hover:underline">
+                    <p className="font-semibold text-[#112032]">
+                      {currentUser.name}
+                    </p>
+                    <Link
+                      href="#"
+                      className="text-sm text-[#1890FF] hover:underline"
+                    >
                       View Profile
                     </Link>
                   </div>
@@ -257,7 +358,10 @@ export function FeedHeader() {
                 <hr className="border-black/5" />
                 <ul className="py-1 text-sm">
                   <li>
-                    <Link href="#" className="flex items-center justify-between px-4 py-2 hover:bg-black/5">
+                    <Link
+                      href="#"
+                      className="flex items-center justify-between px-4 py-2 hover:bg-black/5"
+                    >
                       <span className="flex items-center gap-2 text-[#112032]">
                         <span className="text-[#377DFF]">Settings</span>
                       </span>
@@ -265,13 +369,21 @@ export function FeedHeader() {
                     </Link>
                   </li>
                   <li>
-                    <Link href="#" className="flex items-center justify-between px-4 py-2 hover:bg-black/5">
-                      <span className="flex items-center gap-2">Help &amp; Support</span>
+                    <Link
+                      href="#"
+                      className="flex items-center justify-between px-4 py-2 hover:bg-black/5"
+                    >
+                      <span className="flex items-center gap-2">
+                        Help &amp; Support
+                      </span>
                       <span className="text-[#112032]/40">›</span>
                     </Link>
                   </li>
                   <li>
-                    <Link href="#" className="flex items-center justify-between px-4 py-2 hover:bg-black/5">
+                    <Link
+                      href="#"
+                      className="flex items-center justify-between px-4 py-2 hover:bg-black/5"
+                    >
                       <span className="flex items-center gap-2">Log Out</span>
                       <span className="text-[#112032]/40">›</span>
                     </Link>
@@ -285,10 +397,26 @@ export function FeedHeader() {
 
       <div className="mx-auto flex max-w-[1320px] items-center justify-between px-4 py-3 md:hidden">
         <Link href="/feed">
-          <Image src="/assets/images/logo.svg" alt="" width={100} height={28} className="h-7 w-auto" />
+          <Image
+            src="/assets/images/logo.svg"
+            alt=""
+            width={100}
+            height={28}
+            className="h-7 w-auto"
+          />
         </Link>
-        <Link href="#" className="rounded-full p-2 text-[#666] hover:bg-black/5" aria-label="Search">
-          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 17 17">
+        <Link
+          href="#"
+          className="rounded-full p-2 text-[#666] hover:bg-black/5"
+          aria-label="Search"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="17"
+            height="17"
+            fill="none"
+            viewBox="0 0 17 17"
+          >
             <circle cx="7" cy="7" r="6" stroke="currentColor" />
             <path stroke="currentColor" strokeLinecap="round" d="M16 16l-3-3" />
           </svg>

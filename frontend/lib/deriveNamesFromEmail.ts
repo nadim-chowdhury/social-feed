@@ -1,4 +1,3 @@
-/** Maps email local-part to first/last for APIs that require names when the UI only collects email. */
 export function deriveNamesFromEmail(email: string): {
   firstName: string;
   lastName: string;

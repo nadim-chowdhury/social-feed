@@ -41,18 +41,31 @@ function StoryCard({ story }: { story: (typeof stories)[number] }) {
   if (story.isOwn) {
     return (
       <div className="overflow-hidden rounded-md">
-        <div className="relative aspect-[3/4] rounded-md bg-gradient-to-b from-slate-300 to-slate-500">
+        <div className="relative aspect-3/4 rounded-md bg-linear-to-b from-slate-300 to-slate-500">
           <div className="absolute inset-x-0 bottom-0 flex flex-col items-center pb-3 pt-8">
             <button
               type="button"
               className="mb-2 flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-[#1890FF]"
               aria-label="Add story"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="none" viewBox="0 0 10 10" aria-hidden>
-                <path stroke="#fff" strokeLinecap="round" d="M.5 4.884h9M4.884 9.5v-9" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="10"
+                height="10"
+                fill="none"
+                viewBox="0 0 10 10"
+                aria-hidden
+              >
+                <path
+                  stroke="#fff"
+                  strokeLinecap="round"
+                  d="M.5 4.884h9M4.884 9.5v-9"
+                />
               </svg>
             </button>
-            <p className="text-center text-xs font-medium text-white drop-shadow">Your Story</p>
+            <p className="text-center text-xs font-medium text-white drop-shadow">
+              Your Story
+            </p>
           </div>
         </div>
       </div>
@@ -66,9 +79,11 @@ function StoryCard({ story }: { story: (typeof stories)[number] }) {
 
   return (
     <div className={`overflow-hidden rounded-md`}>
-      <div className="relative aspect-[3/4] rounded-md bg-gradient-to-br from-indigo-400 to-fuchsia-500">
+      <div className="relative aspect-3/4 rounded-md bg-linear-to-br from-indigo-400 to-fuchsia-500">
         <div className="absolute bottom-2 left-2 right-2">
-          <p className="truncate text-xs font-medium text-white drop-shadow">{story.name}</p>
+          <p className="truncate text-xs font-medium text-white drop-shadow">
+            {story.name}
+          </p>
         </div>
         <div className="absolute left-2 top-2">
           <FeedAvatar name={story.name} seed={story.avatarSeed} size="xs" />
@@ -82,10 +97,22 @@ function MobileStory({ story }: { story: (typeof stories)[number] }) {
   if (story.isOwn) {
     return (
       <Link href="#" className="block text-center">
-        <div className="relative mx-auto mb-1 aspect-square w-16 overflow-hidden rounded-full bg-gradient-to-br from-slate-300 to-slate-500">
+        <div className="relative mx-auto mb-1 aspect-square w-16 overflow-hidden rounded-full bg-linear-to-br from-slate-300 to-slate-500">
           <span className="absolute bottom-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-[#1890FF] shadow">
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12" aria-hidden>
-              <path stroke="#fff" strokeLinecap="round" strokeLinejoin="round" d="M6 2.5v7M2.5 6h7" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="12"
+              height="12"
+              fill="none"
+              viewBox="0 0 12 12"
+              aria-hidden
+            >
+              <path
+                stroke="#fff"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 2.5v7M2.5 6h7"
+              />
             </svg>
           </span>
         </div>
@@ -98,11 +125,13 @@ function MobileStory({ story }: { story: (typeof stories)[number] }) {
   return (
     <Link href="#" className="block text-center">
       <div
-        className={`relative mx-auto mb-1 aspect-square w-16 overflow-hidden rounded-full bg-gradient-to-br from-indigo-400 to-fuchsia-500 ${
+        className={`relative mx-auto mb-1 aspect-square w-16 overflow-hidden rounded-full bg-linear-to-br from-indigo-400 to-fuchsia-500 ${
           active ? "ring-2 ring-[#1890FF]" : "opacity-90"
         }`}
       />
-      <p className="truncate text-[11px] text-[#112032]">{story.name.slice(0, 5)}...</p>
+      <p className="truncate text-[11px] text-[#112032]">
+        {story.name.slice(0, 5)}...
+      </p>
     </Link>
   );
 }

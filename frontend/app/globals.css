@@ -8,10 +8,6 @@ button {
   cursor: pointer;
 }
 
-/*
- * docs/assets/css/main.css — _social_login_form_check_input / _social_registration_form_check_input
- * Radio-style control: hollow ring + inner dot (#1890FF). Works with checkbox for toggle behavior.
- */
 .auth-doc-radio {
   appearance: none;
   -webkit-appearance: none;

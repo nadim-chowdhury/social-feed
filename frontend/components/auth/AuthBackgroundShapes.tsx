@@ -9,7 +9,7 @@ export function AuthBackgroundShapes() {
       className="pointer-events-none absolute inset-0 z-0 max-lg:hidden"
       aria-hidden
     >
-      <div className="absolute left-0 top-0 -z-[1] max-[1199px]:w-[150px]">
+      <div className="absolute left-0 top-0 -z-1 max-[1199px]:w-[150px]">
         <Image
           src="/assets/images/shape1.svg"
           alt=""
@@ -25,7 +25,7 @@ export function AuthBackgroundShapes() {
           className="hidden h-auto w-auto"
         />
       </div>
-      <div className="absolute right-[20px] top-0 -z-[1]">
+      <div className="absolute right-[20px] top-0 -z-1">
         <Image
           src="/assets/images/shape2.svg"
           alt=""
@@ -41,7 +41,7 @@ export function AuthBackgroundShapes() {
           className="hidden h-auto w-full opacity-[0.05]"
         />
       </div>
-      <div className="absolute bottom-0 right-[327px] -z-[1] w-[494px] min-[1200px]:max-[1499px]:right-0 min-[1500px]:max-[1700px]:right-[226px] min-[1500px]:max-[1700px]:w-[400px]">
+      <div className="absolute bottom-0 right-[327px] -z-1 w-[494px] min-[1200px]:max-[1499px]:right-0 min-[1500px]:max-[1700px]:right-[226px] min-[1500px]:max-[1700px]:w-[400px]">
         <Image
           src="/assets/images/shape3.svg"
           alt=""

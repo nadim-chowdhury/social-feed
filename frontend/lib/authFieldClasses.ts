@@ -1,6 +1,5 @@
 /** Shared Tailwind utility strings for auth forms (no custom CSS). */
-export const authFieldLabel =
-  "mb-2 block text-sm font-medium text-gray-600";
+export const authFieldLabel = "mb-2 block text-sm font-medium text-gray-600";
 
 export const authFieldInput =
   "h-12 w-full rounded-md border border-gray-200 bg-white px-3.5 text-sm leading-normal text-gray-900 transition-colors placeholder:text-[13px] placeholder:text-gray-400 focus:border-[#1A91FF] focus:outline-none focus:ring-2 focus:ring-[#1A91FF]/25";

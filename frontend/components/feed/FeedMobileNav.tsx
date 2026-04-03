@@ -10,7 +10,14 @@ export function FeedMobileNav() {
             className="flex flex-col items-center justify-center gap-0.5 rounded-md py-1 text-[#666]"
             aria-current="page"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="27" fill="none" viewBox="0 0 24 27" aria-hidden>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="27"
+              fill="none"
+              viewBox="0 0 24 27"
+              aria-hidden
+            >
               <path
                 fill="currentColor"
                 fillOpacity="0.85"
@@ -18,14 +25,31 @@ export function FeedMobileNav() {
                 strokeWidth="1.5"
                 d="M1 13.042c0-2.094 0-3.141.431-4.061.432-.92 1.242-1.602 2.862-2.965l1.571-1.321C8.792 2.232 10.256 1 12 1c1.744 0 3.208 1.232 6.136 3.695l1.572 1.321c1.62 1.363 2.43 2.044 2.86 2.965.432.92.432 1.967.432 4.06v6.54c0 2.908 0 4.362-.92 5.265-.921.904-2.403.904-5.366.904H7.286c-2.963 0-4.445 0-5.365-.904C1 23.944 1 22.49 1 19.581v-6.54z"
               />
-              <path fill="#fff" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.07 18.497h5.857v7.253H9.07v-7.253z" />
+              <path
+                fill="#fff"
+                stroke="#fff"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9.07 18.497h5.857v7.253H9.07v-7.253z"
+              />
             </svg>
             <span className="sr-only">Home</span>
           </Link>
         </li>
         <li className="flex-1">
-          <Link href="#" className="flex flex-col items-center justify-center rounded-md py-1 text-[#666]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="27" height="20" fill="none" viewBox="0 0 27 20" aria-hidden>
+          <Link
+            href="#"
+            className="flex flex-col items-center justify-center rounded-md py-1 text-[#666]"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="27"
+              height="20"
+              fill="none"
+              viewBox="0 0 27 20"
+              aria-hidden
+            >
               <path
                 fill="currentColor"
                 fillOpacity="0.6"
@@ -38,8 +62,18 @@ export function FeedMobileNav() {
           </Link>
         </li>
         <li className="relative flex-1">
-          <Link href="#" className="flex flex-col items-center justify-center rounded-md py-1 text-[#666]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="27" fill="none" viewBox="0 0 25 27" aria-hidden>
+          <Link
+            href="#"
+            className="flex flex-col items-center justify-center rounded-md py-1 text-[#666]"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="25"
+              height="27"
+              fill="none"
+              viewBox="0 0 25 27"
+              aria-hidden
+            >
               <path
                 fill="currentColor"
                 fillOpacity="0.6"
@@ -55,8 +89,18 @@ export function FeedMobileNav() {
           </Link>
         </li>
         <li className="relative flex-1">
-          <Link href="#" className="flex flex-col items-center justify-center rounded-md py-1 text-[#666]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" aria-hidden>
+          <Link
+            href="#"
+            className="flex flex-col items-center justify-center rounded-md py-1 text-[#666]"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+              aria-hidden
+            >
               <path
                 fill="currentColor"
                 fillOpacity="0.6"
@@ -77,8 +121,20 @@ export function FeedMobileNav() {
             className="rounded-md p-2 text-[#666] hover:bg-black/5"
             aria-label="Menu"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" fill="none" viewBox="0 0 18 14" aria-hidden>
-              <path stroke="currentColor" strokeLinecap="round" strokeWidth="1.5" d="M1 1h16M1 7h16M1 13h16" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="14"
+              fill="none"
+              viewBox="0 0 18 14"
+              aria-hidden
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeWidth="1.5"
+                d="M1 1h16M1 7h16M1 13h16"
+              />
             </svg>
           </button>
         </li>

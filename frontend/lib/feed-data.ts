@@ -110,9 +110,27 @@ export const exploreItems: ExploreItem[] = [
 ];
 
 export const suggestedPeople: SuggestedPerson[] = [
-  { id: "1", name: "Steve Jobs", title: "CEO of Apple", avatarImage: "/assets/images/profile.png", avatarSeed: "sj" },
-  { id: "2", name: "Ryan Roslansky", title: "CEO of Linkedin", avatarImage: "/assets/images/profile.png", avatarSeed: "rr" },
-  { id: "3", name: "Dylan Field", title: "CEO of Figma", avatarImage: "/assets/images/profile.png", avatarSeed: "df" },
+  {
+    id: "1",
+    name: "Steve Jobs",
+    title: "CEO of Apple",
+    avatarImage: "/assets/images/profile.png",
+    avatarSeed: "sj",
+  },
+  {
+    id: "2",
+    name: "Ryan Roslansky",
+    title: "CEO of Linkedin",
+    avatarImage: "/assets/images/profile.png",
+    avatarSeed: "rr",
+  },
+  {
+    id: "3",
+    name: "Dylan Field",
+    title: "CEO of Figma",
+    avatarImage: "/assets/images/profile.png",
+    avatarSeed: "df",
+  },
 ];
 
 export const events: EventCard[] = [
@@ -160,8 +178,7 @@ export const feedPosts: FeedPost[] = [
         id: "c1",
         author: "Radovan SkillArena",
         authorSeed: "rs",
-        body:
-          "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+        body: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
         reactions: 198,
         timeLabel: "21m",
       },
@@ -203,12 +220,50 @@ export const notifications: NotificationEntry[] = [
 ];
 
 export const rightSidebarFriends: OnlineFriend[] = [
-  { id: "f1", name: "Steve Jobs", title: "CEO of Apple", avatarSeed: "sj", status: "away", awayLabel: "5 minute ago" },
-  { id: "f2", name: "Ryan Roslansky", title: "CEO of Linkedin", avatarSeed: "rr", status: "online" },
-  { id: "f3", name: "Dylan Field", title: "CEO of Figma", avatarSeed: "df", status: "online" },
-  { id: "f4", name: "Steve Jobs", title: "CEO of Apple", avatarSeed: "sj2", status: "away", awayLabel: "5 minute ago" },
-  { id: "f5", name: "Ryan Roslansky", title: "CEO of Linkedin", avatarSeed: "rr2", status: "online" },
-  { id: "f6", name: "Dylan Field", title: "CEO of Figma", avatarSeed: "df2", status: "online" },
+  {
+    id: "f1",
+    name: "Steve Jobs",
+    title: "CEO of Apple",
+    avatarSeed: "sj",
+    status: "away",
+    awayLabel: "5 minute ago",
+  },
+  {
+    id: "f2",
+    name: "Ryan Roslansky",
+    title: "CEO of Linkedin",
+    avatarSeed: "rr",
+    status: "online",
+  },
+  {
+    id: "f3",
+    name: "Dylan Field",
+    title: "CEO of Figma",
+    avatarSeed: "df",
+    status: "online",
+  },
+  {
+    id: "f4",
+    name: "Steve Jobs",
+    title: "CEO of Apple",
+    avatarSeed: "sj2",
+    status: "away",
+    awayLabel: "5 minute ago",
+  },
+  {
+    id: "f5",
+    name: "Ryan Roslansky",
+    title: "CEO of Linkedin",
+    avatarSeed: "rr2",
+    status: "online",
+  },
+  {
+    id: "f6",
+    name: "Dylan Field",
+    title: "CEO of Figma",
+    avatarSeed: "df2",
+    status: "online",
+  },
 ];
 
 export const rightSidebarMightLike: MightLikePerson[] = [
