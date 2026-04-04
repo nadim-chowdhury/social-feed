@@ -79,6 +79,30 @@ export const postsApi = baseApi.injectEndpoints({
         }
       },
     }),
+
+    togglePostLike: builder.mutation<void, { postId: string }>({
+      query: ({ postId }) => ({
+        url: `/posts/${postId}/like`,
+        method: "POST",
+      }),
+      async onQueryStarted({ postId }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          postsApi.util.updateQueryData("getFeed", undefined, (draft) => {
+            const targetPost = draft.data.find((p) => p.id === postId);
+            if (targetPost) {
+              targetPost.isLikedByMe = !targetPost.isLikedByMe;
+              targetPost.likesCount += targetPost.isLikedByMe ? 1 : -1;
+            }
+          }),
+        );
+
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+    }),
   }),
 });
 
@@ -88,4 +112,5 @@ export const {
   useCreatePostMutation,
   useGetPostCommentsQuery,
   useCreatePostCommentMutation,
+  useTogglePostLikeMutation,
 } = postsApi;

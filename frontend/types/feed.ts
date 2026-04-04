@@ -105,3 +105,7 @@ export interface CreateCommentRequest {
   postId: string;
   content: string;
 }
+
+export interface ToggleLikeRequest {
+  postId: string;
+}

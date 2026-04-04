@@ -11,6 +11,7 @@ import { getRelativeTime } from "@/lib/time";
 import {
   useCreatePostCommentMutation,
   useGetPostCommentsQuery,
+  useTogglePostLikeMutation,
 } from "@/services/postsApi";
 
 export function FeedPostCard({ post }: { post: ApiPost }) {
@@ -18,7 +19,6 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
   const [replyToId, setReplyToId] = useState<string | null>(null);
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState("");
-  console.log("🚀 ~ commentText:", commentText);
 
   const menuRef = useRef<HTMLDivElement>(null);
   const [createComment, { isLoading: isPosting }] =
@@ -29,7 +29,7 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
     isLoading,
     isError,
   } = useGetPostCommentsQuery({ postId: post.id }, { skip: !showComments });
-  console.log("🚀 ~ commentsResponse:", commentsResponse);
+  const [toggleLike] = useTogglePostLikeMutation();
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && commentText.trim() && !isPosting) {
@@ -189,7 +189,7 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
       </div>
 
       <div className="grid grid-cols-3 w-full border-y border-black/5">
-        <button
+        {/* <button
           type="button"
           className="flex items-center justify-center gap-2 bg-[#EAF4FF] py-3 text-[15px] font-medium text-[#112032]"
         >
@@ -211,7 +211,36 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
             />
           </svg>
           Haha
+        </button> */}
+        <button
+          type="button"
+          onClick={() => toggleLike({ postId: post.id })}
+          className={`flex items-center justify-center gap-2 py-3 text-[15px] font-medium transition-colors ${
+            post.isLikedByMe
+              ? "bg-[#EAF4FF] text-[#1890FF]"
+              : "text-[#112032] hover:bg-[#F8F9FB]"
+          }`}
+        >
+          {/* A classic Thumbs Up icon. Filled if liked, outlined if not. */}
+          <svg
+            className={post.isLikedByMe ? "text-[#1890FF]" : "text-[#112032]"}
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            fill={post.isLikedByMe ? "currentColor" : "none"}
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={post.isLikedByMe ? "0" : "1.5"}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"
+            />
+          </svg>
+          {post.isLikedByMe ? "Liked" : "Like"}
         </button>
+
         <button
           type="button"
           onClick={() => setShowComments(!showComments)}
