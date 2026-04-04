@@ -1,7 +1,17 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { FeedAvatar } from "./FeedAvatar";
 import { currentUser } from "@/lib/feed-data";
+import {
+  FileSelectionHandler,
+  ImagePreviewState,
+  OrchestrationStatus,
+} from "@/types/feed";
+import {
+  useCreatePostMutation,
+  useGetUploadSignatureMutation,
+} from "@/services/postsApi";
 
 const actions = [
   {
@@ -83,6 +93,85 @@ const actions = [
 ];
 
 export function FeedComposer() {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [createPost] = useCreatePostMutation();
+  const [getSignature] = useGetUploadSignatureMutation();
+
+  const [content, setContent] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [status, setStatus] = useState<OrchestrationStatus>("IDLE");
+  const [previewUrl, setPreviewUrl] = useState<ImagePreviewState>(null);
+
+  useEffect(() => {
+    if (!imageFile) {
+      setPreviewUrl(null);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(imageFile);
+    setPreviewUrl(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [imageFile]);
+
+  const handleImageSelect: FileSelectionHandler = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      alert("Invalid format");
+      return;
+    }
+
+    const MAX_FILE_SIZE_BYTES = 2 * 1024 * 1024;
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+      alert("Image exceeds 5MB limit.");
+      return;
+    }
+
+    setImageFile(file);
+  };
+  const triggerFileExplorer = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handlePost = async () => {
+    if (!content.trim() && !imageFile) return;
+
+    try {
+      setStatus("SIGNING");
+      let finalImageUrl = null;
+
+      if (imageFile) {
+        const { signature, timestamp, apiKey, cloudName, folder } =
+          await getSignature().unwrap();
+
+        setStatus("UPLOADING_CLOUD");
+        const formData = new FormData();
+        formData.append("file", imageFile);
+        formData.append("signature", signature);
+        formData.append("api_key", apiKey);
+        formData.append("timestamp", String(timestamp));
+        formData.append("folder", folder);
+
+        const uploadRes = await fetch(
+          `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
+          {
+            method: "POST",
+            body: formData,
+          },
+        );
+        finalImageUrl = (await uploadRes.json()).secure_url;
+      }
+
+      setStatus("PUBLISHING");
+      await createPost({ content, imageUrl: finalImageUrl }).unwrap();
+
+      setContent("");
+      setImageFile(null);
+      setStatus("IDLE");
+    } catch (err) {
+      setStatus("FAILED");
+    }
+  };
+
   return (
     <section className="mb-4 rounded-md bg-white p-6 shadow-sm">
       <div className="flex gap-3">
@@ -102,6 +191,34 @@ export function FeedComposer() {
             placeholder="Write something..."
             className="min-h-[88px] w-full resize-y rounded-md px-3 py-3 text-[#112032] placeholder:text-[#666] outline-none focus:border-[#1890FF]/40 focus:ring-2 focus:ring-[#1890FF]/20"
           />
+
+          {previewUrl && (
+            <div className="relative mt-3 inline-block">
+              <img
+                src={previewUrl}
+                alt="Upload preview"
+                className="h-12 w-auto rounded-md border border-black/10 object-cover"
+              />
+              <button
+                type="button"
+                className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white shadow hover:bg-red-600"
+                onClick={() => {
+                  setImageFile(null);
+                  if (fileInputRef.current) fileInputRef.current.value = "";
+                }}
+                aria-label="Remove image"
+              >
+                ✕
+              </button>
+            </div>
+          )}
+          <input
+            type="file"
+            ref={fileInputRef}
+            className="sr-only"
+            accept="image/png, image/jpeg, image/webp"
+            onChange={handleImageSelect}
+          />
         </div>
       </div>
 
@@ -111,9 +228,13 @@ export function FeedComposer() {
             <button
               key={a.id}
               type="button"
-              className="inline-flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium text-[#666] hover:bg-[#F8F9FB]"
+              disabled={status !== "IDLE"}
+              onClick={a.id === "photo" ? triggerFileExplorer : undefined}
+              className="inline-flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium text-[#666] hover:bg-[#F8F9FB] group hover:text-[#1890FF]"
             >
-              <span className="text-[#666]">{a.icon}</span>
+              <span className="text-[#666] group-hover:text-[#1890FF]">
+                {a.icon}
+              </span>
               {a.label}
             </button>
           ))}
@@ -121,6 +242,7 @@ export function FeedComposer() {
         <button
           type="button"
           className="inline-flex items-center gap-2 rounded-md bg-[#1890FF] px-4 py-2 text-sm font-semibold text-white hover:bg-[#1677d9]"
+          onClick={handlePost}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

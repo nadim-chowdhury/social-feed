@@ -6,31 +6,28 @@ import { useEffect, useRef, useState } from "react";
 import type { FeedPost } from "@/lib/feed-data";
 import { currentUser } from "@/lib/feed-data";
 import { FeedAvatar } from "./FeedAvatar";
+import { ApiPost } from "@/types/feed";
+import { getRelativeTime } from "@/lib/time";
 
-export function FeedPostCard({ post }: { post: FeedPost }) {
+export function FeedPostCard({ post }: { post: ApiPost }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [replyToId, setReplyToId] = useState<string | null>("1");
   const menuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function onDoc(e: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node))
-        setMenuOpen(false);
-    }
-    document.addEventListener("mousedown", onDoc);
-    return () => document.removeEventListener("mousedown", onDoc);
-  }, []);
 
   return (
     <article className="mb-4 overflow-hidden rounded-md bg-white shadow-sm">
       <div className="border-b border-black/5 px-6 pb-4 pt-6">
         <div className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 gap-3">
-            <FeedAvatar name={post.author} seed={post.authorSeed} size="lg" />
+            <FeedAvatar
+              name={`${post.author.firstName} ${post.author.lastName}`}
+              seed={post.authorId}
+              size="lg"
+            />
             <div className="min-w-0">
-              <h4 className="font-medium text-[#112032] mb-1">{post.author}</h4>
-              <p className="text-sm text-[#666]">
-                {post.timeLabel} ·{" "}
+              <h4 className="font-medium text-[#112032] mb-1 capitalize">{`${post.author.firstName} ${post.author.lastName}`}</h4>
+              <p className="text-sm text-[#666] capitalize">
+                {getRelativeTime(post.createdAt)} ·{" "}
                 <Link href="#" className="text-[#1890FF] hover:underline">
                   {post.visibility}
                 </Link>
@@ -103,12 +100,16 @@ export function FeedPostCard({ post }: { post: FeedPost }) {
             )}
           </div>
         </div>
-        <h3 className="mt-4 text-base text-[#112032]">{post.title}</h3>
-        <div
-          className={`mt-4 aspect-video w-full rounded-md bg-linear-to-br ${post.imageGradient}`}
-          role="img"
-          aria-label=""
-        />
+        <h3 className="mt-4 text-base text-[#112032]">{post.content}</h3>
+        {post.imageUrl && (
+          <Image
+            className={`mt-4 aspect-video w-full rounded-md`}
+            src={post.imageUrl}
+            alt="post image"
+            width={1280}
+            height={720}
+          />
+        )}
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-y-2 px-4 py-4 pb-3 sm:px-6">
@@ -138,14 +139,14 @@ export function FeedPostCard({ post }: { post: FeedPost }) {
             type="button"
             className="hover:text-[#1890FF] transition-colors"
           >
-            <span className="text-[#112032] mr-1.5">{post.commentCount}</span>
+            <span className="text-[#112032] mr-1.5">{post.commentsCount}</span>
             Comment
           </button>
           <button
             type="button"
             className="hover:text-[#1890FF] transition-colors"
           >
-            <span className="text-[#112032] mr-1.5">{post.shareCount}</span>
+            <span className="text-[#112032] mr-1.5">12</span>
             Share
           </button>
         </div>
@@ -288,7 +289,7 @@ export function FeedPostCard({ post }: { post: FeedPost }) {
           </div>
         </div>
 
-        {post.previousCommentsCount != null &&
+        {/* {post.previousCommentsCount != null &&
           post.previousCommentsCount > 0 && (
             <button
               type="button"
@@ -296,9 +297,9 @@ export function FeedPostCard({ post }: { post: FeedPost }) {
             >
               View {post.previousCommentsCount} previous comments
             </button>
-          )}
+          )} */}
 
-        <div className="flex flex-col gap-6">
+        {/* <div className="flex flex-col gap-6">
           {post.comments.map((c) => (
             <div key={c.id} className="flex gap-3">
               <Link href="#" className="shrink-0 mt-1">
@@ -462,7 +463,7 @@ export function FeedPostCard({ post }: { post: FeedPost }) {
               </div>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
     </article>
   );

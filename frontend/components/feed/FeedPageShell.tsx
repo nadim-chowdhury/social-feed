@@ -28,9 +28,12 @@ export function FeedPageShell() {
           <div className="lg:col-span-6">
             <FeedStories />
             <FeedComposer />
-            {feedPosts.map((post) => (
-              <FeedPostCard key={post.id} post={post} />
-            ))}
+            {!isFetching &&
+              !isLoading &&
+              !isError &&
+              data?.data.map((post) => (
+                <FeedPostCard key={post.id} post={post} />
+              ))}
           </div>
           <div className="hidden lg:col-span-3 lg:block lg:sticky lg:top-[90px] lg:h-[calc(100vh-100px)] lg:overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:pb-4">
             <FeedRightSidebar />
