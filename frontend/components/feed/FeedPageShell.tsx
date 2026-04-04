@@ -1,3 +1,5 @@
+"use client";
+
 import { feedPosts } from "@/lib/feed-data";
 import { FeedComposer } from "./FeedComposer";
 import { FeedHeader } from "./FeedHeader";
@@ -7,8 +9,12 @@ import { FeedPostCard } from "./FeedPostCard";
 import { FeedRightSidebar } from "./FeedRightSidebar";
 import { FeedStories } from "./FeedStories";
 import { FeedThemeToggle } from "./FeedThemeToggle";
+import { useGetFeedQuery } from "@/services/postsApi";
 
 export function FeedPageShell() {
+  const { data, isLoading, isFetching, isError } = useGetFeedQuery();
+  console.log("🚀 ~ data:", data);
+
   return (
     <>
       <FeedHeader />

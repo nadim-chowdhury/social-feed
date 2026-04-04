@@ -72,7 +72,7 @@ export function FeedLeftSidebar() {
               </div>
               <Link
                 href="#"
-                className="shrink-0 rounded-md border border-[#aaa] px-2 py-1 text-xs font-medium text-[#999] hover:bg-[#1890FF]"
+                className="shrink-0 rounded-md border border-[#aaa] px-2 py-1 text-xs font-medium text-[#999] hover:bg-[#1890FF] hover:border-[#1890FF] hover:text-white transition-all duration-200 ease-in-out"
               >
                 Connect
               </Link>
