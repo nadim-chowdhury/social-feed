@@ -94,6 +94,10 @@ export interface ApiComment {
   author: ApiUser;
   createdAt: string;
   reactionsCount: number;
+  parentId?: string | null;
+  replyCount: number;
+  likesCount: number;
+  isLikedByMe: boolean;
 }
 
 export interface GetCommentsRequest {
@@ -109,3 +113,13 @@ export interface CreateCommentRequest {
 export interface ToggleLikeRequest {
   postId: string;
 }
+
+export type ToggleCommentLikeHandler = (args: {
+  postId: string;
+  commentId: string;
+}) => Promise<void>;
+
+export type QueryResolver = (args: { postId: string; commentId: string }) => {
+  url: string;
+  method: string;
+};

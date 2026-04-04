@@ -11,6 +11,7 @@ import { getRelativeTime } from "@/lib/time";
 import {
   useCreatePostCommentMutation,
   useGetPostCommentsQuery,
+  useToggleCommentLikeMutation,
   useTogglePostLikeMutation,
 } from "@/services/postsApi";
 
@@ -30,6 +31,7 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
     isError,
   } = useGetPostCommentsQuery({ postId: post.id }, { skip: !showComments });
   const [toggleLike] = useTogglePostLikeMutation();
+  const [toggleCommentLike] = useToggleCommentLikeMutation();
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && commentText.trim() && !isPosting) {
@@ -364,8 +366,19 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
                     </div>
 
                     <div className="mt-3 px-1 flex gap-1.5 text-[14.5px] font-medium text-[#112032]">
-                      <button type="button" className="hover:text-[#1890FF]">
-                        Like
+                      <button
+                        type="button"
+                        className={`transition-colors hover:text-[#1890FF] ${
+                          c.isLikedByMe ? "text-[#1890FF] font-bold" : "" // Active State styling
+                        }`}
+                        onClick={() =>
+                          toggleCommentLike({
+                            postId: post.id,
+                            commentId: c.id,
+                          })
+                        }
+                      >
+                        Like {c.likesCount > 0 ? `(${c.likesCount})` : ""}
                       </button>
                       <span className="text-[#112032]">.</span>
                       <button

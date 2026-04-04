@@ -103,6 +103,39 @@ export const postsApi = baseApi.injectEndpoints({
         }
       },
     }),
+
+    toggleCommentLike: builder.mutation<
+      void,
+      { postId: string; commentId: string }
+    >({
+      query: ({ postId, commentId }) => ({
+        url: `/posts/${postId}/comments/${commentId}/like`,
+        method: "POST",
+      }),
+      async onQueryStarted(
+        { postId, commentId },
+        { dispatch, queryFulfilled },
+      ) {
+        const patchResult = dispatch(
+          postsApi.util.updateQueryData(
+            "getPostComments",
+            { postId },
+            (draft) => {
+              const targetComment = draft.data.find((c) => c.id === commentId);
+              if (targetComment) {
+                targetComment.isLikedByMe = !targetComment.isLikedByMe;
+                targetComment.likesCount += targetComment.isLikedByMe ? 1 : -1;
+              }
+            },
+          ),
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+    }),
   }),
 });
 
@@ -113,4 +146,5 @@ export const {
   useGetPostCommentsQuery,
   useCreatePostCommentMutation,
   useTogglePostLikeMutation,
+  useToggleCommentLikeMutation,
 } = postsApi;
