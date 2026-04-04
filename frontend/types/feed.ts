@@ -211,3 +211,13 @@ export interface TogglePostLikeRequest {
   postId: string;
   isCurrentlyLiked: boolean;
 }
+
+export interface GetPostLikesRequest {
+  postId: string;
+  page?: number;
+  limit?: number;
+}
+export interface GetPostLikesResponse {
+  data: ApiUser[];
+  total: number;
+}

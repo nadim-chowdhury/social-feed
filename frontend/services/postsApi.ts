@@ -10,6 +10,8 @@ import type {
   CreateCommentRequest,
   ToggleCommentLikeRequest,
   TogglePostLikeRequest,
+  GetPostLikesResponse,
+  GetPostLikesRequest,
 } from "../types/feed";
 
 export const postsApi = baseApi.injectEndpoints({
@@ -116,6 +118,9 @@ export const postsApi = baseApi.injectEndpoints({
         url: `/posts/${postId}/like`,
         method: isCurrentlyLiked ? "DELETE" : "POST",
       }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "Post" as const, id: `LIKES-${arg.postId}` },
+      ],
       async onQueryStarted(
         { postId, isCurrentlyLiked },
         { dispatch, queryFulfilled },
@@ -196,6 +201,14 @@ export const postsApi = baseApi.injectEndpoints({
         { type: "Comment" as const, id: `replies-${arg.commentId}` },
       ],
     }),
+
+    getPostLikes: builder.query<GetPostLikesResponse, GetPostLikesRequest>({
+      query: ({ postId, page = 0, limit = 3 }) =>
+        `/posts/${postId}/likes?page=${page}&limit=${limit}`,
+      providesTags: (result, error, arg) => [
+        { type: "Post" as const, id: `LIKES-${arg.postId}` },
+      ],
+    }),
   }),
 });
 
@@ -208,4 +221,5 @@ export const {
   useTogglePostLikeMutation,
   useToggleCommentLikeMutation,
   useGetCommentRepliesQuery,
+  useGetPostLikesQuery,
 } = postsApi;

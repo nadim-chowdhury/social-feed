@@ -9,6 +9,7 @@ import { getRelativeTime } from "@/lib/time";
 import {
   useCreatePostCommentMutation,
   useGetPostCommentsQuery,
+  useGetPostLikesQuery,
   useTogglePostLikeMutation,
 } from "@/services/postsApi";
 import { CommentThread } from "./CommentThread";
@@ -32,6 +33,10 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
     isError,
   } = useGetPostCommentsQuery({ postId: post.id }, { skip: !showComments });
   const [toggleLike] = useTogglePostLikeMutation();
+  const { data: likesData } = useGetPostLikesQuery({
+    postId: post.id,
+    limit: 3,
+  });
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && commentText.trim() && !isPosting) {
@@ -166,24 +171,22 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
 
       <div className="flex flex-wrap items-center justify-between gap-y-2 px-4 py-4 pb-3 sm:px-6">
         <div className="flex shrink-0 items-center">
-          <span className="flex -space-x-[10px]">
-            {[
-              "/assets/images/react_img1.png",
-              "/assets/images/react_img2.png",
-              "/assets/images/react_img3.png",
-            ].map((img, i) => (
+          <span className="flex -space-x-[16px]">
+            {likesData?.data.map((user, i) => (
               <Image
                 key={i}
-                src={img}
+                src={"/assets/images/react_img1.png"}
                 alt="user"
                 width={36}
                 height={36}
                 className="h-9 w-9 shrink-0 rounded-full border-2 border-white object-cover"
               />
             ))}
-            <span className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-white bg-[#1890FF] text-[14px] font-semibold text-white">
-              9+
-            </span>
+            {post.likesCount > 3 && (
+              <span className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-white bg-[#1890FF] text-[14px] font-semibold text-white">
+                {post.likesCount - 3}+
+              </span>
+            )}
           </span>
         </div>
 
@@ -349,6 +352,7 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
                   className="w-full bg-transparent text-[15.5px] text-[#112032] placeholder:text-[#517596] outline-none"
                 />
               </div>
+
               <div className="flex shrink-0 items-center gap-3 text-[#8C9AA9]">
                 <button
                   type="button"
