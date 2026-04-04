@@ -179,7 +179,6 @@ export function FeedComposer() {
         <FeedAvatar
           name={currentUser.name}
           seed={currentUser.avatarSeed}
-          image="/assets/images/txt_img.png"
           size="sm"
         />
         <div className="relative min-w-0 flex-1">

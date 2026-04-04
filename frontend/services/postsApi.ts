@@ -8,6 +8,8 @@ import type {
   ApiComment,
   GetCommentsRequest,
   CreateCommentRequest,
+  ToggleCommentLikeRequest,
+  TogglePostLikeRequest,
 } from "../types/feed";
 
 export const postsApi = baseApi.injectEndpoints({
@@ -44,26 +46,55 @@ export const postsApi = baseApi.injectEndpoints({
     }),
 
     createPostComment: builder.mutation<ApiComment, CreateCommentRequest>({
-      query: ({ postId, content }) => ({
+      query: ({ postId, content, parentId }) => ({
         url: `/posts/${postId}/comments`,
         method: "POST",
-        body: { content },
+        body: { content, parentId },
       }),
-      async onQueryStarted({ postId }, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ postId, parentId }, { dispatch, queryFulfilled }) {
         try {
           const { data: newComment } = await queryFulfilled;
 
-          dispatch(
-            postsApi.util.updateQueryData(
-              "getPostComments",
-              { postId },
-              (draft) => {
-                if (draft?.data) {
+          // dispatch(
+          //   postsApi.util.updateQueryData(
+          //     "getPostComments",
+          //     { postId },
+          //     (draft) => {
+          //       if (!parentId) {
+          //         draft.data.unshift(newComment);
+          //       } else {
+          //         draft.data.push(newComment);
+          //       }
+          //     },
+          //   ),
+          // );
+          // Replace your current monolithic updateQueryData block entirely with this explicit branching:
+          if (!parentId) {
+            // 1. If it's a Root Comment, update the master Feed list
+            dispatch(
+              postsApi.util.updateQueryData(
+                "getPostComments",
+                { postId },
+                (draft) => {
                   draft.data.unshift(newComment);
-                }
-              },
-            ),
-          );
+                },
+              ),
+            );
+          } else {
+            // 2. If it's a Reply, specifically target the localized Sub-Collection
+            dispatch(
+              postsApi.util.updateQueryData(
+                "getCommentReplies",
+                { postId, commentId: parentId },
+                (draft) => {
+                  // Create the array if it doesn't exist yet (defensive programming)
+                  if (!draft.data) draft.data = [];
+                  draft.data.push(newComment);
+                },
+              ),
+            );
+          }
+
           dispatch(
             postsApi.util.updateQueryData("getFeed", undefined, (draft) => {
               if (draft?.data) {
@@ -80,12 +111,15 @@ export const postsApi = baseApi.injectEndpoints({
       },
     }),
 
-    togglePostLike: builder.mutation<void, { postId: string }>({
-      query: ({ postId }) => ({
+    togglePostLike: builder.mutation<void, TogglePostLikeRequest>({
+      query: ({ postId, isCurrentlyLiked }) => ({
         url: `/posts/${postId}/like`,
-        method: "POST",
+        method: isCurrentlyLiked ? "DELETE" : "POST",
       }),
-      async onQueryStarted({ postId }, { dispatch, queryFulfilled }) {
+      async onQueryStarted(
+        { postId, isCurrentlyLiked },
+        { dispatch, queryFulfilled },
+      ) {
         const patchResult = dispatch(
           postsApi.util.updateQueryData("getFeed", undefined, (draft) => {
             const targetPost = draft.data.find((p) => p.id === postId);
@@ -104,37 +138,63 @@ export const postsApi = baseApi.injectEndpoints({
       },
     }),
 
-    toggleCommentLike: builder.mutation<
-      void,
-      { postId: string; commentId: string }
-    >({
+    toggleCommentLike: builder.mutation<void, ToggleCommentLikeRequest>({
       query: ({ postId, commentId }) => ({
         url: `/posts/${postId}/comments/${commentId}/like`,
         method: "POST",
       }),
       async onQueryStarted(
-        { postId, commentId },
+        { postId, commentId, parentId },
         { dispatch, queryFulfilled },
       ) {
-        const patchResult = dispatch(
-          postsApi.util.updateQueryData(
-            "getPostComments",
-            { postId },
-            (draft) => {
-              const targetComment = draft.data.find((c) => c.id === commentId);
-              if (targetComment) {
-                targetComment.isLikedByMe = !targetComment.isLikedByMe;
-                targetComment.likesCount += targetComment.isLikedByMe ? 1 : -1;
-              }
-            },
-          ),
-        );
+        const patchDraft = (draft: any) => {
+          const target = draft.data.find((c: any) => c.id === commentId);
+          if (target) {
+            target.isLikedByMe = !target.isLikedByMe;
+            target.likesCount += target.isLikedByMe ? 1 : -1;
+          }
+        };
+
+        let patchResult;
+
+        if (!parentId) {
+          patchResult = dispatch(
+            postsApi.util.updateQueryData(
+              "getPostComments",
+              { postId },
+              patchDraft,
+            ),
+          );
+        } else {
+          patchResult = dispatch(
+            // The endpoint is getCommentReplies, and its cache key is { postId, commentId: parentId }
+            postsApi.util.updateQueryData(
+              "getCommentReplies",
+              { postId, commentId: parentId },
+              patchDraft,
+            ),
+          );
+        }
+
         try {
           await queryFulfilled;
         } catch {
           patchResult.undo();
         }
       },
+    }),
+
+    getCommentReplies: builder.query<
+      ApiPaginatedResponse<ApiComment>,
+      { postId: string; commentId: string; cursor?: string }
+    >({
+      query: ({ postId, commentId, cursor }) =>
+        cursor
+          ? `/posts/${postId}/comments/${commentId}/replies?cursor=${cursor}`
+          : `/posts/${postId}/comments/${commentId}/replies`,
+      providesTags: (result, error, arg) => [
+        { type: "Comment" as const, id: `replies-${arg.commentId}` },
+      ],
     }),
   }),
 });
@@ -147,4 +207,5 @@ export const {
   useCreatePostCommentMutation,
   useTogglePostLikeMutation,
   useToggleCommentLikeMutation,
+  useGetCommentRepliesQuery,
 } = postsApi;

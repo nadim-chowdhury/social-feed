@@ -3,25 +3,26 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import type { FeedPost } from "@/lib/feed-data";
-import { currentUser } from "@/lib/feed-data";
 import { FeedAvatar } from "./FeedAvatar";
-import { ApiPost } from "@/types/feed";
+import { ApiPost, ComposerRequestPayload } from "@/types/feed";
 import { getRelativeTime } from "@/lib/time";
 import {
   useCreatePostCommentMutation,
   useGetPostCommentsQuery,
-  useToggleCommentLikeMutation,
   useTogglePostLikeMutation,
 } from "@/services/postsApi";
+import { CommentThread } from "./CommentThread";
 
 export function FeedPostCard({ post }: { post: ApiPost }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [replyToId, setReplyToId] = useState<string | null>(null);
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState("");
+  const [activeComposerId, setActiveComposerId] = useState<string>(post.id);
+  const [replyContextName, setReplyContextName] = useState<string | null>(null);
 
   const menuRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const [createComment, { isLoading: isPosting }] =
     useCreatePostCommentMutation();
   const {
@@ -31,24 +32,38 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
     isError,
   } = useGetPostCommentsQuery({ postId: post.id }, { skip: !showComments });
   const [toggleLike] = useTogglePostLikeMutation();
-  const [toggleCommentLike] = useToggleCommentLikeMutation();
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && commentText.trim() && !isPosting) {
-      console.log("🔥 DISPATCHING MUTATION:", {
-        postId: post.id,
-        content: commentText,
-      });
-
-      try {
+      if (activeComposerId === post.id) {
         await createComment({ postId: post.id, content: commentText }).unwrap();
-        setCommentText("");
-        setShowComments(true);
-      } catch (error) {
-        console.error("Comment failed:", error);
+      } else {
+        await createComment({
+          postId: post.id,
+          content: commentText,
+          parentId: activeComposerId,
+        }).unwrap();
+        setActiveComposerId(post.id);
       }
+      setActiveComposerId(post.id);
+      setReplyContextName(null);
+      setCommentText("");
     }
   };
+
+  const handleReplyRequest = ({
+    targetId,
+    authorName,
+  }: ComposerRequestPayload) => {
+    setActiveComposerId(targetId);
+    setReplyContextName(authorName);
+  };
+
+  useEffect(() => {
+    if (activeComposerId !== post.id && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [activeComposerId]);
 
   return (
     <article className="mb-4 overflow-hidden rounded-md bg-white shadow-sm">
@@ -191,32 +206,11 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
       </div>
 
       <div className="grid grid-cols-3 w-full border-y border-black/5">
-        {/* <button
-          type="button"
-          className="flex items-center justify-center gap-2 bg-[#EAF4FF] py-3 text-[15px] font-medium text-[#112032]"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="19"
-            height="19"
-            fill="none"
-            viewBox="0 0 19 19"
-            aria-hidden
-          >
-            <path
-              fill="#FFCC4D"
-              d="M9.5 19a9.5 9.5 0 100-19 9.5 9.5 0 000 19z"
-            />
-            <path
-              fill="#664500"
-              d="M9.5 11.083c-1.912 0-3.181-.222-4.75-.527-.358-.07-1.056 0-1.056 1.055 0 2.111 2.425 4.75 5.806 4.75 3.38 0 5.805-2.639 5.805-4.75 0-1.055-.697-1.125-1.055-1.055-1.57.305-2.838.527-4.75.527z"
-            />
-          </svg>
-          Haha
-        </button> */}
         <button
           type="button"
-          onClick={() => toggleLike({ postId: post.id })}
+          onClick={() =>
+            toggleLike({ postId: post.id, isCurrentlyLiked: post.isLikedByMe })
+          }
           className={`flex items-center justify-center gap-2 py-3 text-[15px] font-medium transition-colors ${
             post.isLikedByMe
               ? "bg-[#EAF4FF] text-[#1890FF]"
@@ -245,7 +239,11 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
 
         <button
           type="button"
-          onClick={() => setShowComments(!showComments)}
+          onClick={() => {
+            setShowComments(!showComments);
+            setActiveComposerId(post.id);
+            setReplyContextName(null);
+          }}
           className="flex items-center justify-center gap-2 py-3 text-[15px] font-medium text-[#112032] hover:bg-[#F8F9FB] transition-colors"
         >
           <svg
@@ -303,252 +301,114 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
           )}
 
           {post.commentsCount != null && post.commentsCount > 0 && (
-            <div className="flex flex-col gap-6">
-              {commentsResponse?.data.map((c) => (
-                <div key={c.id} className="flex gap-3">
-                  <Link href="#" className="shrink-0 mt-1">
-                    <FeedAvatar
-                      name={c.author.firstName + " " + c.author.lastName}
-                      seed={c.author.avatar || ""}
-                      image="/assets/images/txt_img.png"
-                      size="sm"
+            <>
+              <div className="flex flex-col">
+                {commentsResponse?.data
+                  .filter((c) => !c.parentId)
+                  .map((c) => (
+                    <CommentThread
+                      key={c.id}
+                      post={post}
+                      comment={c}
+                      isActiveComposer={activeComposerId === c.id}
+                      onRequestComposer={handleReplyRequest}
+                      onReleaseComposer={() => setActiveComposerId(post.id)}
                     />
-                  </Link>
-                  <div className="min-w-0 flex-1 flex flex-col items-start w-full">
-                    <div className="relative w-[95%] rounded-2xl bg-[#F5F5F5] px-4 py-3 pb-4">
-                      <Link
-                        href="#"
-                        className="font-medium text-[15px] text-[#112032] hover:underline capitalize"
-                      >
-                        {c.author.firstName + " " + c.author.lastName}
-                      </Link>
-                      <p className="mt-1 text-[15.5px] leading-relaxed text-[#516170]">
-                        {c.content}
-                      </p>
-
-                      <span className="absolute -bottom-[14px] right-4 flex items-center gap-1 shadow-[0_2px_8px_rgba(0,0,0,0.08)] rounded-full bg-white px-2 py-[3px] text-[13px] font-semibold text-[#112032] border border-black/5">
-                        <div className="flex items-center -space-x-[6px] mr-1">
-                          <span className="relative z-10 rounded-full bg-white border-2 border-white flex justify-center items-center">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="#1890FF"
-                              strokeWidth="2.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="p-[1.5px] bg-[#EAF4FF] rounded-full"
-                            >
-                              <path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3" />
-                            </svg>
-                          </span>
-                          <span className="rounded-full bg-white border-2 border-white flex justify-center items-center">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="#FF4D4F"
-                              strokeWidth="2.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="p-[1.5px] bg-[#FFF1F0] rounded-full"
-                            >
-                              <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
-                            </svg>
-                          </span>
-                        </div>
-                        10
-                      </span>
-                    </div>
-
-                    <div className="mt-3 px-1 flex gap-1.5 text-[14.5px] font-medium text-[#112032]">
-                      <button
-                        type="button"
-                        className={`transition-colors hover:text-[#1890FF] ${
-                          c.isLikedByMe ? "text-[#1890FF] font-bold" : "" // Active State styling
-                        }`}
-                        onClick={() =>
-                          toggleCommentLike({
-                            postId: post.id,
-                            commentId: c.id,
-                          })
-                        }
-                      >
-                        Like {c.likesCount > 0 ? `(${c.likesCount})` : ""}
-                      </button>
-                      <span className="text-[#112032]">.</span>
-                      <button
-                        type="button"
-                        className="hover:text-[#1890FF]"
-                        onClick={() =>
-                          setReplyToId(replyToId === c.id ? null : c.id)
-                        }
-                      >
-                        Reply
-                      </button>
-                      <span className="text-[#112032]">.</span>
-                      <button type="button" className="hover:text-[#1890FF]">
-                        Share
-                      </button>
-                      <span className="text-[#8C9AA9] font-normal ml-0.5">
-                        {getRelativeTime(c.createdAt)}
-                      </span>
-                    </div>
-
-                    {replyToId === c.id && (
-                      <div className="flex items-center gap-3 rounded-full bg-[#F5F5F5] p-2 pr-4 mt-3 w-full">
-                        <div className="shrink-0">
-                          <FeedAvatar
-                            name={currentUser.name}
-                            seed={currentUser.avatarSeed}
-                            image="/assets/images/txt_img.png"
-                            size="xs"
-                          />
-                        </div>
-                        <div className="relative min-w-0 flex-1 flex items-center">
-                          <label htmlFor={`reply-${c.id}`} className="sr-only">
-                            Write a comment
-                          </label>
-                          <input
-                            type="text"
-                            id={`reply-${c.id}`}
-                            placeholder="Write a comment"
-                            autoFocus
-                            className="w-full bg-transparent text-[15.5px] text-[#112032] placeholder:text-[#517596] outline-none"
-                          />
-                        </div>
-                        <div className="flex shrink-0 items-center gap-3 text-[#8C9AA9]">
-                          <button
-                            type="button"
-                            className="hover:text-[#1890FF] transition-colors"
-                            aria-label="Microphone"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="19"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
-                              <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-                              <line x1="12" x2="12" y1="19" y2="22" />
-                            </svg>
-                          </button>
-                          <button
-                            type="button"
-                            className="hover:text-[#1890FF] transition-colors"
-                            aria-label="Attach Photo"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="18"
-                              height="18"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <rect
-                                width="18"
-                                height="18"
-                                x="3"
-                                y="3"
-                                rx="4"
-                                ry="4"
-                              />
-                              <circle cx="8.5" cy="8.5" r="1.5" />
-                              <path d="M21 15l-5-5L5 21" />
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+                  ))}
+              </div>
+            </>
           )}
 
-          <div className="flex items-center gap-3 rounded-full bg-[#F5F5F5] p-2 pr-4 w-full">
-            <div className="shrink-0">
-              <FeedAvatar
-                name={currentUser.name}
-                seed={currentUser.avatarSeed}
-                image="/assets/images/txt_img.png"
-                size="xs"
-              />
-            </div>
-            <div className="relative min-w-0 flex-1 flex items-center">
-              <label htmlFor={`comment-${post.id}`} className="sr-only">
-                Write a comment
-              </label>
-              <input
-                type="text"
-                id={`comment-${post.id}`}
-                placeholder="Write a comment"
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                onKeyDown={handleKeyDown}
-                disabled={isPosting}
-                className="w-full bg-transparent text-[15.5px] text-[#112032] placeholder:text-[#517596] outline-none"
-              />
-            </div>
-            <div className="flex shrink-0 items-center gap-3 text-[#8C9AA9]">
-              <button
-                type="button"
-                className="hover:text-[#1890FF] transition-colors"
-                aria-label="Microphone"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="19"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+          {
+            <div className="flex items-center gap-3 rounded-full bg-[#F5F5F5] p-2 pr-4 w-full">
+              <div className="shrink-0">
+                <FeedAvatar
+                  name={""}
+                  seed={""}
+                  image="/assets/images/txt_img.png"
+                  size="xs"
+                />
+              </div>
+              <div className="relative min-w-0 flex-1 flex items-center">
+                <label htmlFor={`comment-${post.id}`} className="sr-only">
+                  Write a comment
+                </label>
+                <input
+                  id={`comment-${post.id}`}
+                  placeholder={
+                    activeComposerId === post.id
+                      ? "Write a comment..."
+                      : `Replying to @${replyContextName}...`
+                  }
+                  ref={inputRef}
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  disabled={isPosting}
+                  autoFocus={activeComposerId !== post.id}
+                  className="w-full bg-transparent text-[15.5px] text-[#112032] placeholder:text-[#517596] outline-none"
+                />
+              </div>
+              <div className="flex shrink-0 items-center gap-3 text-[#8C9AA9]">
+                <button
+                  type="button"
+                  className="hover:text-[#1890FF] transition-colors"
+                  aria-label="Microphone"
                 >
-                  <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
-                  <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-                  <line x1="12" x2="12" y1="19" y2="22" />
-                </svg>
-              </button>
-              <button
-                type="button"
-                className="hover:text-[#1890FF] transition-colors"
-                aria-label="Attach Photo"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="19"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                    <line x1="12" x2="12" y1="19" y2="22" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  className="hover:text-[#1890FF] transition-colors"
+                  aria-label="Attach Photo"
                 >
-                  <rect width="18" height="18" x="3" y="3" rx="4" ry="4" />
-                  <circle cx="8.5" cy="8.5" r="1.5" />
-                  <path d="M21 15l-5-5L5 21" />
-                </svg>
-              </button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect width="18" height="18" x="3" y="3" rx="4" ry="4" />
+                    <circle cx="8.5" cy="8.5" r="1.5" />
+                    <path d="M21 15l-5-5L5 21" />
+                  </svg>
+                </button>
+              </div>
+
+              {activeComposerId !== post.id && (
+                <button
+                  type="button"
+                  aria-label="Cancel Reply"
+                  onClick={() => {
+                    setActiveComposerId(post.id);
+                    setReplyContextName(null);
+                  }}
+                  className="rounded-full bg-black/5 px-2 py-1 text-[12px] font-medium text-[#516170] hover:bg-black/10 transition-colors"
+                >
+                  Cancel
+                </button>
+              )}
             </div>
-          </div>
+          }
         </div>
       )}
     </article>

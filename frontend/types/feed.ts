@@ -108,6 +108,7 @@ export interface GetCommentsRequest {
 export interface CreateCommentRequest {
   postId: string;
   content: string;
+  parentId?: string;
 }
 
 export interface ToggleLikeRequest {
@@ -117,9 +118,96 @@ export interface ToggleLikeRequest {
 export type ToggleCommentLikeHandler = (args: {
   postId: string;
   commentId: string;
+  parentId?: string;
 }) => Promise<void>;
 
-export type QueryResolver = (args: { postId: string; commentId: string }) => {
+export type QueryResolver = (args: {
+  postId: string;
+  commentId: string;
+  parentId?: string;
+}) => {
   url: string;
   method: string;
 };
+
+export type ResolveRootParentFn = (targetNode: ApiComment) => string;
+
+export type ValidatedKeyboardExecution = (
+  e: React.KeyboardEvent<HTMLInputElement>,
+  rootNode: ApiComment,
+) => Promise<void>;
+
+export type RootProjectionFilter = (comment: ApiComment) => boolean;
+
+export interface CommentThreadNode {
+  replies: ApiComment[];
+  activeComposerId: string | null;
+}
+
+export type CacheUpdater = (draft: ApiPaginatedResponse<ApiComment>) => void;
+
+export interface GetRepliesRequest {
+  postId: string;
+  commentId: string;
+  parentId?: string;
+  cursor?: string;
+}
+
+export interface CommentThreadProps {
+  post: ApiPost;
+  comment: ApiComment;
+  isReplying?: boolean;
+  onReplyClick?: () => void;
+  isComposerOpen?: boolean;
+  setIsComposerOpen?: (value: boolean) => void;
+}
+
+export type MutationEvent = {
+  postId: string;
+  parentId?: string;
+  newComment: ApiComment;
+};
+
+export interface CacheDispatcher {
+  routePatch(event: MutationEvent): void;
+}
+
+export type ThreadState = {
+  fixedId: string;
+  isComposerOpen: boolean;
+};
+
+export interface CommentNodeProps {
+  comment: ApiComment;
+  isNested: boolean;
+  onReplyClick: () => void;
+  onLikeClick: () => void;
+}
+
+export type FeedPostControllerState = {
+  activeComposerId: string;
+};
+
+export interface CommentThreadProps {
+  post: ApiPost;
+  comment: ApiComment;
+  isActiveComposer: boolean;
+  onReleaseComposer: () => void;
+  onRequestComposer: (payload: ComposerRequestPayload) => void;
+}
+
+export interface ComposerRequestPayload {
+  targetId: string;
+  authorName: string;
+}
+
+export interface ToggleCommentLikeRequest {
+  postId: string;
+  commentId: string;
+  parentId?: string;
+}
+
+export interface TogglePostLikeRequest {
+  postId: string;
+  isCurrentlyLiked: boolean;
+}
