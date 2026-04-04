@@ -78,7 +78,7 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
             <FeedAvatar
               name={`${post.author.firstName} ${post.author.lastName}`}
               seed={post.authorId}
-              size="lg"
+              size="md"
             />
             <div className="min-w-0">
               <h4 className="font-medium text-[#112032] mb-1 capitalize">{`${post.author.firstName} ${post.author.lastName}`}</h4>
