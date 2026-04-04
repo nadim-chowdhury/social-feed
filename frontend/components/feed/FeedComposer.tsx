@@ -94,8 +94,9 @@ const actions = [
 
 export function FeedComposer() {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [createPost] = useCreatePostMutation();
-  const [getSignature] = useGetUploadSignatureMutation();
+  const [createPost, { isLoading: isCreatingPost }] = useCreatePostMutation();
+  const [getSignature, { isLoading: isSigning }] =
+    useGetUploadSignatureMutation();
 
   const [content, setContent] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -189,7 +190,9 @@ export function FeedComposer() {
             id="feed-composer"
             rows={3}
             placeholder="Write something..."
-            className="min-h-[88px] w-full resize-y rounded-md px-3 py-3 text-[#112032] placeholder:text-[#666] outline-none focus:border-[#1890FF]/40 focus:ring-2 focus:ring-[#1890FF]/20"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            className="min-h-[88px] w-full resize-y rounded-md px-3 py-3 text-[#112032] placeholder:text-[#666] outline-none focus:border-[#1890FF]/40 focus:ring-2 focus:ring-[#1890FF]/20 disabled:bg-gray-400 disabled:cursor-not-allowed"
           />
 
           {previewUrl && (
@@ -201,7 +204,7 @@ export function FeedComposer() {
               />
               <button
                 type="button"
-                className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white shadow hover:bg-red-600"
+                className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white shadow hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
                 onClick={() => {
                   setImageFile(null);
                   if (fileInputRef.current) fileInputRef.current.value = "";
@@ -215,7 +218,7 @@ export function FeedComposer() {
           <input
             type="file"
             ref={fileInputRef}
-            className="sr-only"
+            className="sr-only disabled:bg-gray-400 disabled:cursor-not-allowed"
             accept="image/png, image/jpeg, image/webp"
             onChange={handleImageSelect}
           />
@@ -228,9 +231,9 @@ export function FeedComposer() {
             <button
               key={a.id}
               type="button"
-              disabled={status !== "IDLE"}
+              disabled={isCreatingPost || isSigning}
               onClick={a.id === "photo" ? triggerFileExplorer : undefined}
-              className="inline-flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium text-[#666] hover:bg-[#F8F9FB] group hover:text-[#1890FF]"
+              className="inline-flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium text-[#666] hover:bg-[#F8F9FB] group hover:text-[#1890FF] disabled:cursor-not-allowed"
             >
               <span className="text-[#666] group-hover:text-[#1890FF]">
                 {a.icon}
@@ -241,8 +244,9 @@ export function FeedComposer() {
         </div>
         <button
           type="button"
-          className="inline-flex items-center gap-2 rounded-md bg-[#1890FF] px-4 py-2 text-sm font-semibold text-white hover:bg-[#1677d9]"
           onClick={handlePost}
+          disabled={isCreatingPost || isSigning || status !== "IDLE"}
+          className="inline-flex items-center gap-2 rounded-md bg-[#1890FF] px-4 py-2 text-sm font-semibold text-white hover:bg-[#1677d9] disabled:bg-gray-400 disabled:cursor-not-allowed"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
