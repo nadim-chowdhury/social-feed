@@ -7,6 +7,7 @@ import {
   FileSelectionHandler,
   ImagePreviewState,
   OrchestrationStatus,
+  PostVisibility,
 } from "@/types/feed";
 import {
   useCreatePostMutation,
@@ -102,6 +103,7 @@ export function FeedComposer() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [status, setStatus] = useState<OrchestrationStatus>("IDLE");
   const [previewUrl, setPreviewUrl] = useState<ImagePreviewState>(null);
+  const [visibility, setVisibility] = useState<PostVisibility>("PUBLIC");
 
   useEffect(() => {
     if (!imageFile) {
@@ -163,7 +165,11 @@ export function FeedComposer() {
       }
 
       setStatus("PUBLISHING");
-      await createPost({ content, imageUrl: finalImageUrl }).unwrap();
+      await createPost({
+        content,
+        imageUrl: finalImageUrl,
+        visibility,
+      }).unwrap();
 
       setContent("");
       setImageFile(null);
@@ -185,6 +191,14 @@ export function FeedComposer() {
           <label htmlFor="feed-composer" className="sr-only">
             Write something
           </label>
+          <select
+            value={visibility}
+            onChange={(e) => setVisibility(e.target.value as PostVisibility)}
+            className="ml-auto text-sm text-[#516170] border border-black/20 px-2 py-px rounded-md mb-4"
+          >
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+          </select>
           <textarea
             id="feed-composer"
             rows={3}

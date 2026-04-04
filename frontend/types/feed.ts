@@ -221,3 +221,11 @@ export interface GetPostLikesResponse {
   data: ApiUser[];
   total: number;
 }
+
+export type PostVisibility = "PUBLIC" | "PRIVATE" | "FRIENDS" | undefined;
+
+export interface CreatePostRequest {
+  content?: string | null;
+  imageUrl?: string | null;
+  visibility?: PostVisibility;
+}

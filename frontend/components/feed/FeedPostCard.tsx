@@ -85,7 +85,7 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
               <p className="text-sm text-[#666] capitalize">
                 {getRelativeTime(post.createdAt)} ·{" "}
                 <Link href="#" className="text-[#1890FF] hover:underline">
-                  {post.visibility}
+                  {post.visibility === "public" ? "Public" : "Private"}
                 </Link>
               </p>
             </div>
