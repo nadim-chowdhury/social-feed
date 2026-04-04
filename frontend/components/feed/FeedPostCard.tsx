@@ -353,7 +353,7 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
                         Share
                       </button>
                       <span className="text-[#8C9AA9] font-normal ml-0.5">
-                        .{getRelativeTime(c.createdAt)}
+                        {getRelativeTime(c.createdAt)}
                       </span>
                     </div>
 

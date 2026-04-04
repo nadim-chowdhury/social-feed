@@ -49,9 +49,35 @@ export const postsApi = baseApi.injectEndpoints({
         method: "POST",
         body: { content },
       }),
-      invalidatesTags: (result, error, arg) => [
-        { type: "Comment", id: arg.postId },
-      ],
+      async onQueryStarted({ postId }, { dispatch, queryFulfilled }) {
+        try {
+          const { data: newComment } = await queryFulfilled;
+
+          dispatch(
+            postsApi.util.updateQueryData(
+              "getPostComments",
+              { postId },
+              (draft) => {
+                if (draft?.data) {
+                  draft.data.unshift(newComment);
+                }
+              },
+            ),
+          );
+          dispatch(
+            postsApi.util.updateQueryData("getFeed", undefined, (draft) => {
+              if (draft?.data) {
+                const targetPost = draft.data.find((p) => p.id === postId);
+                if (targetPost && targetPost.commentsCount !== undefined) {
+                  targetPost.commentsCount += 1;
+                }
+              }
+            }),
+          );
+        } catch (error) {
+          console.error("Pessimistic update failed");
+        }
+      },
     }),
   }),
 });
