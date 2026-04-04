@@ -1,14 +1,17 @@
 "use client";
 
 import { useGetMeQuery } from "@/services/authApi";
+import { RootState } from "@/store";
 import { setCredentials } from "@/store/slices/authSlice";
 import { GlobalAuthHydratorProps } from "@/types/auth";
 import { useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export function AuthHydrator({ token, children }: GlobalAuthHydratorProps) {
   const dispatch = useDispatch();
   const hydrated = useRef(false);
+
+  const authUser = useSelector((state: RootState) => state.auth.user);
 
   if (!hydrated.current) {
     if (token) dispatch(setCredentials({ token }));
@@ -37,7 +40,7 @@ export function AuthHydrator({ token, children }: GlobalAuthHydratorProps) {
     }
   }, [isSuccess, user, token, dispatch]);
 
-  if (!user) return null;
+  if (!authUser) return null;
 
   return <>{children}</>;
 }

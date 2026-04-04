@@ -12,6 +12,8 @@ import {
   useCreatePostMutation,
   useGetUploadSignatureMutation,
 } from "@/services/postsApi";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 
 const actions = [
   {
@@ -94,6 +96,7 @@ const actions = [
 
 export function FeedComposer() {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const authUser = useSelector((state: RootState) => state.auth.user);
   const [createPost, { isLoading: isCreatingPost }] = useCreatePostMutation();
   const [getSignature, { isLoading: isSigning }] =
     useGetUploadSignatureMutation();
@@ -182,8 +185,8 @@ export function FeedComposer() {
     <section className="mb-4 rounded-md bg-white p-6 shadow-sm">
       <div className="flex gap-3">
         <FeedAvatar
-          name={currentUser.name}
-          seed={currentUser.avatarSeed}
+          name={`${authUser?.firstName} ${authUser?.lastName}`}
+          seed={authUser?.id || ""}
           size="sm"
         />
         <div className="relative min-w-0 flex-1">
@@ -192,7 +195,9 @@ export function FeedComposer() {
           </label>
           <select
             value={visibility}
-            onChange={(e) => setVisibility(e.target.value as "public" | "private")}
+            onChange={(e) =>
+              setVisibility(e.target.value as "public" | "private")
+            }
             className="ml-auto text-sm text-[#516170] border border-black/20 px-2 py-px rounded-md mb-4"
           >
             <option value="public">Public</option>
