@@ -33,10 +33,10 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
     isError,
   } = useGetPostCommentsQuery({ postId: post.id }, { skip: !showComments });
   const [toggleLike] = useTogglePostLikeMutation();
-  const { data: likesData } = useGetPostLikesQuery({
-    postId: post.id,
-    limit: 3,
-  });
+  // const { data: likesData } = useGetPostLikesQuery({
+  //   postId: post.id,
+  //   limit: 3,
+  // });
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && commentText.trim() && !isPosting) {
@@ -165,6 +165,7 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
             alt="post image"
             width={1280}
             height={720}
+            loading="eager"
           />
         )}
       </div>
@@ -172,19 +173,20 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
       <div className="flex flex-wrap items-center justify-between gap-y-2 px-4 py-4 pb-3 sm:px-6">
         <div className="flex shrink-0 items-center">
           <span className="flex -space-x-[16px]">
-            {likesData?.data.map((user, i) => (
+            {post.recentLikes?.map((user, i) => (
               <Image
                 key={i}
                 src={"/assets/images/react_img1.png"}
                 alt="user"
                 width={36}
                 height={36}
+                loading="eager"
                 className="h-9 w-9 shrink-0 rounded-full border-2 border-white object-cover"
               />
             ))}
-            {post.likesCount > 3 && (
+            {(post.likesCount || 0) > (post.recentLikes?.length || 0) && (
               <span className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-white bg-[#1890FF] text-[14px] font-semibold text-white">
-                {post.likesCount - 3}+
+                +{(post.likesCount || 0) - (post.recentLikes?.length || 0)}
               </span>
             )}
           </span>

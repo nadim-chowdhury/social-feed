@@ -52,6 +52,13 @@ export class Post {
 
   isLikedByMe?: boolean;
 
+  recentLikes?: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    avatar?: string;
+  }[];
+
   @CreateDateColumn()
   createdAt: Date;
 

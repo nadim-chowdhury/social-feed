@@ -96,6 +96,36 @@ export class PostsService {
     const postsIds = posts.map((p) => p.id);
 
     if (postsIds.length) {
+      const likesTab = this.postLikeRepository.metadata.tableName;
+      const usersTab =
+        this.postLikeRepository.manager.connection.getMetadata(User).tableName;
+
+      const recentLikesRows = await this.postLikeRepository.query(
+        `
+  SELECT pl."postId", u.id, u."firstName", u."lastName", u."avatar"
+  FROM (
+    SELECT "postId", "userId", ROW_NUMBER() OVER(PARTITION BY "postId" ORDER BY "createdAt" DESC) as rn
+    FROM "${likesTab}" WHERE "postId" = ANY($1)
+  ) pl JOIN "${usersTab}" u ON pl."userId" = u.id WHERE pl.rn <= 5
+`,
+        [postsIds],
+      );
+
+      const likesMap = recentLikesRows.reduce(
+        (acc, row) => {
+          (acc[row.postId] ??= []).push({
+            id: row.id,
+            firstName: row.firstName,
+            lastName: row.lastName,
+            avatar: row.avatar,
+          });
+          return acc;
+        },
+        {} as Record<string, any[]>,
+      );
+
+      posts.forEach((p) => (p.recentLikes = likesMap[p.id] || []));
+
       const liked = await this.postLikeRepository
         .createQueryBuilder('pl')
         .select('pl.postId')

@@ -76,6 +76,7 @@ export interface ApiPost {
   likesCount: number;
   commentsCount: number;
   isLikedByMe: boolean;
+  recentLikes: ApiUser[];
   createdAt: string;
   updatedAt: string;
 }
