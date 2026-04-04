@@ -1,6 +1,7 @@
 import { setCredentials } from "@/store/slices/authSlice";
 import { baseApi } from "./baseApi";
 import { syncAuthCookie } from "@/app/actions/auth";
+import { GetMeResponse } from "@/types/feed";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -27,6 +28,7 @@ export const authApi = baseApi.injectEndpoints({
         }
       },
     }),
+
     register: builder.mutation({
       query: (credentials) => ({
         url: "/auth/register",
@@ -49,8 +51,13 @@ export const authApi = baseApi.injectEndpoints({
         }
       },
     }),
+
+    getMe: builder.query<GetMeResponse, void>({
+      query: () => "/auth/me",
+      providesTags: ["User"],
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useLoginMutation, useRegisterMutation } = authApi;
+export const { useLoginMutation, useRegisterMutation, useGetMeQuery } = authApi;

@@ -1,8 +1,9 @@
 "use client";
 
+import { useGetMeQuery } from "@/services/authApi";
 import { setCredentials } from "@/store/slices/authSlice";
 import { GlobalAuthHydratorProps } from "@/types/auth";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 
 export function AuthHydrator({ token, children }: GlobalAuthHydratorProps) {
@@ -20,6 +21,23 @@ export function AuthHydrator({ token, children }: GlobalAuthHydratorProps) {
         Security Fault: Missing Token
       </div>
     );
+
+  const { data: user, isSuccess } = useGetMeQuery(undefined, {
+    skip: !token,
+  });
+
+  useEffect(() => {
+    if (isSuccess && user) {
+      dispatch(
+        setCredentials({
+          user,
+          token: token,
+        }),
+      );
+    }
+  }, [isSuccess, user, token, dispatch]);
+
+  if (!user) return null;
 
   return <>{children}</>;
 }

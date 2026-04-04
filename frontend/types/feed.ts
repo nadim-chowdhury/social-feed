@@ -27,7 +27,7 @@ export interface UploadSignatureResponse {
 export interface CreatePostRequest {
   content?: string | null;
   imageUrl?: string | null;
-  visibility?: "PUBLIC" | "PRIVATE" | "FRIENDS";
+  visibility?: "public" | "private" | "friends";
 }
 
 export type OrchestrationStatus =
@@ -222,10 +222,15 @@ export interface GetPostLikesResponse {
   total: number;
 }
 
-export type PostVisibility = "PUBLIC" | "PRIVATE" | "FRIENDS" | undefined;
+export interface GetMeResponse extends ApiUser {}
 
-export interface CreatePostRequest {
-  content?: string | null;
-  imageUrl?: string | null;
-  visibility?: PostVisibility;
+export interface AuthHydrationProps {
+  children: React.ReactNode;
+  initialToken?: string | null;
+}
+
+export interface AuthState {
+  user: ApiUser | null;
+  token: string | null;
+  isAuthenticated: boolean;
 }

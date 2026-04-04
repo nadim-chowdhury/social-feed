@@ -9,6 +9,11 @@ import {
   type NotificationEntry,
 } from "@/lib/feed-data";
 import { FeedAvatar } from "./FeedAvatar";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { logout } from "@/store/slices/authSlice";
+import { useRouter } from "next/navigation";
+import { clearAuthCookie } from "@/app/actions/auth";
 
 function NotificationText({ n }: { n: NotificationEntry }) {
   if (n.kind === "timeline") {
@@ -35,6 +40,17 @@ export function FeedHeader() {
   const notifyRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
 
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const authUser = useSelector((state: RootState) => state.auth.user);
+  console.log("🚀 ~ authUser:", authUser);
+
+  const handleLogout = async () => {
+    dispatch(logout());
+    await clearAuthCookie();
+    router.replace("/login");
+  };
+
   useEffect(() => {
     function onDoc(e: MouseEvent) {
       const t = e.target as Node;
@@ -48,6 +64,10 @@ export function FeedHeader() {
     document.addEventListener("mousedown", onDoc);
     return () => document.removeEventListener("mousedown", onDoc);
   }, []);
+
+  if (!authUser) return null;
+
+  const fullName = `${authUser?.firstName} ${authUser?.lastName}`;
 
   return (
     <header className="fixed left-0 right-0 top-0 z-9999 border-b border-black/5 bg-white">
@@ -299,24 +319,24 @@ export function FeedHeader() {
           </ul>
 
           <div
-            className="relative hidden items-center gap-2 sm:flex"
+            className="relative hidden items-center gap-2 sm:flex cursor-pointer"
             ref={profileRef}
+            onClick={() => setProfileOpen((v) => !v)}
           >
             <FeedAvatar
-              name={currentUser.name}
-              image={currentUser.avatarImage}
-              seed={currentUser.avatarSeed}
+              name={fullName}
+              image={authUser.avatar ?? undefined}
+              seed={authUser.id}
               size="sm"
             />
             <div className="min-w-0 flex items-center gap-2">
-              <p className="truncate text-sm font-medium text-[#112032]">
-                {currentUser.name}
+              <p className="truncate text-sm font-medium text-[#112032] capitalize">
+                {fullName}
               </p>
               <button
                 type="button"
                 className="flex items-center gap-1 text-[#112032]"
                 aria-expanded={profileOpen}
-                onClick={() => setProfileOpen((v) => !v)}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -338,9 +358,9 @@ export function FeedHeader() {
               <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-lg border border-black/10 bg-white py-2 shadow-lg">
                 <div className="flex gap-3 px-4 pb-3">
                   <FeedAvatar
-                    name={currentUser.name}
-                    image={currentUser.avatarImage}
-                    seed={currentUser.avatarSeed}
+                    name={fullName}
+                    image={authUser.avatar ?? undefined}
+                    seed={authUser.id}
                     size="md"
                   />
                   <div>
@@ -356,36 +376,34 @@ export function FeedHeader() {
                   </div>
                 </div>
                 <hr className="border-black/5" />
-                <ul className="py-1 text-sm">
+                <ul className="py-1 text-sm px-4">
                   <li>
                     <Link
                       href="#"
-                      className="flex items-center justify-between px-4 py-2 hover:bg-black/5"
+                      className="flex items-center justify-between px-4 py-2 hover:bg-black/5 rounded-md"
                     >
                       <span className="flex items-center gap-2 text-[#112032]">
                         <span className="text-[#377DFF]">Settings</span>
                       </span>
-                      <span className="text-[#112032]/40">›</span>
                     </Link>
                   </li>
                   <li>
                     <Link
                       href="#"
-                      className="flex items-center justify-between px-4 py-2 hover:bg-black/5"
+                      className="flex items-center justify-between px-4 py-2 hover:bg-black/5 rounded-md"
                     >
                       <span className="flex items-center gap-2">
                         Help &amp; Support
                       </span>
-                      <span className="text-[#112032]/40">›</span>
                     </Link>
                   </li>
                   <li>
                     <Link
                       href="#"
-                      className="flex items-center justify-between px-4 py-2 hover:bg-black/5"
+                      className="flex items-center justify-between px-4 py-2 hover:bg-black/5 rounded-md"
+                      onClick={handleLogout}
                     >
                       <span className="flex items-center gap-2">Log Out</span>
-                      <span className="text-[#112032]/40">›</span>
                     </Link>
                   </li>
                 </ul>

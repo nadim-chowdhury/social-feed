@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const PUBLIC_ROUTES = new Set(["/login", "/register"]);
+const PUBLIC_ROUTES = new Set(["/login", "/register", "/"]);
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("jwt_token")?.value;

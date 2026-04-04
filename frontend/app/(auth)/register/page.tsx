@@ -18,6 +18,8 @@ export default function RegisterPage() {
   const router = useRouter();
   const [register, { isLoading, error }] = useRegisterMutation();
   const [credentials, setCredentials] = useState({
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -42,13 +44,13 @@ export default function RegisterPage() {
       return;
     }
 
-    const { firstName, lastName } = deriveNamesFromEmail(credentials.email);
+    // const { firstName, lastName } = deriveNamesFromEmail(credentials.email);
 
     try {
       const result = await register({
-        firstName,
-        lastName,
-        email: credentials.email,
+        firstName: credentials.firstName.trim(),
+        lastName: credentials.lastName.trim(),
+        email: credentials.email.trim(),
         password: credentials.password,
       }).unwrap();
 
@@ -117,6 +119,40 @@ export default function RegisterPage() {
                 {errorMessage}
               </p>
             )}
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="reg-firstname" className={authFieldLabel}>
+                  First Name
+                </label>
+                <input
+                  id="reg-firstname"
+                  name="firstName"
+                  type="text"
+                  autoComplete="given-name"
+                  value={credentials.firstName}
+                  onChange={handleChange}
+                  className={authFieldInput}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="reg-lastname" className={authFieldLabel}>
+                  Last Name
+                </label>
+                <input
+                  id="reg-lastname"
+                  name="lastName"
+                  type="text"
+                  autoComplete="family-name"
+                  value={credentials.lastName}
+                  onChange={handleChange}
+                  className={authFieldInput}
+                  required
+                />
+              </div>
+            </div>
+
             <div>
               <label htmlFor="reg-email" className={authFieldLabel}>
                 Email
