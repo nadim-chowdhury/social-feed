@@ -76,7 +76,7 @@ export interface ApiPost {
   likesCount: number;
   commentsCount: number;
   isLikedByMe: boolean;
-  recentLikes: ApiUser[];
+  recentLikes: LikerSnippet[];
   createdAt: string;
   updatedAt: string;
 }
@@ -147,6 +147,11 @@ export interface CommentThreadNode {
 
 export type CacheUpdater = (draft: ApiPaginatedResponse<ApiComment>) => void;
 
+export type LikerSnippet = Pick<
+  ApiUser,
+  "id" | "firstName" | "lastName" | "avatar"
+>;
+
 export interface GetRepliesRequest {
   postId: string;
   commentId: string;
@@ -211,6 +216,7 @@ export interface ToggleCommentLikeRequest {
 export interface TogglePostLikeRequest {
   postId: string;
   isCurrentlyLiked: boolean;
+  currentUser?: Pick<ApiUser, "id" | "firstName" | "lastName" | "avatar">;
 }
 
 export interface GetPostLikesRequest {

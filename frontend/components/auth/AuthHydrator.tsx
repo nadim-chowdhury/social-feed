@@ -40,7 +40,12 @@ export function AuthHydrator({ token, children }: GlobalAuthHydratorProps) {
     }
   }, [isSuccess, user, token, dispatch]);
 
-  if (!authUser) return null;
+  if (!authUser)
+    return (
+      <div className="flex items-center justify-center h-[80vh]">
+        <span className="loader"></span>
+      </div>
+    );
 
   return <>{children}</>;
 }

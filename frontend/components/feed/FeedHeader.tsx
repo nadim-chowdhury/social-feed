@@ -14,6 +14,7 @@ import { RootState } from "@/store";
 import { logout } from "@/store/slices/authSlice";
 import { useRouter } from "next/navigation";
 import { clearAuthCookie } from "@/app/actions/auth";
+import { baseApi } from "@/services/baseApi";
 
 function NotificationText({ n }: { n: NotificationEntry }) {
   if (n.kind === "timeline") {
@@ -43,10 +44,10 @@ export function FeedHeader() {
   const router = useRouter();
   const dispatch = useDispatch();
   const authUser = useSelector((state: RootState) => state.auth.user);
-  console.log("🚀 ~ authUser:", authUser);
 
   const handleLogout = async () => {
     dispatch(logout());
+    dispatch(baseApi.util.resetApiState());
     await clearAuthCookie();
     router.replace("/login");
   };

@@ -13,6 +13,7 @@ import type {
   GetPostLikesResponse,
   GetPostLikesRequest,
 } from "../types/feed";
+import { RootState } from "@/store";
 
 export const postsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -123,14 +124,31 @@ export const postsApi = baseApi.injectEndpoints({
       ],
       async onQueryStarted(
         { postId, isCurrentlyLiked },
-        { dispatch, queryFulfilled },
+        { dispatch, queryFulfilled, getState },
       ) {
+        const state = getState() as RootState;
+        const authUser = state.auth.user;
+
         const patchResult = dispatch(
           postsApi.util.updateQueryData("getFeed", undefined, (draft) => {
             const targetPost = draft.data.find((p) => p.id === postId);
             if (targetPost) {
               targetPost.isLikedByMe = !targetPost.isLikedByMe;
               targetPost.likesCount += targetPost.isLikedByMe ? 1 : -1;
+
+              if (targetPost.isLikedByMe && authUser) {
+                const mockAvatar = {
+                  id: authUser.id,
+                  firstName: authUser.firstName,
+                  lastName: authUser.lastName,
+                  avatar: authUser.avatar,
+                };
+                targetPost.recentLikes.unshift(mockAvatar);
+              } else {
+                targetPost.recentLikes = targetPost.recentLikes.filter(
+                  (u) => u.id !== authUser?.id,
+                );
+              }
             }
           }),
         );

@@ -54,7 +54,6 @@ export default function RegisterPage() {
         password: credentials.password,
       }).unwrap();
 
-      console.log("Registration Success!", result);
       router.push("/feed");
     } catch (err) {
       console.error("Registration Failed", err);
