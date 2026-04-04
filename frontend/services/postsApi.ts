@@ -5,6 +5,9 @@ import type {
   CreatePostRequest,
   ApiPaginatedResponse,
   ApiPost,
+  ApiComment,
+  GetCommentsRequest,
+  CreateCommentRequest,
 } from "../types/feed";
 
 export const postsApi = baseApi.injectEndpoints({
@@ -26,6 +29,30 @@ export const postsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Post"],
     }),
+
+    getPostComments: builder.query<
+      ApiPaginatedResponse<ApiComment>,
+      GetCommentsRequest
+    >({
+      query: ({ postId, cursor }) =>
+        cursor
+          ? `/posts/${postId}/comments?cursor=${cursor}`
+          : `/posts/${postId}/comments`,
+      providesTags: (result, error, arg) => [
+        { type: "Comment" as const, id: arg.postId },
+      ],
+    }),
+
+    createPostComment: builder.mutation<ApiComment, CreateCommentRequest>({
+      query: ({ postId, content }) => ({
+        url: `/posts/${postId}/comments`,
+        method: "POST",
+        body: { content },
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "Comment", id: arg.postId },
+      ],
+    }),
   }),
 });
 
@@ -33,4 +60,6 @@ export const {
   useGetFeedQuery,
   useGetUploadSignatureMutation,
   useCreatePostMutation,
+  useGetPostCommentsQuery,
+  useCreatePostCommentMutation,
 } = postsApi;

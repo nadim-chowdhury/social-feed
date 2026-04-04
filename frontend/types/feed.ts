@@ -86,3 +86,22 @@ export interface ApiPaginatedResponse<T> {
 }
 
 export type RelativeTimeFormatter = (isoString: string) => string;
+
+export interface ApiComment {
+  id: string;
+  content: string;
+  postId: string;
+  author: ApiUser;
+  createdAt: string;
+  reactionsCount: number;
+}
+
+export interface GetCommentsRequest {
+  postId: string;
+  cursor?: string;
+}
+
+export interface CreateCommentRequest {
+  postId: string;
+  content: string;
+}
