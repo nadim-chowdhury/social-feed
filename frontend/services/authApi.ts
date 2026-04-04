@@ -1,5 +1,6 @@
 import { setCredentials } from "@/store/slices/authSlice";
 import { baseApi } from "./baseApi";
+import { syncAuthCookie } from "@/app/actions/auth";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -19,6 +20,8 @@ export const authApi = baseApi.injectEndpoints({
               token: data.accessToken,
             }),
           );
+
+          await syncAuthCookie(data.accessToken);
         } catch (error) {
           console.log(error);
         }
@@ -39,6 +42,8 @@ export const authApi = baseApi.injectEndpoints({
               token: data.accessToken,
             }),
           );
+
+          await syncAuthCookie(data.accessToken);
         } catch (error) {
           console.log("Registration API error:", error);
         }
