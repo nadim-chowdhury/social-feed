@@ -242,7 +242,7 @@ export function FeedComposer() {
         </div>
       </div>
 
-      <div className="mt-4 hidden flex-wrap items-center justify-between gap-3 rounded-md py-2 px-4 md:flex bg-border/40">
+      <div className="mt-4 hidden flex-wrap items-center justify-between gap-3 rounded-md py-2 px-4 md:flex bg-border">
         <div className="flex flex-wrap gap-2">
           {actions.map((a) => (
             <button
