@@ -168,6 +168,7 @@ export default function LoginPage() {
             <Link
               href="/register"
               className="font-medium text-[#1A91FF] hover:text-[#1580e6]"
+              prefetch={false}
             >
               Create New Account
             </Link>
