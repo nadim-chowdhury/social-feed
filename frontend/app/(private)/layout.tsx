@@ -9,7 +9,7 @@ export default async function PrivateLayout({
   const token = (await cookies()).get("jwt_token")?.value || null;
 
   return (
-    <div className="min-h-screen bg-[#F0F2F5] pt-14 md:pt-[72px]">
+    <div className="min-h-screen bg-bg pt-14 md:pt-[72px]">
       <AuthHydrator token={token}>{children}</AuthHydrator>
     </div>
   );

@@ -33,7 +33,7 @@ function StatusIndicator({
           x="1"
           y="1"
           fill="#0ACF83"
-          stroke="#fff"
+          // stroke="#fff"
           strokeWidth="2"
           rx="6"
         />
@@ -42,7 +42,7 @@ function StatusIndicator({
   }
 
   return (
-    <span className="text-xs leading-none text-[#666]">
+    <span className="text-xs leading-none text-fg">
       {awayLabel ?? "5 minute ago"}
     </span>
   );
@@ -51,20 +51,18 @@ function StatusIndicator({
 export function FeedRightSidebar() {
   return (
     <aside className="space-y-4">
-      <div className="rounded-md bg-white px-6 pt-6 pb-6 shadow-sm">
+      <div className="rounded-md bg-card px-6 pt-6 pb-6 shadow-sm">
         <div className="flex items-center justify-between">
-          <h4 className="text-lg font-semibold text-[#112032]">
-            You Might Like
-          </h4>
+          <h4 className="text-lg font-semibold text-fg">You Might Like</h4>
           <Link
             href="#"
-            className="text-sm font-medium text-[#1890FF] hover:underline"
+            className="text-sm font-medium text-primary hover:underline"
           >
             See All
           </Link>
         </div>
 
-        <hr className="my-4 border-black/10" />
+        <hr className="my-4 border-border" />
 
         <div className="space-y-4">
           {rightSidebarMightLike.map((p) => (
@@ -89,18 +87,18 @@ export function FeedRightSidebar() {
                 <div className="min-w-0">
                   <Link
                     href="#"
-                    className="block truncate font-medium text-[#112032] hover:text-[#1890FF] mb-1"
+                    className="block truncate font-medium text-fg hover:text-primary mb-1"
                   >
                     {p.name}
                   </Link>
-                  <p className="truncate text-xs text-[#666]">{p.title}</p>
+                  <p className="truncate text-xs text-fg">{p.title}</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-3">
                 <button
                   type="button"
-                  className="h-10 min-w-[110px] rounded-md border border-black/10 bg-transparent text-sm font-medium text-[#9CA3AF] hover:bg-[#F8F9FB]"
+                  className="h-10 min-w-[110px] rounded-md border border-border bg-transparent text-sm font-medium text-fg hover:bg-border"
                 >
                   Ignore
                 </button>
@@ -108,8 +106,8 @@ export function FeedRightSidebar() {
                   type="button"
                   className={`rounded-md px-3 py-1.5 text-sm font-medium ${
                     p.isFollowing
-                      ? "h-10 min-w-[110px] bg-[#377DFF] text-white hover:bg-[#2f6ee8]"
-                      : "h-10 min-w-[110px] border border-[#377DFF] bg-transparent text-[#377DFF] hover:bg-[#E6F7FF]"
+                      ? "h-10 min-w-[110px] bg-primary text-white hover:bg-primary/80"
+                      : "h-10 min-w-[110px] border border-primary bg-transparent text-primary hover:bg-primary/10"
                   }`}
                 >
                   Follow
@@ -120,20 +118,20 @@ export function FeedRightSidebar() {
         </div>
       </div>
 
-      <div className="rounded-md bg-white px-6 pt-6 pb-3 shadow-sm">
+      <div className="rounded-md bg-card px-6 pt-6 pb-3 shadow-sm">
         <div className="flex items-center justify-between">
-          <h4 className="text-lg font-semibold text-[#112032]">Your Friends</h4>
+          <h4 className="text-lg font-semibold text-fg">Your Friends</h4>
           <Link
             href="#"
-            className="text-sm font-medium text-[#1890FF] hover:underline"
+            className="text-sm font-medium text-primary hover:underline"
           >
             See All
           </Link>
         </div>
 
-        <form className="mt-4 flex items-center gap-2  rounded-full bg-[#F5F5F5] px-4 py-3">
+        <form className="mt-4 flex items-center gap-2 rounded-full bg-border px-4 py-3">
           <svg
-            className="h-[17px] w-[17px] shrink-0 text-[#666]"
+            className="h-[17px] w-[17px] shrink-0 text-fg"
             xmlns="http://www.w3.org/2000/svg"
             width="17"
             height="17"
@@ -177,11 +175,11 @@ export function FeedRightSidebar() {
                     <div className="min-w-0">
                       <Link
                         href="#"
-                        className="block truncate font-medium text-[#112032] hover:text-[#1890FF]"
+                        className="block truncate font-medium text-fg hover:text-primary"
                       >
                         {f.name}
                       </Link>
-                      <p className="truncate text-xs text-[#666]">{f.title}</p>
+                      <p className="truncate text-xs text-fg">{f.title}</p>
                     </div>
                   </div>
 

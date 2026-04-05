@@ -45,19 +45,19 @@ export function CommentThread({
       </Link>
 
       <div className="min-w-0 flex-1 flex flex-col items-start w-full">
-        <div className="relative w-[95%] rounded-2xl bg-[#F5F5F5] px-4 py-3 pb-4">
+        <div className="relative w-[95%] rounded-2xl bg-border px-4 py-3 pb-4">
           <Link
             href="#"
-            className="font-medium text-[15px] text-[#112032] hover:underline capitalize"
+            className="font-medium text-[15px] text-fg hover:underline capitalize"
           >
             {comment.author.firstName + " " + comment.author.lastName}
           </Link>
-          <p className="mt-1 text-[15.5px] leading-relaxed text-[#516170]">
+          <p className="mt-1 text-[15.5px] leading-relaxed text-fg">
             {comment.content}
           </p>
 
           {comment.likesCount > 0 && (
-            <span className="absolute -bottom-[14px] right-4 flex items-center gap-1 shadow-[0_2px_8px_rgba(0,0,0,0.08)] rounded-full bg-white px-2 py-[3px] text-[13px] font-semibold text-[#112032] border border-black/5">
+            <span className="absolute -bottom-[14px] right-4 flex items-center gap-1 shadow-[0_2px_8px_rgba(0,0,0,0.08)] rounded-full bg-white px-2 py-[3px] text-[13px] font-semibold text-fg border border-border">
               <div className="flex items-center -space-x-[6px] mr-1">
                 <span className="relative z-10 rounded-full bg-white border-2 border-white flex justify-center items-center">
                   <svg
@@ -97,11 +97,11 @@ export function CommentThread({
           )}
         </div>
 
-        <div className="mt-3 px-1 flex gap-1.5 text-[14.5px] font-medium text-[#112032] mb-4">
+        <div className="mt-3 px-1 flex gap-1.5 text-[14.5px] font-medium text-fg mb-4">
           <button
             type="button"
-            className={`transition-colors hover:text-[#1890FF] ${
-              comment.isLikedByMe ? "text-[#1890FF] font-bold" : ""
+            className={`transition-colors hover:text-primary ${
+              comment.isLikedByMe ? "text-primary font-bold" : ""
             }`}
             onClick={() =>
               toggleCommentLike({
@@ -112,10 +112,10 @@ export function CommentThread({
           >
             Like
           </button>
-          <span className="text-[#112032]">.</span>
+          <span className="text-fg">.</span>
           <button
             type="button"
-            className="hover:text-[#1890FF]"
+            className="hover:text-primary"
             onClick={() => {
               onRequestComposer({
                 threadId: comment.id,
@@ -126,11 +126,11 @@ export function CommentThread({
           >
             Reply
           </button>
-          <span className="text-[#112032]">.</span>
-          <button type="button" className="hover:text-[#1890FF]">
+          <span className="text-fg">.</span>
+          <button type="button" className="hover:text-primary">
             Share
           </button>
-          <span className="text-[#8C9AA9] font-normal ml-0.5">
+          <span className="text-fg font-normal ml-0.5">
             {getRelativeTime(comment.createdAt)}
           </span>
         </div>
@@ -139,9 +139,9 @@ export function CommentThread({
           <button
             type="button"
             onClick={() => setIsRepliesExpanded(true)}
-            className="flex items-center gap-1.5 text-[14.5px] font-semibold text-[#516170] hover:text-[#1890FF] mb-3 ml-2 transition-colors"
+            className="flex items-center gap-1.5 text-[14.5px] font-semibold text-fg hover:text-primary mb-3 ml-2 transition-colors"
           >
-            <span className="w-4 h-px bg-[#516170] inline-block mr-1"></span>
+            <span className="w-4 h-px bg-fg inline-block mr-1"></span>
             View {comment.replyCount} repl
             {comment.replyCount === 1 ? "y" : "ies"}
           </button>
@@ -150,9 +150,9 @@ export function CommentThread({
           <button
             type="button"
             onClick={() => setIsRepliesExpanded(false)}
-            className="flex items-center gap-1.5 text-[14.5px] font-semibold text-[#516170] hover:text-[#1890FF] mb-3 ml-2 transition-colors"
+            className="flex items-center gap-1.5 text-[14.5px] font-semibold text-fg hover:text-primary mb-3 ml-2 transition-colors"
           >
-            <span className="w-6 h-1px bg-[#516170] inline-block mr-1"></span>
+            <span className="w-6 h-1px bg-fg inline-block mr-1"></span>
             Hide repl{comment.replyCount === 1 ? "y" : "ies"}
           </button>
         )}
@@ -171,21 +171,21 @@ export function CommentThread({
               </Link>
 
               <div className="min-w-0 flex-1 flex flex-col items-start w-full">
-                <div className="relative w-full rounded-2xl bg-[#F5F5F5] px-4 py-3 pb-4">
+                <div className="relative w-full rounded-2xl bg-border px-4 py-3 pb-4">
                   <Link
                     href="#"
-                    className="font-medium text-[15px] text-[#112032] hover:underline capitalize"
+                    className="font-medium text-[15px] text-fg hover:underline capitalize"
                   >
                     {reply.author.firstName + " " + reply.author.lastName}
                   </Link>
-                  <p className="mt-1 text-[15.5px] leading-relaxed text-[#516170]">
+                  <p className="mt-1 text-[15.5px] leading-relaxed text-fg">
                     {reply.content}
                   </p>
 
                   {reply.likesCount > 0 && (
-                    <span className="absolute -bottom-[14px] right-4 flex items-center gap-1 shadow-[0_2px_8px_rgba(0,0,0,0.08)] rounded-full bg-white px-2 py-[3px] text-[13px] font-semibold text-[#112032] border border-black/5">
+                    <span className="absolute -bottom-[14px] right-4 flex items-center gap-1 shadow-[0_2px_8px_rgba(0,0,0,0.08)] rounded-full bg-card px-2 py-[3px] text-[13px] font-semibold text-fg border border-border">
                       <div className="flex items-center -space-x-[6px] mr-1">
-                        <span className="relative z-10 rounded-full bg-white border-2 border-white flex justify-center items-center">
+                        <span className="relative z-10 rounded-full bg-card border-2 border-border flex justify-center items-center">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"
@@ -201,7 +201,7 @@ export function CommentThread({
                             <path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3" />
                           </svg>
                         </span>
-                        <span className="rounded-full bg-white border-2 border-white flex justify-center items-center">
+                        <span className="rounded-full bg-card border-2 border-border flex justify-center items-center">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"
@@ -224,11 +224,11 @@ export function CommentThread({
                   )}
                 </div>
 
-                <div className="mt-3 px-1 flex gap-1.5 text-[14.5px] font-medium text-[#112032] mb-2">
+                <div className="mt-3 px-1 flex gap-1.5 text-[14.5px] font-medium text-fg mb-2">
                   <button
                     type="button"
-                    className={`transition-colors hover:text-[#1890FF] ${
-                      reply.isLikedByMe ? "text-[#1890FF] font-bold" : ""
+                    className={`transition-colors hover:text-primary ${
+                      reply.isLikedByMe ? "text-primary font-bold" : ""
                     }`}
                     onClick={() =>
                       toggleCommentLike({
@@ -240,10 +240,10 @@ export function CommentThread({
                   >
                     Like
                   </button>
-                  <span className="text-[#112032]">.</span>
+                  <span className="text-fg">.</span>
                   <button
                     type="button"
-                    className="hover:text-[#1890FF]"
+                    className="hover:text-primary"
                     onClick={() => {
                       onRequestComposer({
                         threadId: comment.id,
@@ -254,11 +254,11 @@ export function CommentThread({
                   >
                     Reply
                   </button>
-                  <span className="text-[#112032]">.</span>
-                  <button type="button" className="hover:text-[#1890FF]">
+                  <span className="text-fg">.</span>
+                  <button type="button" className="hover:text-primary">
                     Share
                   </button>
-                  <span className="text-[#8C9AA9] font-normal ml-0.5">
+                  <span className="text-fg font-normal ml-0.5">
                     {getRelativeTime(reply.createdAt)}
                   </span>
                 </div>

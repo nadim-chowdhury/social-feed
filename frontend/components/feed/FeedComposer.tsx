@@ -182,7 +182,7 @@ export function FeedComposer() {
   };
 
   return (
-    <section className="mb-4 rounded-md bg-white p-6 shadow-sm">
+    <section className="mb-4 rounded-md bg-card p-6 shadow-sm">
       <div className="flex gap-3">
         <FeedAvatar
           name={`${authUser?.firstName} ${authUser?.lastName}`}
@@ -198,7 +198,7 @@ export function FeedComposer() {
             onChange={(e) =>
               setVisibility(e.target.value as "public" | "private")
             }
-            className="ml-auto text-sm text-[#516170] border border-black/20 px-2 py-px rounded-md mb-4"
+            className="ml-auto text-sm text-fg border border-border px-2 py-px rounded-md mb-4"
           >
             <option value="public">Public</option>
             <option value="private">Private</option>
@@ -209,7 +209,7 @@ export function FeedComposer() {
             placeholder="Write something..."
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="min-h-[88px] w-full resize-y rounded-md px-3 py-3 text-[#112032] placeholder:text-[#666] outline-none focus:border-[#1890FF]/40 focus:ring-2 focus:ring-[#1890FF]/20 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            className="min-h-[88px] w-full resize-y rounded-md px-3 py-3 text-fg placeholder:text-fg outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary/20 disabled:bg-gray-400 disabled:cursor-not-allowed"
           />
 
           {previewUrl && (
@@ -242,7 +242,7 @@ export function FeedComposer() {
         </div>
       </div>
 
-      <div className="mt-4 hidden flex-wrap items-center justify-between gap-3 rounded-md py-2 px-4 md:flex bg-[#F3F9FF]">
+      <div className="mt-4 hidden flex-wrap items-center justify-between gap-3 rounded-md py-2 px-4 md:flex bg-border">
         <div className="flex flex-wrap gap-2">
           {actions.map((a) => (
             <button
@@ -250,9 +250,9 @@ export function FeedComposer() {
               type="button"
               disabled={isCreatingPost || isSigning}
               onClick={a.id === "photo" ? triggerFileExplorer : undefined}
-              className="inline-flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium text-[#666] hover:bg-[#F8F9FB] group hover:text-[#1890FF] disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium text-fg hover:bg-border group hover:text-primary disabled:cursor-not-allowed"
             >
-              <span className="text-[#666] group-hover:text-[#1890FF]">
+              <span className="text-fg group-hover:text-primary">
                 {a.icon}
               </span>
               {a.label}
@@ -263,7 +263,7 @@ export function FeedComposer() {
           type="button"
           onClick={handlePost}
           disabled={isCreatingPost || isSigning || status !== "IDLE"}
-          className="flex items-center justify-center gap-2 rounded-md bg-[#1890FF] px-4 py-2 text-sm font-semibold text-white hover:bg-[#1677d9] disabled:bg-gray-400 disabled:cursor-not-allowed w-[86px] h-10"
+          className="flex items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/80 disabled:bg-gray-400 disabled:cursor-not-allowed w-[86px] h-10"
         >
           {isCreatingPost || isSigning || status !== "IDLE" ? (
             <div className="flex items-center justify-center h-full w-full">
@@ -299,7 +299,7 @@ export function FeedComposer() {
             <button
               key={a.id}
               type="button"
-              className="inline-flex flex-1 items-center justify-center rounded-md border border-black/10 bg-[#F8F9FB] px-2 py-2 text-[#666]"
+              className="inline-flex flex-1 items-center justify-center rounded-md border border-black/10 bg-border px-2 py-2 text-fg"
               aria-label={a.label}
             >
               {a.icon}
@@ -309,7 +309,7 @@ export function FeedComposer() {
         <button
           type="button"
           disabled={isCreatingPost || isSigning || status !== "IDLE"}
-          className="flex w-full h-10 items-center justify-center gap-2 rounded-md bg-[#1890FF] px-4 py-2.5 text-sm font-semibold text-white"
+          className="flex w-full h-10 items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-white"
         >
           {isCreatingPost || isSigning || status !== "IDLE" ? (
             <div className="flex items-center justify-center h-full w-full">

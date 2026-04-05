@@ -68,7 +68,7 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
   }, [activeReplyConfig]);
 
   return (
-    <article className="mb-4 overflow-hidden rounded-md bg-white shadow-sm">
+    <article className="mb-4 overflow-hidden rounded-md bg-card shadow-sm">
       <div className="border-b border-black/5 px-6 pb-4 pt-6">
         <div className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 gap-3">
@@ -78,10 +78,10 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
               size="md"
             />
             <div className="min-w-0">
-              <h4 className="font-medium text-[#112032] mb-1 capitalize">{`${post.author.firstName} ${post.author.lastName}`}</h4>
-              <p className="text-sm text-[#666] capitalize">
+              <h4 className="font-medium text-fg mb-1 capitalize">{`${post.author.firstName} ${post.author.lastName}`}</h4>
+              <p className="text-sm text-fg capitalize">
                 {getRelativeTime(post.createdAt)} ·{" "}
-                <Link href="#" className="text-[#1890FF] hover:underline">
+                <Link href="#" className="text-primary hover:underline">
                   {post.visibility === "public" ? "Public" : "Private"}
                 </Link>
               </p>
@@ -91,7 +91,7 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
           <div className="relative shrink-0" ref={menuRef}>
             <button
               type="button"
-              className="rounded p-1 text-[#C4C4C4] hover:bg-black/5"
+              className="rounded p-1 text-fg hover:bg-black/5"
               aria-expanded={menuOpen}
               aria-label="Post options"
               onClick={() => setMenuOpen((v) => !v)}
@@ -109,19 +109,19 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
               </svg>
             </button>
             {menuOpen && (
-              <ul className="absolute right-0 top-full z-20 mt-1 w-52 rounded-md border border-black/10 bg-white py-1 text-sm shadow-lg">
+              <ul className="absolute right-0 top-full z-20 mt-1 w-52 rounded-md border border-black/10 bg-card py-1 text-sm shadow-lg">
                 <li>
                   <Link
                     href="#"
-                    className="flex items-center gap-2 px-3 py-2 hover:bg-black/5"
+                    className="flex items-center gap-2 px-3 py-2 hover:bg-border"
                   >
-                    <span className="text-[#1890FF]">Save Post</span>
+                    <span className="text-primary">Save Post</span>
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="#"
-                    className="flex items-center gap-2 px-3 py-2 hover:bg-black/5"
+                    className="flex items-center gap-2 px-3 py-2 hover:bg-border"
                   >
                     Turn On Notification
                   </Link>
@@ -129,7 +129,7 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
                 <li>
                   <Link
                     href="#"
-                    className="flex items-center gap-2 px-3 py-2 hover:bg-black/5"
+                    className="flex items-center gap-2 px-3 py-2 hover:bg-border"
                   >
                     Hide
                   </Link>
@@ -137,7 +137,7 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
                 <li>
                   <Link
                     href="#"
-                    className="flex items-center gap-2 px-3 py-2 hover:bg-black/5"
+                    className="flex items-center gap-2 px-3 py-2 hover:bg-border"
                   >
                     Edit Post
                   </Link>
@@ -145,7 +145,7 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
                 <li>
                   <Link
                     href="#"
-                    className="flex items-center gap-2 px-3 py-2 text-red-600 hover:bg-black/5"
+                    className="flex items-center gap-2 px-3 py-2 text-red-600 hover:bg-border"
                   >
                     Delete Post
                   </Link>
@@ -154,7 +154,7 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
             )}
           </div>
         </div>
-        <h3 className="mt-4 text-base text-[#112032]">{post.content}</h3>
+        <h3 className="mt-4 text-base text-fg">{post.content}</h3>
         {post.imageUrl && (
           <Image
             className={`mt-4 aspect-video w-full rounded-md`}
@@ -182,7 +182,7 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
               />
             ))}
             {(post.likesCount || 0) > (post.recentLikes?.length || 0) && (
-              <span className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-white bg-[#1890FF] text-[14px] font-semibold text-white">
+              <span className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-white bg-primary text-[14px] font-semibold text-white">
                 +{(post.likesCount || 0) - (post.recentLikes?.length || 0)}
               </span>
             )}
@@ -192,16 +192,16 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
         <div className="flex shrink-0 gap-3 text-[14px] sm:text-[15px] font-medium text-[#8C9AA9] sm:gap-4">
           <button
             type="button"
-            className="hover:text-[#1890FF] transition-colors"
+            className="hover:text-primary transition-colors"
           >
-            <span className="text-[#112032] mr-1.5">{post.commentsCount}</span>
+            <span className="text-fg mr-1.5">{post.commentsCount}</span>
             Comment
           </button>
           <button
             type="button"
-            className="hover:text-[#1890FF] transition-colors"
+            className="hover:text-primary transition-colors"
           >
-            <span className="text-[#112032] mr-1.5">12</span>
+            <span className="text-fg mr-1.5">12</span>
             Share
           </button>
         </div>
@@ -215,13 +215,13 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
           }
           className={`flex items-center justify-center gap-2 py-3 text-[15px] font-medium transition-colors ${
             post.isLikedByMe
-              ? "bg-[#EAF4FF] text-[#1890FF]"
-              : "text-[#112032] hover:bg-[#F8F9FB]"
+              ? "bg-[#EAF4FF] text-primary"
+              : "text-fg hover:bg-border"
           }`}
         >
           {/* A classic Thumbs Up icon. Filled if liked, outlined if not. */}
           <svg
-            className={post.isLikedByMe ? "text-[#1890FF]" : "text-[#112032]"}
+            className={post.isLikedByMe ? "text-primary" : "text-fg"}
             xmlns="http://www.w3.org/2000/svg"
             width="22"
             height="22"
@@ -246,10 +246,10 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
             setActiveReplyConfig(null);
             setReplyContextName(null);
           }}
-          className="flex items-center justify-center gap-2 py-3 text-[15px] font-medium text-[#112032] hover:bg-[#F8F9FB] transition-colors"
+          className="flex items-center justify-center gap-2 py-3 text-[15px] font-medium text-fg hover:bg-border transition-colors"
         >
           <svg
-            className="text-[#112032]"
+            className="text-fg"
             xmlns="http://www.w3.org/2000/svg"
             width="22"
             height="22"
@@ -268,10 +268,10 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
         </button>
         <button
           type="button"
-          className="flex items-center justify-center gap-2 py-3 text-[15px] font-medium text-[#112032] hover:bg-[#F8F9FB] transition-colors"
+          className="flex items-center justify-center gap-2 py-3 text-[15px] font-medium text-fg hover:bg-border transition-colors"
         >
           <svg
-            className="text-[#112032]"
+            className="text-fg"
             xmlns="http://www.w3.org/2000/svg"
             width="22"
             height="22"
@@ -296,7 +296,7 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
             <button
               type="button"
               onClick={() => setShowComments(!showComments)}
-              className="text-left text-[15.5px] font-medium text-[#516170] hover:text-[#1890FF]"
+              className="text-left text-[15.5px] font-medium text-fg hover:text-primary"
             >
               View {post.commentsCount} comments
             </button>
@@ -322,7 +322,7 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
           )}
 
           {
-            <div className="flex items-center gap-3 rounded-full bg-[#F5F5F5] p-2 pr-4 w-full">
+            <div className="flex items-center gap-3 rounded-full bg-border p-2 pr-4 w-full">
               <div className="shrink-0">
                 <FeedAvatar
                   name={
@@ -352,14 +352,14 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
                   onChange={(e) => setCommentText(e.target.value)}
                   onKeyDown={handleKeyDown}
                   disabled={isPosting}
-                  className="w-full bg-transparent text-[15.5px] text-[#112032] placeholder:text-[#517596] outline-none"
+                  className="w-full bg-transparent text-[15.5px] text-fg placeholder:text-fg outline-none"
                 />
               </div>
 
-              <div className="flex shrink-0 items-center gap-3 text-[#8C9AA9]">
+              <div className="flex shrink-0 items-center gap-3 text-fg">
                 <button
                   type="button"
-                  className="hover:text-[#1890FF] transition-colors"
+                  className="hover:text-primary transition-colors"
                   aria-label="Microphone"
                 >
                   <svg
@@ -410,7 +410,7 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
                     setActiveReplyConfig(null);
                     setReplyContextName(null);
                   }}
-                  className="rounded-full bg-black/5 px-2 py-1 text-[12px] font-medium text-[#516170] hover:bg-black/10 transition-colors"
+                  className="rounded-full bg-border px-2 py-1 text-[12px] font-medium text-fg hover:bg-border transition-colors"
                 >
                   Cancel
                 </button>

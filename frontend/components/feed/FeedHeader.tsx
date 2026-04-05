@@ -71,7 +71,7 @@ export function FeedHeader() {
   const fullName = `${authUser?.firstName} ${authUser?.lastName}`;
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-9999 border-b border-black/5 bg-card">
+    <header className="fixed left-0 right-0 top-0 z-9999 border-b border-border bg-card">
       <nav
         className="mx-auto hidden max-w-[1320px] items-center gap-4 px-4 py-2.5 md:flex lg:px-6"
         aria-label="Main"
@@ -200,8 +200,8 @@ export function FeedHeader() {
                 </button>
 
                 {notifyOpen && (
-                  <div className="absolute right-0 top-full z-50 mt-2 w-[min(100vw-2rem,380px)] rounded-lg border border-black/10 bg-white shadow-lg">
-                    <div className="flex items-start justify-between border-b border-black/5 px-4 py-3">
+                  <div className="absolute right-0 top-full z-50 mt-2 w-[min(100vw-2rem,380px)] rounded-lg border border-border bg-white shadow-lg">
+                    <div className="flex items-start justify-between border-b border-border px-4 py-3">
                       <h4 className="text-base font-semibold text-fg">
                         Notifications
                       </h4>
@@ -225,7 +225,7 @@ export function FeedHeader() {
                           </svg>
                         </button>
                         {notifyMenuOpen && (
-                          <ul className="absolute right-0 top-full z-10 mt-1 min-w-[180px] rounded-md border border-black/10 bg-white py-1 text-sm shadow-md">
+                          <ul className="absolute right-0 top-full z-10 mt-1 min-w-[180px] rounded-md border border-border bg-card py-1 text-sm shadow-md">
                             <li>
                               <button
                                 type="button"
@@ -356,7 +356,7 @@ export function FeedHeader() {
             </div>
 
             {profileOpen && (
-              <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-lg border border-black/10 bg-card py-2 shadow-lg">
+              <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-lg border border-border bg-card py-2 shadow-lg">
                 <div className="flex gap-3 px-4 pb-3">
                   <FeedAvatar
                     name={fullName}
