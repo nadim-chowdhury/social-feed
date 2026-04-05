@@ -109,7 +109,8 @@ export interface GetCommentsRequest {
 export interface CreateCommentRequest {
   postId: string;
   content: string;
-  parentId?: string;
+  threadId?: string;
+  replyToId?: string;
 }
 
 export interface ToggleLikeRequest {
@@ -159,15 +160,6 @@ export interface GetRepliesRequest {
   cursor?: string;
 }
 
-export interface CommentThreadProps {
-  post: ApiPost;
-  comment: ApiComment;
-  isReplying?: boolean;
-  onReplyClick?: () => void;
-  isComposerOpen?: boolean;
-  setIsComposerOpen?: (value: boolean) => void;
-}
-
 export type MutationEvent = {
   postId: string;
   parentId?: string;
@@ -200,11 +192,6 @@ export interface CommentThreadProps {
   isActiveComposer: boolean;
   onReleaseComposer: () => void;
   onRequestComposer: (payload: ComposerRequestPayload) => void;
-}
-
-export interface ComposerRequestPayload {
-  targetId: string;
-  authorName: string;
 }
 
 export interface ToggleCommentLikeRequest {
@@ -240,4 +227,17 @@ export interface AuthState {
   user: ApiUser | null;
   token: string | null;
   isAuthenticated: boolean;
+}
+
+export interface ComposerRequestPayload {
+  threadId: string;
+  replyToId: string | null;
+  authorName: string;
+}
+
+export interface CreateNestedCommentPayload {
+  postId: string;
+  content: string;
+  threadId: string;
+  replyToId: string;
 }

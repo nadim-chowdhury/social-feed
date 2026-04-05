@@ -39,7 +39,7 @@ export function CommentThread({
         <FeedAvatar
           name={comment.author.firstName + " " + comment.author.lastName}
           seed={comment.author.avatar || ""}
-          image="/assets/images/txt_img.png"
+          // image="/assets/images/txt_img.png"
           size="sm"
         />
       </Link>
@@ -101,7 +101,7 @@ export function CommentThread({
           <button
             type="button"
             className={`transition-colors hover:text-[#1890FF] ${
-              comment.isLikedByMe ? "text-[#1890FF] font-bold" : "" // Active State styling
+              comment.isLikedByMe ? "text-[#1890FF] font-bold" : ""
             }`}
             onClick={() =>
               toggleCommentLike({
@@ -118,7 +118,8 @@ export function CommentThread({
             className="hover:text-[#1890FF]"
             onClick={() => {
               onRequestComposer({
-                targetId: comment.id,
+                threadId: comment.id,
+                replyToId: null,
                 authorName: `${comment.author.firstName} ${comment.author.lastName}`,
               });
             }}
@@ -142,7 +143,7 @@ export function CommentThread({
                 <FeedAvatar
                   name={reply.author.firstName + " " + reply.author.lastName}
                   seed={reply.author.avatar || ""}
-                  image="/assets/images/txt_img.png"
+                  // image="/assets/images/txt_img.png"
                   size="xs"
                 />
               </Link>
@@ -222,7 +223,11 @@ export function CommentThread({
                     type="button"
                     className="hover:text-[#1890FF]"
                     onClick={() => {
-                      setReplyToId(replyToId === reply.id ? null : reply.id);
+                      onRequestComposer({
+                        threadId: comment.id,
+                        replyToId: null,
+                        authorName: `${comment.author.firstName} ${comment.author.lastName}`,
+                      });
                     }}
                   >
                     Reply

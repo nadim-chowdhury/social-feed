@@ -40,8 +40,11 @@ export class Comment {
   })
   parent: Comment | null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   parentId: string | null;
+
+  @Column({ type: 'varchar', nullable: true })
+  replyToId: string | null;
 
   @OneToMany(() => Comment, (c) => c.parent)
   replies: Comment[];
@@ -59,4 +62,9 @@ export class Comment {
 
   @UpdateDateColumn()
   updatedAt: Date;
+}
+
+export abstract class IFacebookComment {
+  parentId: string | null;
+  replyToId: string | null;
 }

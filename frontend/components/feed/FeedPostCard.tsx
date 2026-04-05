@@ -9,7 +9,6 @@ import { getRelativeTime } from "@/lib/time";
 import {
   useCreatePostCommentMutation,
   useGetPostCommentsQuery,
-  useGetPostLikesQuery,
   useTogglePostLikeMutation,
 } from "@/services/postsApi";
 import { CommentThread } from "./CommentThread";
@@ -18,7 +17,10 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState("");
-  const [activeComposerId, setActiveComposerId] = useState<string>(post.id);
+  const [activeReplyConfig, setActiveReplyConfig] = useState<{
+    threadId: string;
+    replyToId: string | null;
+  } | null>(null);
   const [replyContextName, setReplyContextName] = useState<string | null>(null);
 
   const menuRef = useRef<HTMLDivElement>(null);
@@ -33,42 +35,37 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
     isError,
   } = useGetPostCommentsQuery({ postId: post.id }, { skip: !showComments });
   const [toggleLike] = useTogglePostLikeMutation();
-  // const { data: likesData } = useGetPostLikesQuery({
-  //   postId: post.id,
-  //   limit: 3,
-  // });
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && commentText.trim() && !isPosting) {
-      if (activeComposerId === post.id) {
+      if (!activeReplyConfig) {
         await createComment({ postId: post.id, content: commentText }).unwrap();
       } else {
         await createComment({
           postId: post.id,
           content: commentText,
-          parentId: activeComposerId,
+          threadId: activeReplyConfig.threadId,
+          replyToId: activeReplyConfig.replyToId ?? activeReplyConfig.threadId,
         }).unwrap();
-        setActiveComposerId(post.id);
       }
-      setActiveComposerId(post.id);
       setReplyContextName(null);
       setCommentText("");
     }
   };
 
-  const handleReplyRequest = ({
-    targetId,
-    authorName,
-  }: ComposerRequestPayload) => {
-    setActiveComposerId(targetId);
-    setReplyContextName(authorName);
+  const handleReplyRequest = (payload: ComposerRequestPayload) => {
+    setActiveReplyConfig({
+      threadId: payload.threadId,
+      replyToId: payload.replyToId,
+    });
+    setReplyContextName(payload.authorName);
   };
 
   useEffect(() => {
-    if (activeComposerId !== post.id && inputRef.current) {
+    if (activeReplyConfig && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [activeComposerId]);
+  }, [activeReplyConfig]);
 
   return (
     <article className="mb-4 overflow-hidden rounded-md bg-white shadow-sm">
@@ -246,7 +243,7 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
           type="button"
           onClick={() => {
             setShowComments(!showComments);
-            setActiveComposerId(post.id);
+            setActiveReplyConfig(null);
             setReplyContextName(null);
           }}
           className="flex items-center justify-center gap-2 py-3 text-[15px] font-medium text-[#112032] hover:bg-[#F8F9FB] transition-colors"
@@ -315,9 +312,9 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
                       key={c.id}
                       post={post}
                       comment={c}
-                      isActiveComposer={activeComposerId === c.id}
+                      isActiveComposer={activeReplyConfig?.threadId === c.id}
                       onRequestComposer={handleReplyRequest}
-                      onReleaseComposer={() => setActiveComposerId(post.id)}
+                      onReleaseComposer={() => setActiveReplyConfig(null)}
                     />
                   ))}
               </div>
@@ -328,9 +325,13 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
             <div className="flex items-center gap-3 rounded-full bg-[#F5F5F5] p-2 pr-4 w-full">
               <div className="shrink-0">
                 <FeedAvatar
-                  name={""}
-                  seed={""}
-                  image="/assets/images/txt_img.png"
+                  name={
+                    post.author.firstName + " " + post.author.lastName || ""
+                  }
+                  seed={
+                    post.author.firstName + " " + post.author.lastName || ""
+                  }
+                  // image="/assets/images/txt_img.png"
                   size="xs"
                 />
               </div>
@@ -341,16 +342,16 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
                 <input
                   id={`comment-${post.id}`}
                   placeholder={
-                    activeComposerId === post.id
+                    !activeReplyConfig
                       ? "Write a comment..."
                       : `Replying to @${replyContextName}...`
                   }
+                  autoFocus={!!activeReplyConfig}
                   ref={inputRef}
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
                   onKeyDown={handleKeyDown}
                   disabled={isPosting}
-                  autoFocus={activeComposerId !== post.id}
                   className="w-full bg-transparent text-[15.5px] text-[#112032] placeholder:text-[#517596] outline-none"
                 />
               </div>
@@ -400,12 +401,13 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
                 </button>
               </div>
 
-              {activeComposerId !== post.id && (
+              {!!activeReplyConfig && (
                 <button
                   type="button"
                   aria-label="Cancel Reply"
                   onClick={() => {
-                    setActiveComposerId(post.id);
+                    setShowComments(!showComments);
+                    setActiveReplyConfig(null);
                     setReplyContextName(null);
                   }}
                   className="rounded-full bg-black/5 px-2 py-1 text-[12px] font-medium text-[#516170] hover:bg-black/10 transition-colors"

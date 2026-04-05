@@ -30,19 +30,21 @@ export class CommentsService {
     return this.commentRepository.manager.transaction(async (manager) => {
       const post = await manager.findOne(Post, { where: { id: postId } });
 
+      let resolvedParentId: string | null = dto.threadId ?? null;
+      let resolvedReplyToId: string | null = dto.replyToId ?? null;
+
       if (!post) {
         throw new NotFoundException(`Post ${postId} not found`);
       }
 
-      if (dto.parentId) {
-        const parent = await manager.findOne(Comment, {
-          where: { id: dto.parentId, postId },
+      if (dto.threadId) {
+        const referenceNode = await manager.findOne(Comment, {
+          where: { id: dto.threadId },
         });
 
-        if (!parent) {
-          throw new NotFoundException(
-            `Parent comment ${dto.parentId} not found`,
-          );
+        if (referenceNode && referenceNode.parentId !== null) {
+          resolvedParentId = referenceNode.parentId;
+          resolvedReplyToId = referenceNode.id;
         }
       }
 
@@ -50,7 +52,8 @@ export class CommentsService {
         content: dto.content,
         postId,
         authorId: author.id,
-        parentId: dto.parentId ?? null,
+        parentId: resolvedParentId,
+        replyToId: resolvedReplyToId,
       });
 
       const saved = await manager.save(Comment, comment);

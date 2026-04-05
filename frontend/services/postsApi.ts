@@ -49,31 +49,16 @@ export const postsApi = baseApi.injectEndpoints({
     }),
 
     createPostComment: builder.mutation<ApiComment, CreateCommentRequest>({
-      query: ({ postId, content, parentId }) => ({
+      query: ({ postId, content, threadId, replyToId }) => ({
         url: `/posts/${postId}/comments`,
         method: "POST",
-        body: { content, parentId },
+        body: { content, threadId, replyToId },
       }),
-      async onQueryStarted({ postId, parentId }, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ postId, threadId }, { dispatch, queryFulfilled }) {
         try {
           const { data: newComment } = await queryFulfilled;
 
-          // dispatch(
-          //   postsApi.util.updateQueryData(
-          //     "getPostComments",
-          //     { postId },
-          //     (draft) => {
-          //       if (!parentId) {
-          //         draft.data.unshift(newComment);
-          //       } else {
-          //         draft.data.push(newComment);
-          //       }
-          //     },
-          //   ),
-          // );
-          // Replace your current monolithic updateQueryData block entirely with this explicit branching:
-          if (!parentId) {
-            // 1. If it's a Root Comment, update the master Feed list
+          if (!threadId) {
             dispatch(
               postsApi.util.updateQueryData(
                 "getPostComments",
@@ -84,13 +69,11 @@ export const postsApi = baseApi.injectEndpoints({
               ),
             );
           } else {
-            // 2. If it's a Reply, specifically target the localized Sub-Collection
             dispatch(
               postsApi.util.updateQueryData(
                 "getCommentReplies",
-                { postId, commentId: parentId },
+                { postId, commentId: threadId },
                 (draft) => {
-                  // Create the array if it doesn't exist yet (defensive programming)
                   if (!draft.data) draft.data = [];
                   draft.data.push(newComment);
                 },

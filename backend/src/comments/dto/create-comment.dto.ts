@@ -15,4 +15,12 @@ export class CreateCommentDto {
   @IsOptional()
   @IsUUID()
   parentId?: string;
+
+  @IsOptional()
+  @IsUUID()
+  threadId?: string;
+
+  @IsOptional()
+  @IsUUID()
+  replyToId?: string;
 }
