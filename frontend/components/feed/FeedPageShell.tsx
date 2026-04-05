@@ -9,9 +9,38 @@ import { FeedRightSidebar } from "./FeedRightSidebar";
 import { FeedStories } from "./FeedStories";
 import { useGetFeedQuery } from "@/services/postsApi";
 import { FeedThemeToggle } from "./FeedThemeToggle";
+import { useEffect, useRef, useState } from "react";
 
 export function FeedPageShell() {
-  const { data, isLoading, isFetching, isError } = useGetFeedQuery();
+  const [cursor, setCursor] = useState<string | void>(undefined);
+  const { data, isLoading, isFetching, isError } = useGetFeedQuery(cursor);
+
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  const stateRef = useRef({
+    isFetching,
+    nextCursor: data?.meta?.nextCursor,
+  });
+
+  stateRef.current = {
+    isFetching,
+    nextCursor: data?.meta?.nextCursor,
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const { isFetching: currentFetching, nextCursor } = stateRef.current;
+
+        if (entries[0].isIntersecting && !currentFetching && nextCursor) {
+          setCursor(nextCursor);
+        }
+      },
+      { rootMargin: "400px" },
+    );
+    if (sentinelRef.current) observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <>
@@ -26,7 +55,7 @@ export function FeedPageShell() {
           <div className="lg:col-span-6">
             <FeedStories />
             <FeedComposer />
-            {isFetching || isLoading || isError ? (
+            {isLoading ? (
               <div className="flex items-center justify-center pt-8">
                 <span className="loader"></span>
               </div>
@@ -35,6 +64,14 @@ export function FeedPageShell() {
                 <FeedPostCard key={post.id} post={post} />
               ))
             )}
+            <div ref={sentinelRef} className="flex justify-center py-8">
+              {isFetching && !isLoading && <span className="loader"></span>}
+              {isError && !isLoading && (
+                <p className="text-red-500 font-medium">
+                  Failed to load more posts.
+                </p>
+              )}
+            </div>
           </div>
           <div className="hidden lg:col-span-3 lg:block lg:sticky lg:top-[90px] lg:h-[calc(100vh-100px)] lg:overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:pb-4">
             <FeedRightSidebar />

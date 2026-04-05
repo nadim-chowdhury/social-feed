@@ -20,6 +20,28 @@ export const postsApi = baseApi.injectEndpoints({
     getFeed: builder.query<ApiPaginatedResponse<ApiPost>, string | void>({
       query: (cursor) => (cursor ? `/posts?cursor=${cursor}` : "/posts"),
       providesTags: ["Post"],
+
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName;
+      },
+
+      merge: (currentCache, newItems) => {
+        if (newItems.data) {
+          const existingIds = new Set(currentCache.data.map((p) => p.id));
+          const filteredNew = newItems.data.filter(
+            (p) => !existingIds.has(p.id),
+          );
+          currentCache.data.push(...filteredNew);
+
+          if (newItems.meta) {
+            currentCache.meta.nextCursor = newItems.meta.nextCursor;
+          }
+        }
+      },
+
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
     }),
 
     getUploadSignature: builder.mutation<UploadSignatureResponse, void>({

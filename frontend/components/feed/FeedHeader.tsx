@@ -109,7 +109,7 @@ export function FeedHeader() {
               <input
                 type="search"
                 placeholder="input search text"
-                className="w-full h-10 py-2 pl-12 pr-3 rounded-full text-sm outline-none bg-black/5 dark:bg-white/10 text-fg placeholder:text-fg/50 focus:border-primary/80 focus:ring-1 focus:ring-primary/80 transition-colors duration-300"
+                className="w-full h-10 py-2 pl-12 pr-3 rounded-full text-sm outline-none bg-border text-fg placeholder:text-fg/50 focus:border-primary/80 focus:ring-1 focus:ring-primary/80 transition-colors duration-300"
                 aria-label="Search"
               />
             </form>
