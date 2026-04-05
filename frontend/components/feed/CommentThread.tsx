@@ -135,6 +135,28 @@ export function CommentThread({
           </span>
         </div>
 
+        {comment.replyCount > 0 && !isRepliesExpanded && (
+          <button
+            type="button"
+            onClick={() => setIsRepliesExpanded(true)}
+            className="flex items-center gap-1.5 text-[14.5px] font-semibold text-[#516170] hover:text-[#1890FF] mb-3 ml-2 transition-colors"
+          >
+            <span className="w-4 h-px bg-[#516170] inline-block mr-1"></span>
+            View {comment.replyCount} repl
+            {comment.replyCount === 1 ? "y" : "ies"}
+          </button>
+        )}
+        {comment.replyCount > 0 && isRepliesExpanded && (
+          <button
+            type="button"
+            onClick={() => setIsRepliesExpanded(false)}
+            className="flex items-center gap-1.5 text-[14.5px] font-semibold text-[#516170] hover:text-[#1890FF] mb-3 ml-2 transition-colors"
+          >
+            <span className="w-6 h-1px bg-[#516170] inline-block mr-1"></span>
+            Hide repl{comment.replyCount === 1 ? "y" : "ies"}
+          </button>
+        )}
+
         {/* Replies Section */}
         {isRepliesExpanded &&
           repliesResponse?.data.map((reply) => (

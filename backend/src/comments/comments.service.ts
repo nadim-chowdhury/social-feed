@@ -59,6 +59,16 @@ export class CommentsService {
       const saved = await manager.save(Comment, comment);
       await manager.increment(Post, { id: postId }, 'commentsCount', 1);
 
+        if (resolvedParentId) {
+          await manager.increment(
+            Comment,
+            { id: resolvedParentId },
+            'replyCount',
+            1,
+          );
+        }
+
+
       saved.author = author;
       return saved;
     });
