@@ -31,7 +31,7 @@ export const postsApi = baseApi.injectEndpoints({
           const filteredNew = newItems.data.filter(
             (p) => !existingIds.has(p.id),
           );
-          currentCache.data.push(...filteredNew);
+          currentCache.data.unshift(...filteredNew);
 
           if (newItems.meta) {
             currentCache.meta.nextCursor = newItems.meta.nextCursor;
@@ -167,9 +167,9 @@ export const postsApi = baseApi.injectEndpoints({
     }),
 
     toggleCommentLike: builder.mutation<void, ToggleCommentLikeRequest>({
-      query: ({ postId, commentId }) => ({
+      query: ({ postId, commentId, isCurrentlyLiked }) => ({
         url: `/posts/${postId}/comments/${commentId}/like`,
-        method: "POST",
+        method: isCurrentlyLiked ? "DELETE" : "POST",
       }),
       async onQueryStarted(
         { postId, commentId, parentId },

@@ -22,7 +22,7 @@ export const authApi = baseApi.injectEndpoints({
             }),
           );
 
-          await syncAuthCookie(data.accessToken);
+          // await syncAuthCookie(data.accessToken);
         } catch (error) {
           console.log(error);
         }
@@ -45,7 +45,7 @@ export const authApi = baseApi.injectEndpoints({
             }),
           );
 
-          await syncAuthCookie(data.accessToken);
+          // await syncAuthCookie(data.accessToken);
         } catch (error) {
           console.log("Registration API error:", error);
         }

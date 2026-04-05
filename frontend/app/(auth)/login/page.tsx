@@ -12,6 +12,7 @@ import {
   authFieldLabel,
   authPrimaryBtn,
 } from "@/lib/authFieldClasses";
+import { syncAuthCookie } from "@/app/actions/auth";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -35,6 +36,7 @@ export default function LoginPage() {
     try {
       const result = await login(credentials).unwrap();
       console.log("Login Success!", result);
+      await syncAuthCookie(result.accessToken);
       router.push("/feed");
     } catch (err) {
       console.error("Login Failed", err);

@@ -198,6 +198,7 @@ export interface ToggleCommentLikeRequest {
   postId: string;
   commentId: string;
   parentId?: string;
+  isCurrentlyLiked: boolean;
 }
 
 export interface TogglePostLikeRequest {
