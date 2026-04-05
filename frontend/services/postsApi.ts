@@ -76,43 +76,95 @@ export const postsApi = baseApi.injectEndpoints({
         method: "POST",
         body: { content, threadId, replyToId },
       }),
-      async onQueryStarted({ postId, threadId }, { dispatch, queryFulfilled }) {
+      async onQueryStarted(
+        { postId, content, threadId, replyToId },
+        { dispatch, queryFulfilled, getState },
+      ) {
         try {
-          const { data: newComment } = await queryFulfilled;
+          const state = getState() as RootState;
+          const authUser = state.auth.user;
+          if (!authUser) return;
+
+          const tempId = `optimistic-${Date.now()}`;
+          const optimisticComment: ApiComment = {
+            id: tempId,
+            content,
+            postId,
+            author: authUser,
+            createdAt: new Date().toISOString(),
+            reactionsCount: 0,
+            parentId: threadId ?? null,
+            replyCount: 0,
+            likesCount: 0,
+            isLikedByMe: false,
+          };
+
+          const patches: Array<{ undo: () => void }> = [];
 
           if (!threadId) {
-            dispatch(
-              postsApi.util.updateQueryData(
-                "getPostComments",
-                { postId },
-                (draft) => {
-                  draft.data.unshift(newComment);
-                },
+            patches.push(
+              dispatch(
+                postsApi.util.updateQueryData(
+                  "getPostComments",
+                  { postId },
+                  (draft) => {
+                    draft.data.unshift(optimisticComment);
+                  },
+                ),
               ),
             );
           } else {
-            dispatch(
-              postsApi.util.updateQueryData(
-                "getCommentReplies",
-                { postId, commentId: threadId },
-                (draft) => {
-                  if (!draft.data) draft.data = [];
-                  draft.data.push(newComment);
-                },
+            patches.push(
+              dispatch(
+                postsApi.util.updateQueryData(
+                  "getCommentReplies",
+                  { postId, commentId: threadId },
+                  (draft) => {
+                    if (!draft.data) draft.data = [];
+                    draft.data.push(optimisticComment);
+                  },
+                ),
               ),
             );
           }
 
-          dispatch(
-            postsApi.util.updateQueryData("getFeed", undefined, (draft) => {
-              if (draft?.data) {
-                const targetPost = draft.data.find((p) => p.id === postId);
-                if (targetPost && targetPost.commentsCount !== undefined) {
-                  targetPost.commentsCount += 1;
-                }
-              }
-            }),
+          patches.push(
+            dispatch(
+              postsApi.util.updateQueryData("getFeed", undefined, (draft) => {
+                const target = draft.data.find((p) => p.id === postId);
+                if (target) target.commentsCount += 1;
+              }),
+            ),
           );
+
+          try {
+            const { data: serverComment } = await queryFulfilled;
+            // Replace temp entity with real server data
+            const reconcile = (draft: any) => {
+              const idx = draft.data.findIndex((c: any) => c.id === tempId);
+              if (idx !== -1) draft.data[idx] = serverComment;
+            };
+            // Patch the correct query with real data
+            if (!threadId) {
+              dispatch(
+                postsApi.util.updateQueryData(
+                  "getPostComments",
+                  { postId },
+                  reconcile,
+                ),
+              );
+            } else {
+              dispatch(
+                postsApi.util.updateQueryData(
+                  "getCommentReplies",
+                  { postId, commentId: threadId },
+                  reconcile,
+                ),
+              );
+            }
+          } catch {
+            patches.forEach((p) => p.undo());
+          }
         } catch (error) {
           console.error("Pessimistic update failed");
         }

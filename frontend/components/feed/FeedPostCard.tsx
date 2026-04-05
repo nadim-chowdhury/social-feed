@@ -305,6 +305,12 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
             </button>
           )}
 
+          {isLoading || isFetching ? (
+            <div className="flex items-center justify-center my-2">
+              <span className="loader"></span>
+            </div>
+          ) : null}
+
           {post.commentsCount != null && post.commentsCount > 0 && (
             <>
               <div className="flex flex-col">

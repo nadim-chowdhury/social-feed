@@ -57,9 +57,9 @@ export function CommentThread({
           </p>
 
           {comment.likesCount > 0 && (
-            <span className="absolute -bottom-[14px] right-4 flex items-center gap-1 shadow-[0_2px_8px_rgba(0,0,0,0.08)] rounded-full bg-white px-2 py-[3px] text-[13px] font-semibold text-fg border border-border">
+            <span className="absolute -bottom-[14px] right-4 flex items-center gap-1 shadow-[0_2px_8px_rgba(0,0,0,0.08)] rounded-full bg-card text-fg px-2 py-[3px] text-[13px] font-semibold border border-border">
               <div className="flex items-center -space-x-[6px] mr-1">
-                <span className="relative z-10 rounded-full bg-white border-2 border-white flex justify-center items-center">
+                <span className="relative z-10 rounded-full bg-card border-2 border-border flex justify-center items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
@@ -75,7 +75,7 @@ export function CommentThread({
                     <path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3" />
                   </svg>
                 </span>
-                <span className="rounded-full bg-white border-2 border-white flex justify-center items-center">
+                <span className="rounded-full bg-card border-2 border-border flex justify-center items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
