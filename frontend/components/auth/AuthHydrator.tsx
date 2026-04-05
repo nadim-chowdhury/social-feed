@@ -1,5 +1,6 @@
 "use client";
 
+import { clearAuthCookie } from "@/app/actions/auth";
 import { useGetMeQuery } from "@/services/authApi";
 import { RootState } from "@/store";
 import { logout, setCredentials } from "@/store/slices/authSlice";
@@ -29,11 +30,16 @@ export function AuthHydrator({ token, children }: GlobalAuthHydratorProps) {
   });
 
   useEffect(() => {
-    if (isError || !token) {
+    const handleAuthFailure = async () => {
+      await clearAuthCookie();
       dispatch(logout());
       router.replace("/login");
+    };
+
+    if (isError || !token) {
+      handleAuthFailure();
     } else if (isSuccess && user) {
-      dispatch(setCredentials({ user, token: token }));
+      dispatch(setCredentials({ user, token }));
     }
   }, [isSuccess, isError, user, token, dispatch, router]);
 
