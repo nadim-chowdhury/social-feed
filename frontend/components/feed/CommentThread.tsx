@@ -97,7 +97,7 @@ export function CommentThread({
           )}
         </div>
 
-        <div className="mt-3 px-1 flex gap-1.5 text-[14.5px] font-medium text-fg mb-4">
+        <div className="mt-3 px-1 flex items-center gap-1.5 text-[14.5px] font-medium text-fg mb-4">
           <button
             type="button"
             className={`transition-colors hover:text-primary ${
@@ -107,6 +107,7 @@ export function CommentThread({
               toggleCommentLike({
                 postId: post.id,
                 commentId: comment.id,
+                isCurrentlyLiked: comment.isLikedByMe,
               })
             }
           >
@@ -130,7 +131,7 @@ export function CommentThread({
           <button type="button" className="hover:text-primary">
             Share
           </button>
-          <span className="text-fg font-normal ml-0.5">
+          <span className="text-fg font-normal ml-2 text-xs">
             {getRelativeTime(comment.createdAt)}
           </span>
         </div>
@@ -152,7 +153,7 @@ export function CommentThread({
             onClick={() => setIsRepliesExpanded(false)}
             className="flex items-center gap-1.5 text-[14.5px] font-semibold text-fg hover:text-primary mb-3 ml-2 transition-colors"
           >
-            <span className="w-6 h-1px bg-fg inline-block mr-1"></span>
+            <span className="w-6 h-1px bg-border inline-block mr-1"></span>
             Hide repl{comment.replyCount === 1 ? "y" : "ies"}
           </button>
         )}
@@ -224,7 +225,7 @@ export function CommentThread({
                   )}
                 </div>
 
-                <div className="mt-3 px-1 flex gap-1.5 text-[14.5px] font-medium text-fg mb-2">
+                <div className="mt-3 px-1 flex items-center gap-1.5 text-[14.5px] font-medium text-fg mb-2">
                   <button
                     type="button"
                     className={`transition-colors hover:text-primary ${
@@ -235,6 +236,7 @@ export function CommentThread({
                         postId: post.id,
                         commentId: reply.id,
                         parentId: comment.id,
+                        isCurrentlyLiked: reply.isLikedByMe,
                       })
                     }
                   >
@@ -258,7 +260,7 @@ export function CommentThread({
                   <button type="button" className="hover:text-primary">
                     Share
                   </button>
-                  <span className="text-fg font-normal ml-0.5">
+                  <span className="text-fg text-xs font-normal ml-2">
                     {getRelativeTime(reply.createdAt)}
                   </span>
                 </div>
