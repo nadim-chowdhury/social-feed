@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { StoreProvider } from "@/components/providers/store-providers";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 
 const poppins = Poppins({
   weight: ["100", "300", "400", "500", "600", "700", "800"],
@@ -30,7 +31,16 @@ export default function RootLayout({
         className="flex min-h-full flex-col bg-[#F8F9FB] font-sans text-gray-900 antialiased"
         suppressHydrationWarning
       >
-        <StoreProvider>{children}</StoreProvider>
+        <StoreProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </StoreProvider>
       </body>
     </html>
   );

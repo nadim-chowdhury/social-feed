@@ -241,3 +241,8 @@ export interface CreateNestedCommentPayload {
   threadId: string;
   replyToId: string;
 }
+
+export interface ThemeComponentState {
+  theme: "light" | "dark" | "system" | undefined;
+  mounted: boolean;
+}
