@@ -12,6 +12,8 @@ import {
   useTogglePostLikeMutation,
 } from "@/services/postsApi";
 import { CommentThread } from "./CommentThread";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 
 export function FeedPostCard({ post }: { post: ApiPost }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -25,6 +27,7 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
 
   const menuRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const currentUser = useSelector((state: RootState) => state.auth.user);
 
   const [createComment, { isLoading: isPosting }] =
     useCreatePostCommentMutation();
@@ -326,10 +329,10 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
               <div className="shrink-0">
                 <FeedAvatar
                   name={
-                    post.author.firstName + " " + post.author.lastName || ""
+                    currentUser?.firstName + " " + currentUser?.lastName || ""
                   }
                   seed={
-                    post.author.firstName + " " + post.author.lastName || ""
+                    currentUser?.firstName + " " + currentUser?.lastName || ""
                   }
                   // image="/assets/images/txt_img.png"
                   size="xs"
@@ -406,11 +409,11 @@ export function FeedPostCard({ post }: { post: ApiPost }) {
                   type="button"
                   aria-label="Cancel Reply"
                   onClick={() => {
-                    setShowComments(!showComments);
+                    // setShowComments(!showComments);
                     setActiveReplyConfig(null);
                     setReplyContextName(null);
                   }}
-                  className="rounded-full bg-border px-2 py-1 text-[12px] font-medium text-fg hover:bg-border transition-colors"
+                  className="rounded-full bg-fg px-2 py-1 text-[12px] font-medium text-fg hover:bg-border transition-colors border border-bg"
                 >
                   Cancel
                 </button>

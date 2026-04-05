@@ -13,6 +13,7 @@ import {
   authFieldLabel,
   authPrimaryBtn,
 } from "@/lib/authFieldClasses";
+import { syncAuthCookie } from "@/app/actions/auth";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -44,8 +45,6 @@ export default function RegisterPage() {
       return;
     }
 
-    // const { firstName, lastName } = deriveNamesFromEmail(credentials.email);
-
     try {
       const result = await register({
         firstName: credentials.firstName.trim(),
@@ -54,6 +53,7 @@ export default function RegisterPage() {
         password: credentials.password,
       }).unwrap();
 
+      await syncAuthCookie(result.accessToken);
       router.push("/feed");
     } catch (err) {
       console.error("Registration Failed", err);

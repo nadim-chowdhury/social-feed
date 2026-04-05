@@ -68,7 +68,7 @@ export function FeedHeader() {
 
   if (!authUser) return null;
 
-  const fullName = `${authUser?.firstName} ${authUser?.lastName}`;
+  const fullName = authUser?.firstName + " " + authUser?.lastName;
 
   return (
     <header className="fixed left-0 right-0 top-0 z-9999 border-b border-border bg-card">
