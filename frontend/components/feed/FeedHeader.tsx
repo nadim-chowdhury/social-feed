@@ -19,17 +19,17 @@ import { baseApi } from "@/services/baseApi";
 function NotificationText({ n }: { n: NotificationEntry }) {
   if (n.kind === "timeline") {
     return (
-      <p className="text-sm leading-snug text-[#112032]">
+      <p className="text-sm leading-snug text-fg">
         <span className="font-medium">{n.actor}</span> posted a link in your
         timeline.
       </p>
     );
   }
   return (
-    <p className="text-sm leading-snug text-[#112032]">
+    <p className="text-sm leading-snug text-fg">
       An admin changed the name of the group{" "}
-      <span className="font-medium text-[#1890FF]">{n.groupName}</span> to{" "}
-      <span className="font-medium text-[#1890FF]">{n.groupName}</span>
+      <span className="font-medium text-primary">{n.groupName}</span> to{" "}
+      <span className="font-medium text-primary">{n.groupName}</span>
     </p>
   );
 }
@@ -71,7 +71,7 @@ export function FeedHeader() {
   const fullName = `${authUser?.firstName} ${authUser?.lastName}`;
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-9999 border-b border-black/5 bg-white">
+    <header className="fixed left-0 right-0 top-0 z-9999 border-b border-black/5 bg-card">
       <nav
         className="mx-auto hidden max-w-[1320px] items-center gap-4 px-4 py-2.5 md:flex lg:px-6"
         aria-label="Main"
@@ -109,7 +109,7 @@ export function FeedHeader() {
               <input
                 type="search"
                 placeholder="input search text"
-                className="w-full rounded-full bg-[#F5F5F5] h-10 py-2 pl-12 pr-3 text-sm text-[#112032] placeholder:text-[#666] outline-none focus:border-[#1890FF]/80 focus:ring-1 focus:ring-[#1890FF]/80"
+                className="w-full h-10 py-2 pl-12 pr-3 rounded-full text-sm outline-none bg-black/5 dark:bg-white/10 text-fg placeholder:text-fg/50 focus:border-primary/80 focus:ring-1 focus:ring-primary/80 transition-colors duration-300"
                 aria-label="Search"
               />
             </form>
@@ -119,7 +119,7 @@ export function FeedHeader() {
             <li>
               <Link
                 href="/feed"
-                className="flex h-11 w-11 items-center justify-center rounded-md text-[#112032]/70 hover-nav-button"
+                className="flex h-11 w-11 items-center justify-center rounded-md text-fg/70 hover-nav-button"
                 aria-current="page"
               >
                 <svg
@@ -150,7 +150,7 @@ export function FeedHeader() {
             <li>
               <Link
                 href="#"
-                className="flex h-11 w-11 items-center justify-center rounded-md text-[#112032]/70 hover-nav-button"
+                className="flex h-11 w-11 items-center justify-center rounded-md text-fg/70 hover-nav-button"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -174,7 +174,7 @@ export function FeedHeader() {
               <div className="relative" ref={notifyRef}>
                 <button
                   type="button"
-                  className="relative flex h-11 w-11 items-center justify-center rounded-md text-[#112032]/70 hover-nav-button"
+                  className="relative flex h-11 w-11 items-center justify-center rounded-md text-fg/70 hover-nav-button"
                   aria-expanded={notifyOpen}
                   onClick={() => setNotifyOpen((v) => !v)}
                 >
@@ -194,7 +194,7 @@ export function FeedHeader() {
                       clipRule="evenodd"
                     />
                   </svg>
-                  <span className="absolute right-1 top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#1890FF] px-1 text-[11px] font-semibold text-white">
+                  <span className="absolute right-1 top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-primary px-1 text-[11px] font-semibold text-white">
                     6
                   </span>
                 </button>
@@ -202,7 +202,7 @@ export function FeedHeader() {
                 {notifyOpen && (
                   <div className="absolute right-0 top-full z-50 mt-2 w-[min(100vw-2rem,380px)] rounded-lg border border-black/10 bg-white shadow-lg">
                     <div className="flex items-start justify-between border-b border-black/5 px-4 py-3">
-                      <h4 className="text-base font-semibold text-[#112032]">
+                      <h4 className="text-base font-semibold text-fg">
                         Notifications
                       </h4>
                       <div className="relative">
@@ -257,7 +257,7 @@ export function FeedHeader() {
                     <div className="flex gap-2 border-b border-black/5 px-4 py-2">
                       <button
                         type="button"
-                        className="rounded-md bg-[#1890FF] px-3 py-1.5 text-sm font-medium text-white"
+                        className="rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-white"
                       >
                         All
                       </button>
@@ -294,7 +294,7 @@ export function FeedHeader() {
             <li>
               <Link
                 href="#"
-                className="relative flex h-11 w-11 items-center justify-center rounded-md text-[#112032]/70 hover-nav-button"
+                className="relative flex h-11 w-11 items-center justify-center rounded-md text-fg/70 hover-nav-button"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -312,7 +312,7 @@ export function FeedHeader() {
                     clipRule="evenodd"
                   />
                 </svg>
-                <span className="absolute right-1 top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#1890FF] px-1 text-[11px] font-semibold text-white">
+                <span className="absolute right-1 top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-primary px-1 text-[11px] font-semibold text-white">
                   2
                 </span>
               </Link>
@@ -331,12 +331,12 @@ export function FeedHeader() {
               size="sm"
             />
             <div className="min-w-0 flex items-center gap-2">
-              <p className="truncate text-sm font-medium text-[#112032] capitalize">
+              <p className="truncate text-sm font-medium text-fg capitalize">
                 {fullName}
               </p>
               <button
                 type="button"
-                className="flex items-center gap-1 text-[#112032]"
+                className="flex items-center gap-1 text-fg"
                 aria-expanded={profileOpen}
               >
                 <svg
@@ -348,7 +348,7 @@ export function FeedHeader() {
                   aria-hidden
                 >
                   <path
-                    fill="#112032"
+                    fill="currentColor"
                     d="M5 5l.354.354L5 5.707l-.354-.353L5 5zm4.354-3.646l-4 4-.708-.708 4-4 .708.708zm-4.708 4l-4-4 .708-.708 4 4-.708.708z"
                   />
                 </svg>
@@ -356,7 +356,7 @@ export function FeedHeader() {
             </div>
 
             {profileOpen && (
-              <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-lg border border-black/10 bg-white py-2 shadow-lg">
+              <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-lg border border-black/10 bg-card py-2 shadow-lg">
                 <div className="flex gap-3 px-4 pb-3">
                   <FeedAvatar
                     name={fullName}
@@ -365,12 +365,10 @@ export function FeedHeader() {
                     size="md"
                   />
                   <div>
-                    <p className="font-semibold text-[#112032]">
-                      {currentUser.name}
-                    </p>
+                    <p className="font-semibold text-fg">{currentUser.name}</p>
                     <Link
                       href="#"
-                      className="text-sm text-[#1890FF] hover:underline"
+                      className="text-sm text-primary hover:underline"
                     >
                       View Profile
                     </Link>
@@ -383,7 +381,7 @@ export function FeedHeader() {
                       href="#"
                       className="flex items-center justify-between px-4 py-2 hover:bg-black/5 rounded-md"
                     >
-                      <span className="flex items-center gap-2 text-[#112032]">
+                      <span className="flex items-center gap-2 text-fg">
                         <span className="text-[#377DFF]">Settings</span>
                       </span>
                     </Link>

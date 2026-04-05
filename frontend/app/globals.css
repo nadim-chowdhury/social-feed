@@ -2,6 +2,41 @@
 
 @theme inline {
   --font-sans: var(--font-poppins);
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
+  --color-card: var(--card-bg);
+  --color-card-foreground: var(--card-fg);
+  --color-border: var(--border-color);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-fg);
+}
+
+:root {
+  --bg: #f8f9fb;
+  --fg: #111827;
+  --card-bg: #ffffff;
+  --card-fg: #111827;
+  --border-color: #e5e7eb;
+  --primary: #1890ff;
+  --primary-fg: #ffffff;
+}
+
+.dark {
+  --bg: #0b0f19;
+  --fg: #f9fafb;
+  --card-bg: #111827;
+  --card-fg: #f9fafb;
+  --border-color: #1f2937;
+  --primary: #3b9eff;
+  --primary-fg: #ffffff;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--fg);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 button {
